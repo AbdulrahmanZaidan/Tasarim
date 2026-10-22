@@ -1,0 +1,29 @@
+# Supabase CLI ile yerel geliştirme için (npx supabase start). Barındırılan projede bu ayarlar
+# Supabase panelinden yapılır; bkz. SETUP.md. Docker gerektirir.
+project_id = "tasarim1-8bit"
+
+[api]
+port = 54321
+schemas = ["public"]
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+port = 54323
+
+[auth]
+site_url = "http://127.0.0.1:5173"
+additional_redirect_urls = ["http://127.0.0.1:5173/admin/parola", "http://localhost:5173/admin/parola"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+# Herkese açık kayıt kapalı: hesaplar yalnızca davetle oluşturulur
+enable_signup = false
+
+[auth.email]
+enable_signup = false
+enable_confirmations = true
+
+[storage]
+file_size_limit = "50MiB"

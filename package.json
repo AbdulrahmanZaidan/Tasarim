@@ -1,0 +1,43 @@
+{
+  "name": "sdu-8bit-breadboard-bilgisayar",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "build:gh": "tsc -b && vite build --mode ghpages && cp dist/index.html dist/404.html",
+    "build:single": "vite build --mode single --outDir dist-single",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "test": "vitest run tests/unit",
+    "test:db": "vitest run tests/db",
+    "test:api": "vitest run tests/integration",
+    "test:e2e": "node tests/e2e/run.mjs",
+    "test:static": "node tests/e2e/static.mjs",
+    "db:seed:generate": "node scripts/generate-seed.mjs",
+    "db:types": "node scripts/gen-types.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "lucide-react": "^1.60.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.6"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.23.1",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.6.1",
+    "pg": "^8.23.1",
+    "playwright-core": "^1.64.1",
+    "postcss": "^8.5.31",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vitest": "^2.1.9"
+  }
+}

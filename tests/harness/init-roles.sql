@@ -1,0 +1,21 @@
+-- Supabase'in temel rol yapısının yerel kopyası (yalnızca test ortamı)
+create role anon nologin noinherit;
+create role authenticated nologin noinherit;
+create role service_role nologin noinherit bypassrls;
+create role authenticator login password 'postgres' noinherit;
+grant anon, authenticated, service_role to authenticator;
+create role supabase_auth_admin login password 'postgres' noinherit createrole;
+create role supabase_storage_admin login password 'postgres' noinherit createrole;
+grant anon, authenticated, service_role to supabase_storage_admin;
+create schema if not exists auth authorization supabase_auth_admin;
+create schema if not exists storage authorization supabase_storage_admin;
+create schema if not exists extensions;
+create extension if not exists pgcrypto with schema extensions;
+grant usage on schema extensions to anon, authenticated, service_role, supabase_auth_admin, supabase_storage_admin;
+alter role supabase_auth_admin set search_path = auth;
+alter role supabase_storage_admin set search_path = storage;
+grant usage on schema public to anon, authenticated, service_role;
+alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
+alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
+alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
+grant create on database postgres to supabase_auth_admin, supabase_storage_admin;
