@@ -10,7 +10,8 @@ export default defineConfig(async ({ mode }) => {
     plugins.push(viteSingleFile());
   }
   const base =
-    process.env.VITE_BASE ?? (mode === 'ghpages' ? '/Tasarim1/' : mode === 'single' ? './' : '/');
+
+process.env.VITE_BASE ?? (mode === 'ghpages' ? '/Tasarim/' : mode === 'single' ? './' : '/');
   return {
     base,
     plugins,
