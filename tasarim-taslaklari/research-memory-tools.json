@@ -1,0 +1,315 @@
+{
+ "items": [
+  {
+   "name": "SST39SF010-90-4C-PH parallel flash 128Kx8, DIP-32 (old stock, non-A version), 3-piece lots, DOMESTIC - RECOMMENDED first buy",
+   "part": "SST39SF010-90-4C-PH",
+   "qty_needed": 6,
+   "unit_price_try": 193.21,
+   "source": "n11.com store 'ackelektronik' (Istanbul): 579.64 TL per 3-piece lot (basket price, list 623.27), free shipping",
+   "url": "https://www.n11.com/urun/sst39sf010-90-4c-ph-entegre-3-adet-128902116",
+   "in_stock": "Yes, 'Son 2 ürün': only 2 lots (6 chips) left, page data 27 Oct 2026",
+   "notes": "Ships from Turkey, so there is no customs exposure, and n11 returns/buyer protection apply. This is the original non-A SST part: same pinout, same JEDEC command set and same chip ID 0xBFB5 as the SST39SF010A. The open-source minipro/XGecu device database has ONE combined entry 'SST39SF010,SST39SF010A' (chip_id 0xBFB5) in both its TL866II+ section and its newer T-series section, so you program it with the same setting. 90 ns is ample at 1-2 MHz with the registered control word (250 ns half-cycle at 2 MHz). It is old stock, possibly pulls, so on arrival read the ID, blank-check, and run a full erase/program/verify of every chip on the T48. Six chips cover 4-5 microcode ROMs plus the program ROM and font ROM with little or no spare; the next items cover the balance to 10."
+  },
+  {
+   "name": "SST39SF010A-70-4C-PHE parallel flash, DIP-32 (EOL), AliExpress single pieces (balance to reach 10; only if you accept an import parcel)",
+   "part": "SST39SF010A-70-4C-PHE",
+   "qty_needed": 4,
+   "unit_price_try": 98.59,
+   "source": "AliExpress (tr.aliexpress.com), 1 pc/lot, price shown in TRY",
+   "url": "https://tr.aliexpress.com/item/1005007458436336.html",
+   "in_stock": "Listed; 36 sold, rating 5",
+   "notes": "PDIP-32 is END-OF-LIFE: DigiKey 'Obsolete, no longer manufactured', no stock (https://www.digikey.com/en/products/detail/microchip-technology/SST39SF010A-70-4C-PHE/2297826); Mouser lists Obsolete with discontinuation notice dated 10 Apr 2026 (Microchip PCN CAAN-08FCZP770). The SST39SF020A/040 PDIP are also Obsolete at DigiKey. Broker stock exists (findchips: IBS Electronics ~9,207 pcs at ~USD 3.93-4.29 = ~196-214 TL). No Turkish shop (direnc, robotistan, motorobit, ozdisan) lists it. AliExpress chips are old or broker stock: on arrival read the chip ID (BF/B5) and do full erase/program/verify on the T48; buy 2-3 spares. Price excludes import costs. In 2026 every AliExpress parcel risks thousands of TL in extra clearance demands (see CUSTOMS in findings), so this is cheap only on paper: 4 pcs = ~394 TL, 10 pcs = ~986 TL before import costs."
+  },
+  {
+   "name": "ALTERNATIVE: SST39SF010A-70-4C-NHE flash, PLCC-32 (active, genuine)",
+   "part": "SST39SF010A-70-4C-NHE",
+   "qty_needed": 0,
+   "unit_price_try": 98.6,
+   "source": "DigiKey (USD 1.98 x 49.8; 25+ USD 1.96)",
+   "url": "https://www.digikey.com/en/products/detail/microchip-technology/SST39SF010A-70-4C-NHE/2297825",
+   "in_stock": "DigiKey live check: Active, 4,047 in stock, 17-week factory lead time",
+   "notes": "Microchip's recommended replacement for the EOL DIP part, same die and pinout functions. Each breadboard position needs a PLCC32-to-DIP32 adapter (next item). Supported by T48 and TL866II+ as 'SST39SF010A @PLCC32'. AliExpress also has PLCC-32 lots (5 pcs TRY 462.34 = ~92 TL/pc, https://tr.aliexpress.com/item/1005007314702843.html). This is the genuine way to get the balance of 4-6 chips: put them in the single distributor order (see findings) and mount each on a PLCC32-to-DIP32 adapter."
+  },
+  {
+   "name": "PLCC32 to DIP32 converter adapter (only for the PLCC route; also fits the programmer ZIF)",
+   "part": "PLCC32-DIP32 adapter",
+   "qty_needed": 0,
+   "unit_price_try": 58.12,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/plcc32-dip32-cevirici-adaptor",
+   "in_stock": "Yes ('Sepete Ekle')",
+   "notes": "Price includes KDV. Motorobit sells it for 101 TL + KDV (121.20 TL), stock unclear: https://www.motorobit.com/plcc32-to-dip32-converter-adapter . You'd need about 5-6 (one per ROM socket plus one for the programmer)."
+  },
+  {
+   "name": "CY62256LL-70PC 32Kx8 SRAM, DIP-28 (old stock), 2-piece lots, DOMESTIC - RECOMMENDED",
+   "part": "CY62256LL-70PC",
+   "qty_needed": 3,
+   "unit_price_try": 462.61,
+   "source": "n11.com store 'ackelektronik': 925.21 TL per 2-piece lot (basket price, list 994.85)",
+   "url": "https://www.n11.com/urun/cy62256ll-70pc-28pin-diger-entegreler-2-adet-128900107",
+   "in_stock": "Yes, 'Son 3 ürün': 3 lots (6 chips)",
+   "notes": "Buy 2 lots (4 chips, 1,850.42 TL): 3 needed plus 1 spare. It is a standard JEDEC 62256 (32Kx8, 0.6 in DIP-28) and drops into the AS6C62256 footprint. 70 ns is fine for RAM and VRAM at 1-2 MHz and for the 1.27 us VGA character slot. Cypress old stock from a discontinued line, so test each chip with the T48 'Standard SRAM 62256' test on arrival. The same seller also has HY62256ALP-10 DIP (100 ns), 2 pcs for 925.21 TL (https://www.n11.com/urun/hy62256alp-10-dip-hyundai-entegreler-2-adet-128902459), and one uPD43256BCZ-85LL DIP-28 for 604.50 TL (https://www.n11.com/urun/d43256bcz-85ll-dip-28-256k-bit-cmos-statik-ram-32k-kelime-124109748). The unit price is about 6.6x AliExpress, but it is still cheaper than one 2026 parcel-clearance bill."
+  },
+  {
+   "name": "AS6C62256-55PCN 32Kx8 SRAM, DIP-28, AliExpress 10-pack (alternative, import)",
+   "part": "AS6C62256-55PCN",
+   "qty_needed": 0,
+   "unit_price_try": 69.83,
+   "source": "AliExpress, sold as a 10-piece lot for TRY 698.33",
+   "url": "https://tr.aliexpress.com/item/1005011924674121.html",
+   "in_stock": "Listed; 3 sold, rating 5 (new seller/listing)",
+   "notes": "Alternative to the domestic CY62256. Must buy the 10-pack (698.33 TL), which leaves 7 spares. Risk: pulled or remarked chips, and the speed grade can't be verified, but any 62256 is fine at 1-2 MHz. Test each with the T48 'Standard SRAM: 62256' test. Genuine option: DigiKey live check shows Active, 5,480 in stock, USD 9.93 (~494 TL) at qty 1, 20-week lead time (https://www.digikey.com/en/products/detail/alliance-memory-inc/AS6C62256-55PCN/4234592). Mouser's cached search snippet shows USD 4.10 and ~9,459 in stock, not verified live (https://www.mouser.com/ProductDetail/Alliance-Memory/AS6C62256-55PCN/?qs=LD2UibpCYJqgbIupMJnGTQ%3D%3D). No Turkish retailer found. It is only worth it if it travels in the same parcel as other imports and that parcel clears without broker fees; a 10-pack on its own is a separate parcel from a separate seller."
+  },
+  {
+   "name": "AT28C256-15PU 32Kx8 parallel EEPROM, DIP-28 (genuine)",
+   "part": "AT28C256-15PU",
+   "qty_needed": 2,
+   "unit_price_try": 578.68,
+   "source": "DigiKey (USD 11.62 x 49.8; 25+ USD 11.41)",
+   "url": "https://www.digikey.com/en/products/detail/microchip-technology/AT28C256-15PU/1008506",
+   "in_stock": "DigiKey live check: Active, 257 in stock, 18-week factory lead time",
+   "notes": "Ozdisan lists it with stock 0 and no incoming stock (price on request): https://www.ozdisan.com/entegre-devreler-ics/hafiza-entegreleri/hafiza-entegreleri/AT28C256-15PU . Only worth buying if you need in-system byte writes; the SST39SF010A covers every ROM role more cheaply. See the next item for AliExpress fake/used risk. There is no DIP-28 28C256 on n11 either. The only listing is a PLCC-32 '28C256' at 210.80 TL (https://www.n11.com/urun/28c256-plcc32-eeprom-entegresi-14686357), which would need a PLCC32-DIP32 adapter plus 32-pin JEDEC wiring. OPTIONAL: buy it only inside the single distributor order, and only if you need in-system byte writes."
+  },
+  {
+   "name": "NOT RECOMMENDED: AT28C256 DIP-28 from AliExpress",
+   "part": "AT28C256-15PC/15PI/12PC (listing)",
+   "qty_needed": 0,
+   "unit_price_try": 397.98,
+   "source": "AliExpress, 1 pc/lot",
+   "url": "https://tr.aliexpress.com/item/4001000243213.html",
+   "in_stock": "Listed; 40 sold",
+   "notes": "HIGH fake/used risk. The listing names old Atmel non-RoHS codes (-15PC/-15PI/-12PC) that were discontinued long ago, so the chips must be pulled, used or re-marked. Mixed 10-piece lots at ~30 TL/pc (https://tr.aliexpress.com/item/1005012233123134.html) are almost certainly not genuine. Hobbyists commonly report chips that won't write, are locked by software data protection (SDP), or are other parts re-marked. This is not cheaper than DigiKey after import duty."
+  },
+  {
+   "name": "XGecu T48 (TL866-3G) universal programmer - RECOMMENDED",
+   "part": "XGecu T48",
+   "qty_needed": 1,
+   "unit_price_try": 4358.82,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/t48-tl866-3g-spi/nor/nand-flash-bios-mcu-eeprom-avr-pic-programlayici",
+   "in_stock": "Yes ('Sepete Ekle'; XGecu brand page with in-stock filter lists it)",
+   "notes": "Includes KDV (3,632.35 + KDV). Robotistan: 4,692.50 TL, in stock (https://www.robotistan.com/t48-tl866-3g-eeprom-bios-mcu-programmer-en). Motorobit T48 + 9 adapters including PLCC32: 6,060 + KDV = 7,272 TL (https://www.motorobit.com/t48-universal-usb-programmer-9-converter-adapter). Device list V12.67 (6.15.2024) confirms: SST39SF010A in DIP-32 directly (also @PLCC32 and @TSOP32), AT28C256, a 'Standard SRAM' test that includes 62256, and a 324-IC 'Logic Test' list including 74138, 74154, 74161, 74166, 74173, 74245, 74283, 74574 and 74688. The logic test is a static 5 V functional check, not a speed test. The minipro database also shows 'SST39SF010,SST39SF010A' as one device (ID 0xBFB5), so the domestic non-A chips use the same entry."
+  },
+  {
+   "name": "XGecu TL866II Plus programmer (alternative, not preferred)",
+   "part": "TL866II Plus",
+   "qty_needed": 0,
+   "unit_price_try": 4773.11,
+   "source": "robotistan.com",
+   "url": "https://www.robotistan.com/tl866a-universal-usb-programmer-with-icsp-feature",
+   "in_stock": "Yes",
+   "notes": "Costs more than the T48 in Turkey. Device list V12.63 (9.7.2023, 18,825 devices) confirms SST39SF010A (DIP and @PLCC32), AT28C256, the 62256 SRAM test, and a 323-IC Logic Test list with the same 74xx numbers. Vpp max is 18 V, which doesn't matter for these parts. Only worth it if found used or cheaper."
+  },
+  {
+   "name": "ZIF socket 40-pin DIP (0.6 in wide), used for the 28-pin and 32-pin wide chips",
+   "part": "ZIF 40-pin",
+   "qty_needed": 4,
+   "unit_price_try": 58.12,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/40-li-zif-soket-en",
+   "in_stock": "Yes ('Add to Cart')",
+   "notes": "Includes KDV (48.43 + KDV). No dedicated 28-pin-wide or 32-pin-wide ZIF found in Turkish shops; the direnc 28-pin ZIF is NARROW (0.3 in), so don't buy it for these memories. A 40-pin 0.6 in ZIF accepts any 0.6 in 28/32-pin DIP placed at the pin-1 end. Branded alternative: 3M 40-pin at Elektrovadi, 78.47 TL (https://www.elektrovadi.com/urun/zif-soket-40-pin-dip). ZIF legs are short and thick, so seat it on a machined-pin socket to plug into a breadboard."
+  },
+  {
+   "name": "Arduino Mega 2560 R3 clone (CH340), USB cable included - RECOMMENDED",
+   "part": "Mega 2560 clone",
+   "qty_needed": 1,
+   "unit_price_try": 833.7,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/arduino-mega-2560-r3-klon-usb-kablo-dahil-en",
+   "in_stock": "Yes ('Add to Cart')",
+   "notes": "Includes KDV. Other Turkish prices from search snippets: Motorobit 906.75, Robotistan 918.96 (out of stock), Elektrovadi ~747-780. Fine for a debug and loader board."
+  },
+  {
+   "name": "Arduino Mega 2560 R3 ORIGINAL (alternative)",
+   "part": "Arduino A000067",
+   "qty_needed": 0,
+   "unit_price_try": 3031.91,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/orjinal-arduino-mega-2560-r3-en",
+   "in_stock": "Yes ('Add to Cart')",
+   "notes": "Includes KDV. Robotistan has it discounted to 2,746.90 TL but OUT OF STOCK (https://www.robotistan.com/original-arduino-mega-2560-r3-new-version-board)."
+  },
+  {
+   "name": "USB logic analyzer 8-ch 24 MHz (Saleae-clone, CY7C68013A class) - RECOMMENDED",
+   "part": "8ch 24MHz clone",
+   "qty_needed": 1,
+   "unit_price_try": 374.23,
+   "source": "elektrovadi.com",
+   "url": "https://www.elektrovadi.com/urun/saleae-usb-lojik-analizor-24mhz-8-kanal",
+   "in_stock": "'Sepete Ekle' shown",
+   "notes": "Listed as 6.20 USD + KDV. Works with PulseView/sigrok (fx2lafw). Direnc's version (418.45 TL) is sold out; Robotistan's (464.28 TL) is out of stock. Eight channels is tight for a 16-bit address bus, so use it together with the Arduino trace logger."
+  },
+  {
+   "name": "Kingst LA1010 16-ch 100 MHz USB logic analyzer (optional upgrade)",
+   "part": "Kingst LA1010",
+   "qty_needed": 0,
+   "unit_price_try": 5114.35,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/kingst-la1010-usb-logic-analyzer",
+   "in_stock": "Yes (the only logic analyzer in stock on that page)",
+   "notes": "Includes KDV. The DSLogic 100 MHz 16-ch is 4,533.17 TL but SOLD OUT at direnc (https://www.direnc.net/dslogic-plus-usb-tabanli-logic-analyzer-100mhz-16-kanal). Kingst LA2016 and LA5016 are sold out. Optional: the Arduino Mega logger already captures the full address/data/control bus every clock."
+  },
+  {
+   "name": "25.175 MHz crystal oscillator, 14-DIP full can, 5 V, TTL output (ECS-100A-251.7), import, optional exact-VGA clock",
+   "part": "ECS-100A-251.7",
+   "qty_needed": 0,
+   "unit_price_try": 202.19,
+   "source": "DigiKey (USD 4.06 x 49.8; qty 10 USD 3.531)",
+   "url": "https://www.digikey.com/en/products/detail/ecs-inc/ECS-100A-251-7/79229",
+   "in_stock": "DigiKey live check: Active, 1,120 in stock (35-week factory lead time once depleted)",
+   "notes": "The only stocked 25.175 MHz DIP can found. NOT available in Turkey as an oscillator or a crystal. TTL output (VOH 2.4 V class, 70 mA max supply), so drive a 74HCT input; the /2 flip-flop for 12.5875 MHz can be a 74HCT74. Mouser's ECS-100AX-25.175 is non-stocked (1,000 MOQ); DigiKey's CTS MXO45HS-3C-25M175000 (8-DIP HCMOS) is non-stocked (1,000 MOQ, 18 weeks). Consider buying 2. Only needed if you want exact 640x480@60 timing; it is the one oscillator with no domestic substitute."
+  },
+  {
+   "name": "25.000 MHz crystal oscillator, DIP-8 half-size metal can, 5-piece lot, DOMESTIC - RECOMMENDED VGA clock",
+   "part": "25.000MHz half-can XO (unbranded)",
+   "qty_needed": 1,
+   "unit_price_try": 92.55,
+   "source": "n11.com store 'ackelektronik': 462.77 TL per 5-piece lot (basket price, list 497.60)",
+   "url": "https://www.n11.com/urun/25000mhz-kristal-osilator-5-adet-128897159",
+   "in_stock": "Yes, but 'Son 1 ürün': ONLY 1 lot left, so buy it first",
+   "notes": "The listing photo shows a 4-pin DIP-8 half-size metal can marked 25.000MHz, an active oscillator rather than a bare crystal. Supply voltage and output type are not stated; most such cans are 5 V TTL/HCMOS. On arrival, check the half-can pinout (pin 8 = +5 V, pin 4 = GND, pin 5 = out, pin 1 = NC/enable) and look at the output on the scope. The minimum purchase is the 5-piece lot (462.77 TL), which leaves spares. Divided by 2 it gives a 12.5 MHz dot clock: 31.25 kHz line and 59.5 Hz frame with your 400x525 timing (0.7% fast), which practically all monitors accept."
+  },
+  {
+   "name": "25.000 MHz crystal oscillator, 14-DIP full can, 5 V TTL (ECS-100A-250), branded import alternative",
+   "part": "ECS-100A-250",
+   "qty_needed": 0,
+   "unit_price_try": 172.81,
+   "source": "DigiKey (USD 3.47 x 49.8; 10+ USD 3.012), live check 27 Oct 2026",
+   "url": "https://www.digikey.com/en/products/detail/ecs-inc/ECS-100A-250/109984",
+   "in_stock": "Active, 655 in stock",
+   "notes": "New, branded alternative to the n11 lot; only worth adding to a single distributor order. No new 25 MHz DIP can is sold by Turkish hobby shops (the n11 lot is old stock)."
+  },
+  {
+   "name": "25.000 MHz passive crystal HC-49S (local fallback, needs a 74HCU04 Pierce oscillator)",
+   "part": "Raltron 25.000 MHz HC-49S",
+   "qty_needed": 0,
+   "unit_price_try": 6.97,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/25000mhz-kristal-hc-49s",
+   "in_stock": "'Add to cart' shown",
+   "notes": "Includes KDV. Same shop: 4 MHz 2.91 TL (https://www.direnc.net/4000mhz-kristal-hc-49s), 8 MHz 6.97 TL (https://www.direnc.net/8000mhz-kristal-hc-49s), 2 MHz 22.08 TL (https://www.direnc.net/2000-mhz-kristal). No 25.175 MHz crystal found in Turkey. 74HCU04 wasn't found in Turkish shop search results (check ozdisan or DigiKey); a 74HC04 often works but isn't recommended."
+  },
+  {
+   "name": "1 MHz crystal oscillator, 14-DIP full can, 5 V TTL (ECS-100AX-010)",
+   "part": "ECS-100AX-010",
+   "qty_needed": 0,
+   "unit_price_try": 218.62,
+   "source": "DigiKey (USD 4.39 x 49.8; 10+ USD 3.816), live check 27 Oct 2026",
+   "url": "https://www.digikey.com/en/products/detail/ecs-inc/ECS-100AX-010/827230",
+   "in_stock": "Active, 2,896 in stock",
+   "notes": "Not available in Turkey. Not needed if the clock module divides the domestic 2.048 MHz can by 2 with a 74HC74 (1.024 MHz), or a 4 MHz can by 4."
+  },
+  {
+   "name": "2 MHz crystal oscillator, 14-DIP full can, 5 V TTL (ECS-100AX-020)",
+   "part": "ECS-100AX-020",
+   "qty_needed": 0,
+   "unit_price_try": 162.85,
+   "source": "DigiKey (USD 3.27 x 49.8; 10+ USD 2.842), live check 27 Oct 2026",
+   "url": "https://www.digikey.com/en/products/detail/ecs-inc/ECS-100AX-020/827233",
+   "in_stock": "Active; page shows no stock figure for -AX-020, but its listed substitute ECS-100A-020 has 4,522 in stock",
+   "notes": "Not available in Turkey. The domestic 2.048 MHz can (next item) is the practical choice."
+  },
+  {
+   "name": "2.048 MHz crystal oscillator, DIP-14 full-size metal can, 5-piece lot, DOMESTIC - RECOMMENDED CPU crystal clock",
+   "part": "2.048MHz full-can XO (unbranded)",
+   "qty_needed": 1,
+   "unit_price_try": 92.55,
+   "source": "n11.com store 'ackelektronik': 462.77 TL per 5-piece lot (basket price, list 497.60)",
+   "url": "https://www.n11.com/urun/2048mhz-kristal-osilator-5-adet-128897270",
+   "in_stock": "Yes, 'Son 5 ürün': 5 lots",
+   "notes": "The listing photo shows a 4-pin DIP-14 full-size can marked 2.048MHz. Run the CPU at 2.048 MHz directly, or divide by 2 with a 74HC74 for 1.024 MHz, so one part covers both the 1 MHz and 2 MHz targets. Supply and output are not stated: verify 5 V operation (pin 14 = +5 V, pin 7 = GND, pin 8 = out) and the waveform on the scope. The same seller has a 1.8432 MHz 5-piece lot (462.77 TL, 4 lots, https://www.n11.com/urun/18432mhz-kristal-osilator-5-adet-128895713), but its photo shows a 3.6864 MHz can, so it is unclear what you would receive."
+  },
+  {
+   "name": "4 MHz crystal oscillator, 14-DIP full can, 5 V (ECS-100A-040 / ECS-100AX-040)",
+   "part": "ECS-100A-040",
+   "qty_needed": 0,
+   "unit_price_try": 162.85,
+   "source": "DigiKey ECS-100A-040 (USD 3.27 x 49.8; 10+ USD 2.842), live check 27 Oct 2026",
+   "url": "https://www.digikey.com/en/products/detail/ECS-100A-040/X107-ND/20501",
+   "in_stock": "Active, 717 in stock, 35-week factory lead time",
+   "notes": "Not available new in Turkey; see the domestic 4 MHz half-cans in the next item."
+  },
+  {
+   "name": "4.000 MHz crystal oscillator, DIP-8 half-size metal can, 4-piece lots, DOMESTIC (optional)",
+   "part": "4.000MHz half-can XO / HCI JCO8-3-B",
+   "qty_needed": 0,
+   "unit_price_try": 138.83,
+   "source": "n11.com store 'ackelektronik': 555.32 TL per 4-piece lot (6 lots); HCI JCO8-3-B 4.0000 MHz 644.56 TL per 4-piece lot (535 lots)",
+   "url": "https://www.n11.com/urun/4000mhz-kristal-osilator-4-adet-128896944",
+   "in_stock": "Yes (6 lots; JCO8-3-B: 535 lots)",
+   "notes": "Both listing photos show 4-pin DIP-8 half-size cans: the unbranded one is marked '.4.0', and the HCI JCO 8-3-B one carries a 2008 date code (https://www.n11.com/urun/jc08-3-b-lf-4000mhz-osilator-kristaller-4-adet-128898936). They are only needed for a 4 MHz stretch test or for /4 = 1 MHz. Verify 5 V operation and the output on arrival. Avoid that seller's '4.000m Osilatör 10 Adet' (462.77 TL) and the 'V30145-F210-Y29 25.000mhz' 23-piece lot (1,019.61 TL): the photos show SMD parts. Also avoid 'GWX-26 25.000 MHz' (82.50 TL, another seller), which is a bare cylindrical crystal."
+  },
+  {
+   "name": "6 MHz crystal oscillator, DIP-14, 5 V (Raltron CO6025-6.000MHZ) - only DIP can found in stock in Turkey",
+   "part": "CO6025-6.000MHZ",
+   "qty_needed": 0,
+   "unit_price_try": 93.01,
+   "source": "ozdisan.com (77.51 TL + VAT; 10+ 71.77 TL + VAT)",
+   "url": "https://www.ozdisan.com/en/p/osilatorler-510/raltron-co6025-6-000mhz-345377",
+   "in_stock": "663 in stock, MOQ 1",
+   "notes": "Local option for the CPU 'crystal' clock: 6 MHz / 3 = 2 MHz and / 6 = 1 MHz with a 74HC161 or 74HC74. Ozdisan's TRY/USD pair implies 49.84 TRY per USD."
+  },
+  {
+   "name": "Si5351 clock-generator module (programmable 8 kHz-150 MHz; optional fallback)",
+   "part": "Si5351A breakout",
+   "qty_needed": 0,
+   "unit_price_try": 116.24,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/si5351-saat-sinyal-jenerator-modulu-en",
+   "in_stock": "'Add to Cart' shown",
+   "notes": "Includes KDV. Runs on 3.3 V and needs I2C configuration at every power-up, i.e. a microcontroller. That conflicts with 'Arduino not functionally required' and the no-microcontroller spirit of the project, so treat it as a lab tool only. Its 3.3 V output needs a 74HCT buffer."
+  },
+  {
+   "name": "Native PS/2 keyboard, KEEPRO (round 6-pin mini-DIN plug, Turkish Q, 1.2 m cable)",
+   "part": "KEEPRO PS/2 keyboard (Trendyol product 823304640)",
+   "qty_needed": 1,
+   "unit_price_try": 640,
+   "source": "Trendyol (price from search snippet: 637.50-641.59 TL)",
+   "url": "https://www.trendyol.com/genel-markalar/ps2-girisli-klavye-yuvarlak-girisli-klavye-ps2-klavye-1-2-metre-kablo-uzunlugu-p-823304640",
+   "in_stock": "Yes: Trendyol page data fetched 27 Oct 2026 shows inStock:true, brand KEEPRO, 3.7/5 from 6 ratings (price is loaded dynamically, so it comes from the snippet)",
+   "notes": "A native round PS/2 plug speaks the PS/2 protocol, unlike a USB keyboard on a green passive adapter, which only works if the keyboard is dual-protocol. Alternatives: Keepro PS/2 keyboard on Hepsiburada, 750 TL (https://www.hepsiburada.com/keepro-ps2-girisli-klavye-yuvarlak-girisli-klavye-ps2-klavye-1-2-metre-kablo-uzunlugu-pm-HBC000066FATV); A4Tech KR-8572 PS/2 set at Vatan, 549 TL but sold out (https://www.vatanbilgisayar.com/a4-tech-kr-8572-kablolu-klavye-ve-optik-mouse-set--ps2.html); Logitech Deluxe 250 PS/2 ~4,325 TL. Check the PS/2 clock and data lines on the scope on arrival. An n11 search turned up no native PS/2 keyboards, only USB-to-PS/2 adapters and extension cables."
+  },
+  {
+   "name": "PS/2 6-pin female mini-DIN connector",
+   "part": "Mini-DIN 6 female",
+   "qty_needed": 2,
+   "unit_price_try": 44.84,
+   "source": "motorobit.com (37.37 TL + KDV)",
+   "url": "https://www.motorobit.com/6-pin-female-mini-din-connector",
+   "in_stock": "100+ in stock",
+   "notes": "The page doesn't state the mounting type (PCB right-angle vs panel), so verify. Solder it to a small perfboard with header pins for the breadboard. No ready-made PS/2 breakout was found in Turkish shops, and AliExpress search showed none. Breakout alternative: cut a PS/2 male-to-female extension cable and wire its female end to header pins. This gives good strain relief but is pricier (n11 from 392 TL: https://www.n11.com/urun/ps2-disi-erkek-uzatma-kablosu-ps2-klavye-mouse-uzatma-kablosu-110804758)."
+  },
+  {
+   "name": "VGA HD15 (3-row DB15) female connector, 90 deg PCB type",
+   "part": "HD15 female 90deg PCB",
+   "qty_needed": 2,
+   "unit_price_try": 34.87,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/dsub-15li-3-sira-90c-disi",
+   "in_stock": "Yes ('Sepete Ekle')",
+   "notes": "Includes KDV (29.06 + KDV). The page title says female (disi) but the description says male, so confirm before ordering. Alternatives: Robolink 3-row 15-pin female solder-cup, 9.50 TL + KDV (~11.40), 20+ in stock (https://www.robolinkmarket.com/15-pin-disi-d-sub-konnektor-3-sira-lehim-tip); Motorobit DR15P-VGA female 90 deg PCB, 25 TL + KDV. Screw-terminal 'VGA disi klemensli' connectors exist on Trendyol and Hepsiburada (price not captured) and are the easiest to wire to a breadboard."
+  },
+  {
+   "name": "7-segment display, common cathode, 14 mm (0.56 in), single digit, red",
+   "part": "7-seg CC 0.56in",
+   "qty_needed": 4,
+   "unit_price_try": 7.27,
+   "source": "motorobit.com (6.06 TL + KDV)",
+   "url": "https://www.motorobit.com/7-segment-display-cathode",
+   "in_stock": "1000+ in stock",
+   "notes": "Exact part number not stated (5611AS-type). Multi-digit common-cathode modules also exist (2-digit 5621AS ~7.27 TL incl. KDV, 3-digit 27 TL incl. KDV)."
+  },
+  {
+   "name": "10-segment LED bar graph, red",
+   "part": "10-seg bar graph",
+   "qty_needed": 8,
+   "unit_price_try": 19.76,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/10-lu-bargraf-led-kirmizi-en",
+   "in_stock": "Yes ('Add to Cart')",
+   "notes": "Includes KDV (16.47 + KDV). Motorobit sells a multicolour 10-segment bar at 29.25 TL + KDV. You'll also need resistor networks (not priced here)."
+  }
+ ],
+ "findings": "EXCHANGE RATE: 1 USD = 49.8 TRY, 1 EUR = 55.7 TRY (market quotes 20-23 Oct 2026; Ozdisan's TRY/USD pair implies 49.84; TCMB 23 Oct selling rate 49.65). DigiKey prices are converted at 49.8 and exclude 20% KDV, shipping and import costs. Turkish shop prices include KDV unless marked '+ KDV'. n11 prices are the 'sepette' (in-basket) prices.\n\nMAIN CHANGE AFTER THE VERIFICATION PASS: personal imports in 2026 carry a fixed cost of several thousand TL per parcel (see CUSTOMS), so domestic stock beats AliExpress even at 2-7x the unit price. The pass found an n11 store, 'ackelektronik' (ships from Turkey), selling old-stock memories and DIP oscillator cans: SST39SF010-90 DIP-32 (6 chips), CY62256LL-70PC DIP-28 (6 chips), real 25.000 MHz oscillator cans (one 5-piece lot left), and 2.048 MHz and 4 MHz cans. Photos were checked to confirm metal-can oscillators.\n\nRECOMMENDED BUY PLAN (all domestic, no customs). (1) n11 ackelektronik: 2 lots SST39SF010-90 (6 chips) 1,159.28 TL; 2 lots CY62256LL-70PC (4 chips) 1,850.42 TL; 1 lot 25.000 MHz half-can (5 pcs) 462.77 TL, ONLY ONE LOT LEFT, buy it first; 1 lot 2.048 MHz DIP-14 can (5 pcs) 462.77 TL. Subtotal 3,935.24 TL. (2) direnc.net: XGecu T48 4,358.82; 4x 40-pin ZIF 232.48; Arduino Mega 2560 clone 833.70; 2x HD15 female 69.74; 8x bar graph 158.08; a few 25 MHz HC-49S crystals (6.97 each) as spares. (3) elektrovadi: 8-ch 24 MHz logic analyzer 374.23. (4) motorobit: 2x mini-DIN-6 female 89.68; 4x common-cathode 7-seg 29.08. (5) Trendyol: KEEPRO PS/2 keyboard ~640. TOTAL about 10,720 TL for this whole list (about 36% of the 30,000 TL budget) with zero import exposure. Trade-offs: 6 flash chips instead of 10 (enough for 4-5 microcode ROMs plus the program and font ROMs, but little or no spare), 25.000 MHz instead of 25.175 MHz, old-stock parts (test on arrival; n11 returns apply), and no AT28C256. Optional extras: Kingst LA1010 16-ch 5,114.35 TL; domestic 4 MHz cans 555.32 TL per 4.\n\nOPTIONAL SINGLE IMPORT: do this only if you need the exact 25.175 MHz clock, more flash spares or the AT28C256. Place ONE DigiKey order, ideally through the university's purchasing/BAP office or DigiKey's Turkish partner EKOM, containing 2x ECS-100A-251.7 (USD 8.12), 4-6x SST39SF010A-70-4C-NHE PLCC (USD 1.98 each) with PLCC32-DIP32 adapters from direnc (58.12 TL each), and 2x AT28C256-15PU (USD 23.24). That is about USD 39 (~1,960 TL) of parts, but expect ~390 TL KDV plus roughly 3,000-5,000 TL of courier/broker clearance (or EKOM's landed-price margin) and unknown DigiKey shipping: ESTIMATE ~5,500-7,500 TL landed, several times the parts value. The total would then be ~16,000-18,500 TL. Never split imports into several parcels. The first-pass AliExpress plan (SST39SF010A DIP x10 = 985.90 TL plus AS6C62256 10-pack = 698.33 TL) is NOT recommended as the main route: two sellers means two parcels, each exposed to the clearance fees below.\n\nCRITICAL AVAILABILITY: SST39SF010A DIP-32 IS END-OF-LIFE. DigiKey marks SST39SF010A-70-4C-PHE 'Obsolete, no longer manufactured' with no stock. Mouser lists it Obsolete with a discontinuation notice dated 10 Apr 2026 (Microchip PCN CAAN-08FCZP770). The pin-compatible PDIP SST39SF020A/SST39SF040 are also Obsolete at DigiKey. The PLCC-32 SST39SF010A-70-4C-NHE is Active (DigiKey USD 1.98, 4,047 in stock). Every DIP-32 chip on the market is therefore old or broker stock: the n11 non-A SST39SF010-90 (same chip ID 0xBFB5 and same programmer entry), AliExpress lots (~99 TL each), or brokers (~USD 4). The 'prefer DIP parts available new in 2026' rule no longer holds for this flash. Design around DIP-32 footprints, buy the domestic chips now, and keep the PLCC-NHE plus adapter route as the genuine backup. No Turkish hobby shop (direnc, robotistan, motorobit) stocks any DIP parallel memory. Ozdisan lists AT28C256-15PU with stock 0.\n\nCUSTOMS 2026 (verify before ordering): Presidential Decision 10813 (Resmi Gazete 7 Jan 2026) removed the 30 EUR duty-free route for postal/express e-commerce parcels from 6 Feb 2026. News reports quote flat 30% duty for EU origin and 60% for non-EU (China, US) on goods plus shipping, +20% for OTV-list goods, and Karar (13 Jan 2026) says individuals effectively must use a customs broker. In practice AliExpress now collects tax at checkout, yet Sikayetvar complaints from Mar-May 2026 show parcels still held, with large extra demands from PTT or the clearance agent 'gnd Global'. Examples: 5,634 TL demanded for a 54.11 TL item already paid at 214.79 TL including tax (26 Mar 2026), and ~3,900 TL in another case (9 Apr 2026). The parallel import research documents a 770 TL item that cost ~10,400 TL in total (Karar, 14 Apr 2026: 3,984 brokerage + 1,908 inspection + ~4,500 tax). Budget roughly 4,000-6,000 TL of overhead per small parcel. Student route: the MODEL exemption code (Ministry of Trade circular, 30 Jan 2026) lets a courier clear non-commercial samples/components for education or R&D on a simplified declaration. Limits are 30 EUR per shipment and 5 shipments per month, with your TCKN, proof of enrollment and a university letter; ask your department. Distributors: Mouser Turkey ships FCA and collects duties, taxes and fees on delivery (free shipping over ~60 EUR per mouser.com.tr text). DigiKey's authorized Turkish partner EKOM (+90 212 590 97 15, info@e-kom.com) quotes landed prices including clearance and duties. Sources disagree on the details, so confirm the current procedure first.\n\nFAKE/USED RISK. AT28C256 on AliExpress: HIGH. Listings use old Atmel '-15PC/-15PI/-12PC' codes that were discontinued long ago, so the chips are pulled, used or re-marked; commonly reported problems are chips that won't write, chips locked by SDP (the T48 can unlock SDP) and re-marked other parts. After import costs they are not cheaper than a genuine USD 11.62 DigiKey part. SST39SF010A DIP on AliExpress: MEDIUM, since all stock is old or broker stock. AS6C62256 on AliExpress: MEDIUM (possibly re-marked or slower than marked, which doesn't matter at 1-2 MHz). n11 ackelektronik old stock: MEDIUM (old date codes, possibly pulls), but the seller is domestic and n11 returns apply. For every memory chip: read the ID, then run erase/program/verify or the T48 62256 SRAM test on arrival, and keep spares.\n\nPROGRAMMER RECOMMENDATION: XGecu T48 (TL866-3G) from direnc.net, 4,358.82 TL incl. KDV, in stock (Robotistan 4,692.50). Device list V12.67 confirms SST39SF010A in DIP-32 with no adapter (and @PLCC32 with the PLCC adapter), AT28C256, a 'Standard SRAM' test that includes 62256, and a 324-chip Logic Test list. That list covers every 74xx function checked for this design: 74138, 74154, 74161, 74166, 74173, 74245, 74283, 74574 and 74688 (listed by generic 74xxx number). The open-source minipro database lists 'SST39SF010,SST39SF010A' as one device (ID 0xBFB5), so the old non-A n11 chips use the same entry. The TL866II Plus (device list V12.63, 323 logic ICs) supports the same chips but costs MORE in Turkey (Robotistan 4,773.11 TL), so there is no reason to choose it. The logic test is a static 5 V functional check; it does not test speed or timing.\n\n25.175 MHz OSCILLATOR AVAILABILITY: there is NONE in Turkey, as an oscillator or as a crystal. direnc, motorobit, robotistan, elektrovadi, ozdisan and n11 were all checked. The only stocked exact part is DigiKey ECS-100A-251.7 (14-DIP, 5 V, TTL output, USD 4.06 = ~202 TL, 1,120 in stock); its TTL output should feed a 74HCT input (e.g. a 74HCT74 for the /2). Mouser ECS-100AX-25.175 and DigiKey CTS MXO45HS-3C-25M175000 are non-stocked with a 1,000-piece minimum. 25 MHz IS the practical fallback. 25.000 / 2 = 12.5 MHz gives a 31.25 kHz line rate and a 59.5 Hz frame with your 400x525 timing (0.7% off spec), which practically all monitors accept. It is available domestically as a real oscillator can (n11 ackelektronik, 5 half-cans for 462.77 TL, only one lot left) or new from DigiKey (ECS-100A-250, USD 3.47, 655 in stock). It can also be built from a 25 MHz HC-49S crystal (direnc 6.97 TL) with a 74HCU04 Pierce oscillator. Keep the dot clock parameterised in the VGA timing generator so 25.175 MHz can be dropped in later. The Si5351 module (116 TL) can make 25.175 MHz exactly, but it needs a microcontroller to configure it at every power-up, so it is a lab tool only.\n\nCPU CLOCK (1/2/4 MHz): use the domestic 2.048 MHz DIP-14 can (n11, 5 for 462.77 TL), either directly or divided by 2 with a 74HC74 (1.024 MHz). Domestic 4 MHz half-cans: 555.32 TL per 4, or HCI JCO8-3-B at 644.56 TL per 4 (535 lots). Ozdisan has a Raltron 6 MHz DIP-14 can (93.01 TL; /3 or /6). New 1/2/4 MHz cans exist only abroad (DigiKey live: ECS-100AX-010 USD 4.39, ECS-100AX-020 USD 3.27, ECS-100A-040 USD 3.27).\n\nONLY AVAILABLE FROM ABROAD: the exact 25.175 MHz oscillator; NEW/genuine SST39SF010A (any package), AS6C62256 and AT28C256; more than 6 DIP-32 SST39SF010-family chips; exact 1.000 and 2.000 MHz cans. Everything else is in stock in Turkey, including working substitutes for the memories and oscillators: T48, 40-pin ZIF, Arduino Mega, logic analyzers, PS/2 keyboard, mini-DIN-6, HD15, 7-seg, bar graphs, PLCC32-DIP32 adapters and passive crystals.\n\nUNVERIFIED POINTS: the KEEPRO keyboard price is from a Trendyol search snippet (page data confirms it is in stock). Hepsiburada, Mouser and Microchip block automated fetches. For the n11 oscillator lots, frequency comes from the titles and photos; supply voltage and output type are not stated. Live DigiKey checks covered the 1/2/4/25/25.175 MHz cans, AS6C62256, AT28C256 and SST39SF010A-NHE (the 2 MHz -AX-020 page shows no stock figure). Customs fee levels come from news reports and complaints, not official tariffs. DigiKey's Turkey shipping fee could not be read."
+}

@@ -1,0 +1,315 @@
+{
+ "items": [
+  {
+   "part": "74HC00",
+   "name": "74HC00 quad NAND DIP-14",
+   "qty_needed": 3,
+   "unit_price_try": 10.3,
+   "source": "motorobit.com",
+   "url": "https://www.motorobit.com/74hc00-dip14-entegre",
+   "in_stock": "yes (433)",
+   "notes": "Stm/Texas-branded stock. Alt direnc.net 10.46 (1115 stk) https://www.direnc.net/74hc00--quad-2-input-nand-gate . Ozdisan TI SN74HC00N 0 stock."
+  },
+  {
+   "part": "74HC02",
+   "name": "74HC02 quad NOR DIP-14",
+   "qty_needed": 2,
+   "unit_price_try": 6.97,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc02--quad-2-input-nor-gate",
+   "in_stock": "yes (1116)",
+   "notes": "Stm/Texas-branded stock. Plenty of stock."
+  },
+  {
+   "part": "74HC04",
+   "name": "74HC04 hex inverter DIP-14",
+   "qty_needed": 3,
+   "unit_price_try": 12.84,
+   "source": "robotsepeti.com",
+   "url": "https://www.robotsepeti.com/74hc04-entegre",
+   "in_stock": "yes (162)",
+   "notes": "direnc 5.81 SOLD OUT; robotistan 13.94 (96, Hgsemi); Ozdisan SN74HC04N (TI) 18.15+KDV=21.78 (992 stk)."
+  },
+  {
+   "part": "74HC08",
+   "name": "74HC08 quad AND DIP-14",
+   "qty_needed": 4,
+   "unit_price_try": 18.18,
+   "source": "robotistan.com",
+   "url": "https://www.robotistan.com/74hc08",
+   "in_stock": "yes (83)",
+   "notes": "Hgsemi (Chinese second-source, fine functionally). Alt: Ozdisan SN74HC08N (genuine TI) 18.74+KDV=22.49 (822 stk) https://www.ozdisan.com/p/logic-kapi-ve-cevirici-entegreleri-248/texas-sn74hc08n-36914 ; robotsepeti 20.78; direnc 5.81 sold out."
+  },
+  {
+   "part": "74HC14",
+   "name": "74HC14 DIP-14",
+   "qty_needed": 3,
+   "unit_price_try": 5.81,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc14--hex-inverting-schmitt-trigger-soic-14",
+   "in_stock": "yes (241)",
+   "notes": "Title says DIP-14 (URL slug says soic-14, but it is the DIP listing; SMD is a separate listing). Ozdisan SN74HC14N 28.84+KDV=34.61 (1894 stk) as genuine-TI fallback."
+  },
+  {
+   "part": "74HC32",
+   "name": "74HC32 DIP-14",
+   "qty_needed": 3,
+   "unit_price_try": 6.97,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc32--quad-2-input-or-gate",
+   "in_stock": "yes (848)",
+   "notes": "Alt motorobit 10.91 (409). Ozdisan only HCT: SN74HCT32N 22.84+KDV."
+  },
+  {
+   "part": "74HC74",
+   "name": "74HC74 DIP-14",
+   "qty_needed": 4,
+   "unit_price_try": 9.3,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc74--dual-d-type-flip-flop-with-set-and-reset-positive-edge-trigger",
+   "in_stock": "yes (47)",
+   "notes": "Alt robotistan SN74HC74N 12.73 (96, Xblw); Ozdisan SN74HC74N TI 28.18+KDV=33.82 (2714)."
+  },
+  {
+   "part": "74HC86",
+   "name": "74HC86 DIP-14",
+   "qty_needed": 4,
+   "unit_price_try": 26.89,
+   "source": "robotsepeti.com",
+   "url": "https://www.robotsepeti.com/74hc86-quadruple-2-input-exclusive-or-gate-dip-14",
+   "in_stock": "yes (31)",
+   "notes": "TI. Cheaper direnc 9.88 and robotistan 12.12 are SOLD OUT - check again before ordering. LCSC TI SN74HC86N $0.95 (144 stk)."
+  },
+  {
+   "part": "74HC138",
+   "name": "74HC138 DIP-16",
+   "qty_needed": 3,
+   "unit_price_try": 10.91,
+   "source": "robotistan.com",
+   "url": "https://www.robotistan.com/74hc138",
+   "in_stock": "yes (60)",
+   "notes": "direnc SOLD OUT; Ozdisan SN74HC138N TI 35.58+KDV=42.70 (411) or CD74HCT138E 27.89+KDV=33.47 (847). If 74HC154 is replaced by 2x138, buy 7 total."
+  },
+  {
+   "part": "74HC139",
+   "name": "74HC139 DIP-16",
+   "qty_needed": 2,
+   "unit_price_try": 11.62,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc139--other-decoderdriver-inverted-output-pdip16",
+   "in_stock": "yes (277)",
+   "notes": "Ozdisan SN74HC139N 39.02+KDV (1945) as fallback."
+  },
+  {
+   "part": "74HC154",
+   "name": "74HC154 DIP-24",
+   "qty_needed": 2,
+   "unit_price_try": 116.24,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc154-dar--other-decoderdriver-inverted-output-pdip24",
+   "in_stock": "yes (41)",
+   "notes": "direnc lists 74HC154 narrow (0.3in) DIP-24 at 116.24 (41 stk) - grade/brand unverified, possibly old stock. TI CD74HC154E/EN DIP OBSOLETE at DigiKey (0 stock). Ozdisan CD74HCT154E 60.66+KDV=72.79 but only 2 pcs (https://www.ozdisan.com/p/signal-switches-multiplexer-decoder-ve-encoder-entegreleri-253/texas-cd74hct154e-483704). Recommended: 2x 74HC138 (cascade with enables) = ~22 TL instead."
+  },
+  {
+   "part": "74HC157",
+   "name": "74HC157 DIP-16",
+   "qty_needed": 4,
+   "unit_price_try": 20.34,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc157--quad-2-line-to-1-line-multiplexer-true-output-pdip16",
+   "in_stock": "yes (46)",
+   "notes": "STM. Fallback/substitute: Ozdisan SN74HC257N (3-state 157, tie /OE low) 33.01+KDV=39.61, 4719 stk https://www.ozdisan.com/p/signal-switches-multiplexer-decoder-ve-encoder-entegreleri-253/texas-sn74hc257n-342615 ; Toshiba TC74HC158P (inverting) 12.71+KDV at Ozdisan (187)."
+  },
+  {
+   "part": "74HC153",
+   "name": "74HC153 DIP-16",
+   "qty_needed": 4,
+   "unit_price_try": 16.97,
+   "source": "robotistan.com",
+   "url": "https://www.robotistan.com/74hc153",
+   "in_stock": "yes (49)",
+   "notes": "direnc SOLD OUT; motorobit 30.30 (342)."
+  },
+  {
+   "part": "74HC161",
+   "name": "74HC161 DIP-16",
+   "qty_needed": 8,
+   "unit_price_try": 18.51,
+   "source": "n11.com (ACK Elektronik, NOS lot of 25)",
+   "url": "https://www.n11.com/urun/74hc161n-dip-philips-74-serisi-entegre-25-adet-115911320",
+   "in_stock": "listed",
+   "notes": "Old-stock (NOS) Philips 74HC161N, lot of 25 for 462.77 TL on n11 (seller ackelektronik, free shipping), only 1 lot left on 27.10. Not stocked by direnc/robotistan/motorobit/Ozdisan; Farnell-via-SAMM sold out. Import alt: DigiKey SN74HC161N $0.696@10 (=34.6 TL); LCSC SN74HC161N(LX) $0.24@5. Philips brand is long gone -> old date codes; test on arrival."
+  },
+  {
+   "part": "74HC163",
+   "name": "74HC163 DIP-16",
+   "qty_needed": 8,
+   "unit_price_try": 22.46,
+   "source": "n11.com (Motorola NOS lot of 25)",
+   "url": "https://www.n11.com/urun/mc74hc163-dip-motorola-74-serisi-entegreler-25-adet-128898167",
+   "in_stock": "listed",
+   "notes": "NOS Motorola MC74HC163, lot of 25 = 561.53 TL (4 lots) on n11 (ackelektronik); also SN74HC163N lot 20 = 558.12. 161 and 163 are interchangeable for most uses (163 = synchronous clear). Import alt: DigiKey CD74HC163E $1.26. Test on arrival."
+  },
+  {
+   "part": "74HC164",
+   "name": "74HC164 DIP-14",
+   "qty_needed": 2,
+   "unit_price_try": 10.46,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc164--8-bit-right-serial-in-parallel-out-shift-register-true-output-pdip14",
+   "in_stock": "yes (306)",
+   "notes": ""
+  },
+  {
+   "part": "74HC166",
+   "name": "74HC166 8-bit PISO shift register DIP-16",
+   "qty_needed": 2,
+   "unit_price_try": 118.43,
+   "source": "n11.com (single piece)",
+   "url": "https://www.n11.com/urun/74hc166-entegre-14735202",
+   "in_stock": "listed InStock (qty not shown)",
+   "notes": "No Turkish distributor stocks 74HC166 DIP. Options: n11 single 118.43; n11 lot 74HC166AP x20 = 598.76 (29.94/ea, 28 lots) https://www.n11.com/urun/74hc166ap-texas-20-adet-128895320 ; PC74HC166P x15 = 546.02; DigiKey CD74HC166E $1.07 (=53 TL, 1642 stk). Substitute: 74HC165 (async load; Ozdisan SN74HC165N 2500 upcoming, 40.55+KDV) if the load pulse is timed away from the shift clock edge."
+  },
+  {
+   "part": "74HC173",
+   "name": "74HC173 4-bit D register 3-state DIP-16",
+   "qty_needed": 2,
+   "unit_price_try": 93.05,
+   "source": "n11.com (gozelerelektronik, single)",
+   "url": "https://www.n11.com/urun/74hc173-entegre-14735320",
+   "in_stock": "yes (8)",
+   "notes": "No TR distributor stock. DigiKey CD74HC173E $1.26 (=62.7 TL, 419 stk). Substitute: 74HC163 used as 4-bit loadable register (+ 3-state buffer if needed) or a 74HC377/574."
+  },
+  {
+   "part": "74HC175",
+   "name": "74HC175 quad D flip-flop DIP-16",
+   "qty_needed": 2,
+   "unit_price_try": 50.8,
+   "source": "Ozdisan (74HC175N,652 Nexperia)",
+   "url": "https://www.ozdisan.com/p/flip-flop-entegreleri-247/nexperia-74hc175n-652-460526",
+   "in_stock": "yes (57)",
+   "notes": "42.33 excl. KDV -> 50.80 incl. Alt: farnell.samm.com SN74HC175N 54.61+KDV=65.53 (923 stk) https://farnell.samm.com/d-type-flip-flop-1208818 ; n11 single 106.46; DigiKey $1.12. direnc 74HC174 DIP (hex D-FF, no Q-bar) 18.71 (48) is a cheaper substitute if Q-bar not needed."
+  },
+  {
+   "part": "74HC191",
+   "name": "74HC191 DIP-16",
+   "qty_needed": 4,
+   "unit_price_try": 16.27,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc191--syn-positive-edge-triggered-4-bit-bidirectional-binary-counter",
+   "in_stock": "yes (16)",
+   "notes": "Only 16 in stock - buy early. No other TR shop has it in DIP; Ozdisan has only CD74HC190E (BCD version, 61.12+KDV). LCSC TI 191N OOS."
+  },
+  {
+   "part": "74HC193",
+   "name": "74HC193 DIP-16",
+   "qty_needed": 4,
+   "unit_price_try": 19.39,
+   "source": "motorobit.com",
+   "url": "https://www.motorobit.com/74hc193-dip16-entegre",
+   "in_stock": "yes (140)",
+   "notes": "Alt direnc 23.25; robotistan 33.94 (43)."
+  },
+  {
+   "part": "74HC245",
+   "name": "74HC245 DIP-20",
+   "qty_needed": 4,
+   "unit_price_try": 12.12,
+   "source": "motorobit.com",
+   "url": "https://www.motorobit.com/74hc245-dip-20-entegre-sn74hc245n",
+   "in_stock": "yes (105)",
+   "notes": "direnc 12.20 (1788 stk) https://www.direnc.net/74hc245--octal-bus-tranceiver-3-state ; Ozdisan TI 22.25+KDV (128). Also the cheapest substitute for 74HC541 (tie DIR)."
+  },
+  {
+   "part": "74HC273",
+   "name": "74HC273 DIP-20",
+   "qty_needed": 2,
+   "unit_price_try": 11.62,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc273--positive-edge-triggered-d-flip-flop-true-output-pdip20",
+   "in_stock": "yes (56)",
+   "notes": "robotsepeti 21.39 alt."
+  },
+  {
+   "part": "74HC283",
+   "name": "74HC283 DIP-16",
+   "qty_needed": 3,
+   "unit_price_try": 39.39,
+   "source": "motorobit.com",
+   "url": "https://www.motorobit.com/74hc283-dip16-entegre",
+   "in_stock": "yes (197)",
+   "notes": "robotistan 43.03 SOLD OUT; n11 single 128.52. DigiKey/TI part is CD74HC283E."
+  },
+  {
+   "part": "74HC377",
+   "name": "74HC377 octal D FF with clock enable DIP-20",
+   "qty_needed": 8,
+   "unit_price_try": 122.12,
+   "source": "n11.com (elektronikport, single)",
+   "url": "https://www.n11.com/urun/74hc377-dip-20-lojik-kapi-entegresi-36142459",
+   "in_stock": "yes (42)",
+   "notes": "No TR distributor/robotics shop stocks 74HC377 DIP (direnc, robotistan, motorobit, robotsepeti, Ozdisan, elektrovadi, Farnell-SAMM all checked). Other n11 listing 115.44 https://www.n11.com/urun/74hc377-entegre-14735410 (qty unknown). Import: DigiKey CD74HC377E $1.31 (=65 TL, 858 stk) / SN74HC377N $1.59; LCSC TI OOS. CHEAPER SUBSTITUTE: 2x 74HC163 (n11 lot, 22.46/ea) per 8-bit register, using synchronous /LOAD as the clock enable with ENP/ENT=0 -> ~45 TL per register instead of 122 TL."
+  },
+  {
+   "part": "74HC541",
+   "name": "74HC541 octal buffer 3-state DIP-20",
+   "qty_needed": 12,
+   "unit_price_try": 26.73,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc541--octal-bufferline-driver-3-state",
+   "in_stock": "only 9 (need 12) - verified live 27.10",
+   "notes": "Buy the 9 (STM) + 3x 74HC245 (DIR tied, 12.20 at direnc) as functionally identical unidirectional 3-state buffers. Or n11 SN74HC541N DIP lot 16 = 575.35 (35.96/ea) https://www.n11.com/urun/sn74hc541n-dip-entegre-16-adet-128699735 ; CD74HCT541E Harris lot 20 = 560.91 (28.05/ea) https://www.n11.com/urun/cd74hct541e-dip-harris-74-serisi-entegreler-20-adet-129956374 (HCT is fine driven by HC). 74HC244 DIP direnc 15.11 (supplier stock, 99999). DigiKey SN74HC541N $1.0775@20 (=53.6 TL)."
+  },
+  {
+   "part": "74HC574",
+   "name": "74HC574 octal D FF 3-state DIP-20",
+   "qty_needed": 8,
+   "unit_price_try": 26.53,
+   "source": "Ozdisan (SN74HC574N, TI)",
+   "url": "https://www.ozdisan.com/p/flip-flop-entegreleri-247/texas-sn74hc574n-30681",
+   "in_stock": "yes (1777)",
+   "notes": "Ozdisan price 22.11 excl. KDV @1 -> 26.53 incl.; 20.47+KDV @10 (=24.56), 18.83+KDV @20 (=22.60). Genuine TI from authorized distributor, same-day ship. direnc.net DIP 14.53 but only 3 pcs. DigiKey $0.91."
+  },
+  {
+   "part": "74HC595",
+   "name": "74HC595 DIP-16",
+   "qty_needed": 3,
+   "unit_price_try": 5.81,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/74hc595--8-bit-right-serial-in-parallel-out-shift-register-true-output-pdip16",
+   "in_stock": "yes (1166)",
+   "notes": ""
+  },
+  {
+   "part": "74HC688",
+   "name": "74HC688 8-bit identity comparator DIP-20",
+   "qty_needed": 3,
+   "unit_price_try": 55.53,
+   "source": "n11.com (ackelektronik, PC74HCT688P lot of 6 = 333.19)",
+   "url": "https://www.n11.com/urun/pc74hct688p-dip-74-serisi-entegreler-6-adet-56292675",
+   "in_stock": "1 lot left",
+   "notes": "HCT version (Philips NOS) - fine in a 5 V HC system. Fallback: 74HC688N DIP lot of 5 = 520.61 (104.12/ea, 68 lots) https://www.n11.com/urun/74hc688n-dip-thailand-74-serisi-entegreler-5-adet-128903464 ; M74HC688B1 x4 = 592.56. Import: DigiKey SN74HC688N $1.62 (=80.6 TL, 1167 stk); TME SN74HC688N ~$1.70 (265 stk, EU origin). No TR distributor stocks it."
+  },
+  {
+   "part": "CMOS 555",
+   "name": "TLC555CP DIP-8",
+   "qty_needed": 2,
+   "unit_price_try": 27.27,
+   "source": "motorobit.com",
+   "url": "https://www.motorobit.com/tlc555cp-dip-8-entegre",
+   "in_stock": "yes (566)",
+   "notes": "TI TLC555CP, genuine. LMC555/ICM7555 DIP not found in TR shops; TLC555 is the standard choice. n11 single 116.32."
+  },
+  {
+   "part": "NE555",
+   "name": "NE555CN DIP-8",
+   "qty_needed": 2,
+   "unit_price_try": 2.91,
+   "source": "direnc.net",
+   "url": "https://www.direnc.net/ne555cn-zamanlayici-entegresi-dip8",
+   "in_stock": "yes (1048)",
+   "notes": "OEM generic, plenty of stock. motorobit 7.27 (2711); robotsepeti TI 18.34. Fine for a debug clock; use TLC555 for the main adjustable clock (cleaner edges, smaller supply spikes)."
+  }
+ ],
+ "findings": "PRICES: all TRY incl. 20% KDV, checked 26-27 Oct 2026. Ozdisan lists prices excl. KDV, multiplied by 1.2 here. FX for conversions: TCMB selling rate 26.10.2026, USD 49.7627 / EUR 55.7542. Turkish shop prices track the exchange rate, so expect about +5-10% by late January 2027.\n\nTOTALS (list as given = 116 logic chips, not ~95):\n- Unit price x qty = 3,677 TL for the 74HC chips, plus 60 TL for the 555s.\n- Real cash outlay is about 4,500 TL, because 74HC161, 74HC163 and 74HC688 come only as n11 lots (25 / 25 / 6 pcs, which gives about 37 spares). Add an ESTIMATED 300-600 TL shipping across 5-7 shops.\n- Cheaper plan, about 3,300 TL (same lots, two substitutions):\n  (a) 74HC154 -> 2x 74HC138 (saves about 190 TL; DIP 154 is obsolete anyway).\n  (b) 74HC377 -> 2x 74HC163 per 8-bit register (saves about 980 TL). Wire /LOAD as the active-low clock enable, ENP/ENT=0, /CLR=1. 8 + 16 = 24 chips fit in one 25-piece 163 lot.\n- Rule of thumb: ~100 74HC DIP chips cost 3,500-5,000 TL bought in Turkey, which is 12-17% of the 30,000 TL budget.\n\nHARD TO FIND IN DIP IN TURKEY (none of these on the shelf at direnc / robotistan / motorobit / robotsepeti / Ozdisan / elektrovadi; Farnell-via-SAMM sold out):\n- 74HC161, 163, 166, 173, 377, 688: only on n11, mostly old-stock lots (seller ackelektronik) or single pieces at 93-122 TL.\n- 74HC154: DIP is OBSOLETE worldwide (TI CD74HC154E/EN, DigiKey 0 stock). direnc has 41 narrow-DIP pcs at 116 TL; Ozdisan has 2 pcs CD74HCT154E -> use 2x 74HC138.\n- 74HC541: direnc has only 9 DIP (verified live 27.10).\n- 74HC191: direnc has only 16.\n- Thin or sold-out stock that varies by shop: 74HC283, 74HC86 (cheap ones sold out), 74HC175 (Ozdisan 57).\n- LMC555 / ICM7555: not found; TLC555CP is easy (motorobit 566 pcs).\nSUBSTITUTES:\n- HCT parts work alongside HC at 5 V: HC outputs drive HCT inputs fine and HCT outputs are full CMOS swing. CD74HCT541E, PC74HCT688P and CD74HCT138E are cheaper or the only stock.\n- 74HC245 with DIR tied (12.20 TL, 1788 pcs at direnc) = 74HC541.\n- 74HC244 (direnc 15.11, supplier stock) = 541 with a different pinout.\n- 74HC257 (Ozdisan 39.61 incl. KDV, 4719 pcs) = 157 with /OE tied low.\n- 74HC174 (direnc 18.71) = 175 if Q-bar is not needed.\n- 74HC165 = 166, but its parallel load is asynchronous, so time the load pulse away from the shift clock edge.\n- 2x 74HC163 = 74HC377.\n- 74HC163 or 74HC377 = 74HC173 if no tri-state output is needed.\n\nIMPORT VS LOCAL: buy locally. Importing does not pay off for logic chips.\n- Customs: the 30 EUR duty-free allowance for post/express parcels ended (Presidential Decision 10813, Resmi Gazete 7 Jan 2026, in force about 6 Feb 2026). Consultancy and press sources (lires.com.tr, Hurriyet) give flat 30% for EU origin and 60% for non-EU (US, China), plus declaration ('sunum') and broker fees. One source (ideasoft) says ordinary goods now go through a full declaration at per-GTIP rates instead (ICs 8542 = 0% duty + 20% KDV) plus broker fees. Treat this as unresolved; the fixed fees apply either way.\n- Real-world 2026 complaints (sikayetvar, AliExpress): extra customs/broker demands of about 3,900-5,600 TL on small parcels via PTT / gnd Global.\n- Mouser Turkey: FCA terms, duties and taxes paid by you on delivery; free shipping over about 60 EUR / $100.\n- DigiKey Turkey terms could not be verified (site blocks fetches; ESTIMATE: similar free-shipping threshold, duties paid on delivery).\n- Worked example, all ~116 chips from DigiKey/Mouser (about $105 = 5,200 TL): +60% = about 8,350 TL, plus broker fees -> 8,500-13,000 TL, versus about 4,500 TL locally.\n- LCSC: cheaper parts (Lingxing/HGSEMI clones $0.14-0.31, TI $0.5-1.6) but several DIP parts are out of stock (TI 377, 541, 191, 166, 161; 74 sold out). DHL shipping ESTIMATE $20-35, then 60% -> still worse than local.\n- Even adding only the expensive-locally chips (377, 166, 173, 688, about $20) to an import order you place anyway (e.g. for SRAM or the 25.175 MHz oscillator) roughly breaks even (about 1,600 TL vs 1,566 TL locally), so it is not worth the delay or risk.\n- If importing anyway, an EU-origin seller (TME Poland: SN74HC688N 265 pcs about $1.70; Farnell) gets 30% instead of 60%.\n\nFAKE / REFURB RISK:\n- Ozdisan (authorized TI/Nexperia distributor) and DigiKey/Mouser: genuine.\n- direnc / robotistan / motorobit / robotsepeti: mostly STM/TI or Chinese second-source brands (Hgsemi, Xblw, HTC). Second-source chips are legitimate and fine for 1-2 MHz.\n- n11 ackelektronik lots carry discontinued brands (Philips, Motorola, Harris), so they are old new-old-stock or possibly pulls: expect old date codes and oxidized legs. Fine on breadboard, but test every chip on arrival (the TL866II+/T48 programmer has a 74xx logic-test mode, or use an Arduino tester).\n- AliExpress 74HC lots: higher remark risk, and now the same customs exposure. Avoid.\n\nWHERE TO BUY (fewest parcels):\n- direnc.net: 02, 14, 32, 74, 139, 157, 164, 191, 273, 541 (9), 595, 245, NE555; 154 only if not substituting.\n- motorobit: 00, 193, 245, 283, TLC555 (also 153 at 30.30).\n- robotistan: 08, 138, 153.\n- robotsepeti: 04, 86.\n- Ozdisan: SN74HC574N (genuine TI, 1777 pcs), 74HC175N; also the genuine-TI fallback for 04/08/14/74/138/139/164/245.\n- n11: 74HC161 lot, MC74HC163 lot, PC74HCT688P lot, 74HC166, 74HC173, 74HC377 (or skip 377 via 2x163).\nOrder in Nov-Dec 2026, before the late-Jan build start, because several listings are the last lot or low stock (161 lot, HCT688 lot, 541, 191). Buy 10-20% spares."
+}
