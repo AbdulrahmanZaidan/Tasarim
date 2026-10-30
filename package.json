@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:gh": "tsc -b && vite build --mode ghpages && cp dist/index.html dist/404.html",
+    "build:gh": "tsc -b && vite build --mode ghpages && cp dist/index.html dist/404.html && cp -r raporlar dist/raporlar",
     "build:single": "vite build --mode single --outDir dist-single",
     "preview": "vite preview",
     "typecheck": "tsc -b",
