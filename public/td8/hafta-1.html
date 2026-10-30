@@ -73,6 +73,28 @@ pre.term { margin: 0; background: var(--term); color: var(--term-fg); font: .8re
 pre.term .p { color: var(--muted); }
 pre.term .ok { color: #7fd3a4; }
 
+.sub { display: grid; gap: 10px; padding-top: 18px; border-top: 1px solid var(--line); }
+.sub > p, .sub > ul { max-width: 66ch; }
+.goal { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; }
+
+.flow { display: grid; gap: 10px; }
+.lane { display: flex; gap: 6px; align-items: stretch; }
+.node { flex: 1 1 0; min-width: 0; background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; font-size: .85rem; line-height: 1.3; }
+.node small { display: block; margin-top: 3px; color: var(--muted); font: .72rem/1.3 var(--f-mono); }
+.node.src { border-color: var(--accent); }
+.node.hw { border-color: var(--copper); }
+.arr { align-self: center; color: var(--muted); font-family: var(--f-mono); }
+
+.tbl { overflow-x: auto; }
+.tbl table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+.tbl th, .tbl td { text-align: left; vertical-align: top; padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); }
+.tbl th { font: 500 .72rem var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.tbl td:first-child { white-space: nowrap; font-family: var(--f-mono); font-size: .82rem; padding-right: 16px; }
+
+.steps { padding-left: 1.4em; display: grid; gap: 6px; margin: 0; max-width: 66ch; }
+.steps li::marker { color: var(--accent); font-family: var(--f-mono); }
+code { font-family: var(--f-mono); font-size: .85em; background: var(--card); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; }
+
 .next { counter-reset: n; list-style: none; padding: 0; display: grid; gap: 8px; }
 .next li { display: grid; grid-template-columns: 26px 1fr; gap: 8px; }
 .next li::before { counter-increment: n; content: counter(n); font: 500 .8rem/1.6 var(--f-mono); color: var(--accent); }
@@ -83,6 +105,8 @@ footer { font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap;
   .item { grid-template-columns: 1fr; gap: 8px; }
   .timeline { grid-template-columns: 1fr; }
   .seg:first-child { border-radius: 4px 4px 0 0; } .seg:last-child { border-radius: 0 0 4px 4px; }
+  .lane { flex-direction: column; }
+  .arr { transform: rotate(90deg); line-height: 1; }
 }
 </style>
 </head>
@@ -101,6 +125,12 @@ footer { font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap;
     <div class="specs" aria-label="Planlanan özellikler">
       <span>8-bit veri / 16-bit adres</span><span>CPU 1 MHz</span><span>53 komut</span><span>VGA 40×30 metin</span><span>PS/2 klavye</span><span>92 entegre · 24 breadboard</span>
     </div>
+    <p>Proje sonunda teslim edeceklerimiz:</p>
+    <ul>
+      <li>Breadboard üzerinde çalışan bilgisayar ve Snake demosu (Arduino bağlı olmadan, ROM'dan açılır).</li>
+      <li>Kendi araç zincirimiz: ROM üreticileri, assembler, emülatörler, C derleyicisi.</li>
+      <li>Modüllerin simülasyon modelleri, KiCad şemaları ve tez raporu.</li>
+    </ul>
   </section>
 
   <section>
@@ -156,6 +186,7 @@ footer { font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap;
             <li>Komut seti tek bir Python dosyasında tanımlı. Mikrokod, ALU ve VGA ROM imajları buradan otomatik üretiliyor.</li>
             <li>Assembler ve iki bağımsız emülatör yazıldı. Devre ya da breadboard emülatörden farklı davranırsa hata bulunmuş oluyor.</li>
             <li>27 otomatik test var, hepsi geçiyor. ALU tablosu 8 milyon girişin hepsinde denendi.</li>
+            <li>Ne kullandığımız ve nasıl çalıştığı aşağıda: <a href="#yazilim">Yazılım tarafı</a>.</li>
           </ul>
 <pre class="term"><span class="p">&gt; py -m unittest</span>
 Ran 27 tests in 8.5s
@@ -186,12 +217,108 @@ durdu (HALT) · 573 çevrim (0.57 ms @ 1 MHz)
     </div>
   </section>
 
+  <section id="yazilim">
+    <h2>Yazılım tarafı</h2>
+
+    <div class="sub">
+      <h3>Neden yazılım gerekiyor</h3>
+      <p>TD-8'de hazır bir işlemci yok. İşlemcinin nasıl davranacağı flash çiplere yazılan tablolarda duruyor:</p>
+      <ul>
+        <li><b>Mikrokod:</b> Her komutun hangi adımlarla çalışacağını söyler. 3 flash çipte tutulur, her adımda 24 kontrol sinyali verir.</li>
+        <li><b>ALU tabloları:</b> Toplama, çıkarma, AND, OR, kaydırma gibi 25 işlemin sonuçları 2 flash çipte hazır tablo olarak durur.</li>
+        <li><b>VGA zamanlaması ve yazı tipi:</b> Monitörün senkron sinyalleri ve harflerin piksel desenleri.</li>
+      </ul>
+      <p>Bunlar toplam 7 çip × 128 KB, yaklaşık 900 bin byte. Elle yazılamaz, bu yüzden Python ile üretiyoruz. İkinci sebep: 92 entegreyi kablolamadan önce makinenin doğru davranışını bilmemiz gerekiyor. Bunu yazdığımız emülatör söylüyor.</p>
+      <p class="goal"><b>Yazılımda son hedef:</b> C ile yazılmış Snake oyununun TD-8'de, Arduino bağlı olmadan ROM'dan çalışması.</p>
+    </div>
+
+    <div class="sub">
+      <h3>Ne kullandık</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Araç</th><th>Ne için</th></tr></thead>
+          <tbody>
+            <tr><td>Python 3.12</td><td>Bütün araçların yazıldığı dil. Ek paket kurmaya gerek yok, yalnızca standart kütüphane kullanılıyor.</td></tr>
+            <tr><td>unittest</td><td>Python'un hazır test kütüphanesi. 27 otomatik testi bununla çalıştırıyoruz.</td></tr>
+            <tr><td>Proteus</td><td>Devre simülasyonu. Bu hafta saat modülü burada kuruldu.</td></tr>
+            <tr><td>Git + GitHub</td><td>Sürüm takibi ve iki kişinin aynı dosyalar üzerinde çalışması.</td></tr>
+            <tr><td>Flash programlayıcı</td><td>Okuldaki programlayıcı. Yapım döneminde üretilen <code>.bin</code> dosyalarını gerçek çiplere yazmak için.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sub">
+      <h3>Ne yazdık</h3>
+      <div class="flow" role="img" aria-label="Akış: isa.py komut setinden ROM üreticileriyle 7 ROM imajı üretilir, bunlar Proteus'a ve flash çiplere yüklenir. Assembly programı assembler ile program ROM'una çevrilir ve emülatörde çalıştırılır.">
+        <div class="lane">
+          <span class="node src">isa.py<small>komut seti</small></span><span class="arr">→</span>
+          <span class="node">ROM üreticileri<small>mikrokod · ALU · VGA</small></span><span class="arr">→</span>
+          <span class="node">7 ROM imajı<small>.bin, her biri 128 KB</small></span><span class="arr">→</span>
+          <span class="node hw">Proteus'taki ROM'lar<small>yapımda: flash çipler</small></span>
+        </div>
+        <div class="lane">
+          <span class="node src">merhaba.asm<small>TD-8 programı</small></span><span class="arr">→</span>
+          <span class="node">Assembler<small>asm.py</small></span><span class="arr">→</span>
+          <span class="node">Program ROM'u<small>.bin, 32 KB</small></span><span class="arr">→</span>
+          <span class="node hw">Emülatör<small>doğru sonucu verir</small></span>
+        </div>
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Dosya</th><th>Ne yapar</th></tr></thead>
+          <tbody>
+            <tr><td>isa.py</td><td>Komut setinin tek kaynağı: 53 komut, 88 opcode ve her birinin mikroadımları. Komut seti değişecekse yalnızca bu dosya değişir, geri kalan her şey buradan üretilir.</td></tr>
+            <tr><td>microcode.py</td><td>3 mikrokod ROM'unun içeriğini üretir. Kuralları denetler: iki çip aynı anda veri yoluna yazmıyor, her komut düzgün bitiyor.</td></tr>
+            <tr><td>alu.py</td><td>ALU'nun 2 flash tablosunu üretir. Karşılaştırma için bir referans ALU da içerir.</td></tr>
+            <tr><td>vga.py</td><td>VGA zamanlama ROM'unu ve yazı tipi ROM'unu üretir.</td></tr>
+            <tr><td>asm.py</td><td>Assembler. Assembly ile yazılan programı TD-8'in makine koduna çevirir.</td></tr>
+            <tr><td>emu_micro.py</td><td>Mikroadım emülatörü. Üretilen ROM imajlarını gerçek devre gibi, çevrim çevrim çalıştırır.</td></tr>
+            <tr><td>emu_ref.py</td><td>Komut seviyesi emülatör. Mikrokoddan bağımsız yazıldı, iki emülatör her komuttan sonra aynı sonucu vermek zorunda.</td></tr>
+            <tr><td>cli.py</td><td>Hepsini tek komutla çalıştıran komut satırı aracı.</td></tr>
+            <tr><td>tests/</td><td>27 test. ALU'da 8 milyon girişin hepsi deneniyor, 150 rastgele programda iki emülatör karşılaştırılıyor.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="cap">Toplam yaklaşık 2.100 satır Python (testler dahil).</p>
+    </div>
+
+    <div class="sub">
+      <h3>Nasıl kullanıyoruz</h3>
+      <ol class="steps">
+        <li>Komut setini <code>isa.py</code> içinde tanımlıyoruz.</li>
+        <li><code>py gen_roms.py</code> ile 7 ROM imajını üretiyoruz.</li>
+        <li>İmajları simülasyondaki ROM bileşenlerine yüklüyoruz. Yapımda aynı dosyaları programlayıcıyla flash çiplere yazacağız.</li>
+        <li>Test programını assembler ile çevirip emülatörde çalıştırıyoruz. Çıkan sonuç "doğru cevap" oluyor.</li>
+        <li>Aynı programı devrede (önce Proteus, sonra breadboard) çalıştırıp emülatörle karşılaştırıyoruz. Fark varsa hata devrededir.</li>
+      </ol>
+    </div>
+
+    <div class="sub">
+      <h3>Sırada ne var</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Ne zaman</th><th>İş</th><th>Neden</th></tr></thead>
+          <tbody>
+            <tr><td>10–16 Kas</td><td>Emülatörden devre test vektörü üretici</td><td>Bütün CPU'yu simülasyonda çevrim çevrim kontrol etmek</td></tr>
+            <tr><td>8–14 Ara</td><td>Gerçek yazı tipi</td><td>"MERHABA" yazısını simülasyonda VGA ekranda görmek</td></tr>
+            <tr><td>22–28 Ara</td><td>Arduino iz ve yükleme yazılımı</td><td>Breadboard'daki sinyalleri Arduino ile okuyup emülatörle karşılaştırmak</td></tr>
+            <tr><td>Oca – Mar 2027</td><td>C derleyicisi (tdcc)</td><td>Programları assembly yerine C ile yazabilmek</td></tr>
+            <tr><td>Mar – Nis 2027</td><td>Snake oyunu (C) ve açılış test ROM'u</td><td>Final demosu</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="cap">C derleyicisi ve Snake emülatörde yazılıp denenebildiği için breadboard'un bitmesini beklemeden geliştirilecek.</p>
+    </div>
+  </section>
+
   <section>
     <h2>Gelecek hafta <span class="eyebrow">3–9 Kasım</span></h2>
     <ol class="next">
       <li><span>Saat modülünün testlerini bitirmek (ilk kilometre taşı).</span></li>
       <li><span>Adres registerları (PC, AR, X, SP) simülasyonuna başlamak.</span></li>
-      <li><span>Kontrol ünitesi: mikrokod ROM'ları simülasyondaki devreye yüklemek.</span></li>
+      <li><span>Kontrol ünitesi: mikrokod ROM'larını simülasyondaki devreye yüklemek.</span></li>
+      <li><span>Yazılım: yeni test programları yazmak ve bunları emülatörde çalıştırmak.</span></li>
     </ol>
   </section>
 
