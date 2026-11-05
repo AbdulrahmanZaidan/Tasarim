@@ -7,6 +7,7 @@ GitHub Pages'te yayımlanır: `https://abdulrahmanzaidan.github.io/Tasarim/rapor
 | Hafta | Tarih | Rapor |
 |---|---|---|
 | 1 | 27 Ekim – 2 Kasım 2026 | [hafta1.html](https://abdulrahmanzaidan.github.io/Tasarim/raporlar/hafta1.html) |
+| 2 | 3–9 Kasım 2026 | [hafta2.html](https://abdulrahmanzaidan.github.io/Tasarim/raporlar/hafta2.html) |
 
 ## Yeni haftanın raporu
 

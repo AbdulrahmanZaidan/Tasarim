@@ -1,6 +1,8 @@
 """Assembler: kodlamalar, ifadeler, yönergeler ve hata mesajları."""
 
+import tempfile
 import unittest
+from pathlib import Path
 
 from td8 import asm
 
@@ -51,6 +53,19 @@ class TestAsm(unittest.TestCase):
             with self.assertRaises(asm.AsmError) as ctx:
                 asm.assemble(src)
             self.assertIn(msg, str(ctx.exception), src)
+
+    def test_include(self):
+        with tempfile.TemporaryDirectory() as d:
+            Path(d, 'lib').mkdir()
+            Path(d, 'lib', 'a.asm').write_text('A_SABIT = 7\nalt: RET\n', encoding='utf-8')
+            Path(d, 'lib', 'b.asm').write_text('.include "b.asm"\n', encoding='utf-8')
+            prog = asm.assemble('LDA #A_SABIT\nCALL alt\n.include "lib/a.asm"', base=d)
+            self.assertEqual(bytes(prog.image[:6]), bytes([0x40, 7, 0xA3, 5, 0, 0xA4]))
+            for src, msg in {'.include "yok.asm"': 'dosya açılamadı',
+                             '.include "lib/b.asm"': 'çok derin'}.items():
+                with self.assertRaises(asm.AsmError) as ctx:
+                    asm.assemble(src, base=d)
+                self.assertIn(msg, str(ctx.exception), src)
 
 
 if __name__ == '__main__':

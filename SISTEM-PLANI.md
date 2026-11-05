@@ -611,7 +611,7 @@ C kaynağı ──► tdcc (Python C derleyicisi, yapımın 1–11. haftası) �
 - **Tipler:** `char` (işaretsiz), `signed char`, `int` (16-bit), `unsigned`, pointer'lar.
 - **Veri:** global 1-D ve 2-D diziler, string'ler, ROM'da `const` tablolar, `volatile`.
 - **Deyimler:** if/else, while, do/while, for, break, continue, return, switch (karşılaştırma zinciri ya da JMPI tablosu).
-- **Operatörler:** Hepsi. `* / %` ve değişken miktarda kaydırma runtime'a çağrılır (`__mul16` ~250–400 çevrim, `__divmod16` ~600–900 çevrim).
+- **Operatörler:** Hepsi. `* / %` ve değişken miktarda kaydırma runtime'a çağrılır (`sim/lib/runtime.asm`). Ölçülen süreler (CALL + RET dahil): `__mul16` ortalama ~1.070 çevrim, çarpan < 256 ise ~500; `__divmod16` ~1.250–1.400 çevrim. İlk tahmin (250–400 / 600–900) iyimserdi. Bu yüzden derleyici sabitle çarpma ve bölmeyi (ör. `satır*64`) kaydırmaya çevirir; döngülerde `* / %`'den kaçınılır.
 - **v1'de yok:** recursion (derleyici hata verir), struct, long, float, fonksiyon pointer'ı.
 
 ### 11.3 Çağırma kuralı: statik çerçeve
@@ -721,7 +721,7 @@ Başlangıç sınav takvimine göre 4 ya da 18 Ocak. Ocak'taki sınav haftaları
 | 1–2 | Güç dağıtımı (önce çipsiz ölçüm), M1 saat ve durdurma. Paralel iş: VGA zamanlaması, monitör kilitlenene kadar. | C derleyici: lexer, parser |
 | 3–5 | M2 kontrol latch'i + manuel panel. Paralel iş: VGA metin hattı, test fontuyla. | C derleyici: ifadeler, deyimler, kod üretimi |
 | 6–8 | M4 ALU + A + F + IR, DB switch'leriyle. PS/2 tek başına. | C derleyici: fonksiyonlar, statik çerçeve, çağrı grafiği |
-| 9–11 | M3: PC, AR, X, SP | Runtime (`__mul16`, `__divmod16`), `crt0`, `hw.h`; C'den "MERHABA" emülatörde |
+| 9–11 | M3: PC, AR, X, SP | `crt0`, `hw.h` (runtime'ın ilk sürümü simülasyonun 2. haftasında yazıldı); C'den "MERHABA" emülatörde |
 | 12–13 | M5 bellek + I/O, Arduino kartı | Snake (C), emülatörde oynanıyor |
 | 14–15 | Mikrokod takılır; Arduino izi emülatörle karşılaştırılır | Açılış kendi kendini test ROM'u |
 | 16–17 | VGA ve PS/2 CPU'ya bağlanır | Snake ince ayarı: hız, skor, yem |

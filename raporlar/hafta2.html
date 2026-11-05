@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TD-8 2. Hafta Raporu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Tek sütun rapor: özet, araştırma (soru-cevap, kitler), assembly simülasyonu (ekran, ölçümler), gelecek hafta */
+:root {
+  --paper: #f3f5f2; --card: #ffffff; --ink: #172019; --muted: #5a665d; --line: #d4dbd5;
+  --accent: #1d6a46; --copper: #ad6224; --term: #1a221c; --term-fg: #d9e6dc; --term-dim: #7f9486;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #101512; --card: #171e19; --ink: #e5ebe6; --muted: #97a59b; --line: #2b352e;
+  --accent: #52b386; --copper: #de9551; --term: #0b0f0c; --term-fg: #cfe0d4; --term-dim: #6f8377; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #101512; --card: #171e19; --ink: #e5ebe6; --muted: #97a59b; --line: #2b352e;
+  --accent: #52b386; --copper: #de9551; --term: #0b0f0c; --term-fg: #cfe0d4; --term-dim: #6f8377; color-scheme: dark }
+
+body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--f-body); }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 40px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 40px; }
+h1, h2 { font-family: var(--f-display); font-weight: 600; text-wrap: balance; margin: 0; }
+h1 { font-size: 2.1rem; line-height: 1.15; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: .95rem; font-weight: 600; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+ul { margin: 0; padding-left: 1.15em; display: grid; gap: 4px; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code { font-family: var(--f-mono); font-size: .85em; background: var(--card); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; }
+.eyebrow { font: 500 .75rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--f-mono); }
+.cap { font-size: .8rem; color: var(--muted); }
+section { display: grid; gap: 16px; }
+section > p, section > ul { max-width: 66ch; }
+
+header { display: grid; gap: 10px; }
+.meta { color: var(--muted); }
+
+.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.summary div { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 12px 14px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.summary .eyebrow { color: var(--copper); }
+.summary p { font-size: .9rem; line-height: 1.45; }
+
+.qa { display: grid; gap: 0; }
+.q { display: grid; grid-template-columns: 210px 1fr; gap: 18px; padding-block: 14px; border-top: 1px solid var(--line); }
+.q > div { min-width: 0; display: grid; gap: 6px; font-size: .92rem; }
+.q h3 { font-size: .95rem; }
+
+.tbl { overflow-x: auto; }
+.tbl table { border-collapse: collapse; width: 100%; font-size: .86rem; }
+.tbl th, .tbl td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
+.tbl th { font: 500 .72rem var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.tbl td:first-child { font-weight: 600; white-space: nowrap; }
+.tbl td.num, .tbl th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl td.plan { color: var(--copper); }
+
+.screen { background: var(--term); color: var(--term-fg); border-radius: 6px; padding: 14px 16px; overflow-x: auto; display: grid; gap: 10px; }
+.screen pre { margin: 0; font: .8rem/1.35 var(--f-mono); }
+.screen .cmd { color: var(--term-dim); }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.duo > div { min-width: 0; display: grid; gap: 8px; align-content: start; }
+
+.finding { border-left: 3px solid var(--copper); padding: 4px 0 4px 14px; display: grid; gap: 6px; max-width: 66ch; }
+
+.next { counter-reset: n; list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.next li { display: grid; grid-template-columns: 26px 1fr; gap: 8px; }
+.next li::before { counter-increment: n; content: counter(n); font: 500 .8rem/1.6 var(--f-mono); color: var(--accent); }
+footer { font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+
+@media (max-width: 620px) {
+  h1 { font-size: 1.7rem; }
+  .summary, .duo { grid-template-columns: 1fr; }
+  .q { grid-template-columns: 1fr; gap: 6px; }
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <span class="eyebrow">Bitirme projesi · Haftalık durum</span>
+    <h1>TD-8: 2. hafta raporu</h1>
+    <p class="meta mono">3–9 Kasım 2026 · Simülasyon dönemi, hafta 2 / 10 · <a href="hafta1.html">1. hafta</a></p>
+  </header>
+
+  <section>
+    <h2>Bu hafta</h2>
+    <div class="summary">
+      <div><span class="eyebrow">Araştırma</span><p>Komut seti, programlama dili, assembler ve hazır kitler: neyi neden seçtiğimizi karşılaştırmalarla belgeledik.</p></div>
+      <div><span class="eyebrow">Assembly simülasyonu</span><p>Çarpma, bölme ve ekrana sayı yazma rutinleri TD-8 assembly'sinde yazıldı. İki demo program emülatörde çalışıyor.</p></div>
+      <div><span class="eyebrow">Donanım</span><p>Abdurrahman saat modülünün testleri üzerinde çalışıyor (Proteus).</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Neyi neden seçtik</h2>
+    <div class="qa">
+      <div class="q"><h3>Neden hazır bir işlemci (6502, Z80) değil?</h3><div>
+        <p>Hazır işlemciyle bilgisayarın geri kalanını kurarız ama işlemciyi biz tasarlamamış oluruz. Projenin amacı işlemcinin kendisini 74HC entegrelerle kurmak.</p>
+        <p>Hazır işlemci yolu daha az riskli (6502 için cc65, Z80 için SDCC derleyicisi hazır), bu yüzden yedek plan olarak duruyor. W65C02 hâlâ üretiliyor; Zilog bağımsız Z80'in üretimini 2024'te durdurdu.</p>
+      </div></div>
+      <div class="q"><h3>Hangi komut seti?</h3><div>
+        <p>Kendi tasarımımız <b>TD-8</b>: 53 komut, 88 opcode, 8-bit veri, 16-bit adres. A akümülatör, X 16-bit gösterici, 14 dallanma koşulu.</p>
+        <p>Üç öneri karşılaştırıldı: en az çip (54 entegre), C dostu (96), hata ayıklanabilir (115). Hata ayıklanabilir olan temel alındı, diğerlerinin iyi fikirleri eklendi, 92 entegreye indirildi.</p>
+      </div></div>
+      <div class="q"><h3>Kontrol ünitesi neden mikrokodlu?</h3><div>
+        <p>Kablolu kontrolde her hata kablo değişikliği demek. Mikrokodda komut adımları flash çipte duruyor; hatayı düzeltmek için Python'dan yeni imaj üretip çipe yazmak yetiyor. Flag'ler mikrokod adresine girdiği için koşullu dallanma ek devre istemiyor.</p>
+      </div></div>
+      <div class="q"><h3>ALU neden flash tablosu?</h3><div>
+        <p>74HC181 ALU entegresinin üretimi bitti; toplayıcı ve kapılarla 25 işlem çok entegre ister. 2 flash çipte hazır sonuç tablosu var. Tablo, 8 milyon girişin hepsinde Python'daki referans ALU ile karşılaştırıldı.</p>
+      </div></div>
+      <div class="q"><h3>Neden 74HC, 74LS değil?</h3><div>
+        <p>92 entegrede 74LS ailesi 1–2 A çeker ve ısınır, 74HC çok daha az akım çeker.</p>
+      </div></div>
+      <div class="q"><h3>Hangi programlama dili?</h3><div>
+        <ul>
+          <li><b>Araçlar:</b> Python 3.12. Hızlı geliştirme, ek paket yok, test kolay. Emülatör saniyede 0,36–1,7 milyon çevrim çalıştırıyor, gerçek makine 1 milyon.</li>
+          <li><b>TD-8 programları:</b> şimdilik TD-8 assembly, yapım döneminde C'nin bir alt kümesi.</li>
+          <li><b>C derleyicisi:</b> kendimiz yazıyoruz (<code>tdcc</code>). GCC/LLVM'i yeni bir 8-bit işlemciye uyarlamak aylar sürer; Small-C ve LCC incelendi.</li>
+        </ul>
+      </div></div>
+      <div class="q"><h3>Hangi assembler?</h3><div>
+        <p>Kendi yazdığımız <code>asm.py</code> (~400 satır). Plan genel amaçlı customasm'i öneriyordu. Kendimizinkini seçtik çünkü opcode tablosunu doğrudan komut seti dosyasından okuyor: komut seti değişince assembler kendiliğinden güncelleniyor. Emülatör ve testlerle aynı kodun içinde, kurulum gerekmiyor. ca65, vasm gibi hazır assembler'lar var olan işlemciler için, TD-8'i bilmiyorlar.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Piyasadaki hazır kitler</h2>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Kit</th><th>Nedir</th><th>Avantajı</th><th>Neden seçmedik</th></tr></thead>
+        <tbody>
+          <tr><td>Ben Eater 8-bit</td><td>Breadboard'da SAP-1 tabanlı eğitim bilgisayarı</td><td>Video anlatımı, denenmiş tasarım</td><td>4-bit adres, 16 byte RAM: C ve VGA mümkün değil</td></tr>
+          <tr><td>RC2014</td><td>Z80 tabanlı modüler kart seti</td><td>BASIC ve CP/M hazır çalışır</td><td>İşlemci ve kartlar hazır, tasarım katkısı az</td></tr>
+          <tr><td>Gigatron TTL</td><td>Mikroişlemcisiz, ~35 TTL entegreli bilgisayar</td><td>Az entegreyle VGA ve oyun</td><td>Tasarım ve ROM hazır; 6,25 MHz breadboard'da zor</td></tr>
+          <tr><td>FPGA kartı</td><td>İşlemciyi Verilog/VHDL ile tarif etmek</td><td>Hızlı, kablolama hatası yok</td><td>Proje kararı: gerçek entegrelerle breadboard</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Kitlerden fikir aldık: modül modül kurma ve mikrokodu EEPROM'a yazma Ben Eater'dan, ekran üretme fikirleri Gigatron'dan. Hazır parçayı tasarımın konusu olmayan yerlerde kullanıyoruz: kristal osilatörler (4 MHz, 25 MHz), flash ve SRAM bellek çipleri. Arduino yalnızca test aracı, demo onsuz çalışacak.</p>
+  </section>
+
+  <section>
+    <h2>Assembly simülasyonu</h2>
+    <p>C derleyicisinin ileride kullanacağı rutinleri şimdiden TD-8 assembly'sinde yazdık (<code>sim/lib/runtime.asm</code>) ve iki demo programla emülatörde çalıştırdık. Ekran çıktıları emülatörün ürettiği gerçek çıktılar.</p>
+    <div class="duo">
+      <div>
+        <div class="screen" role="img" aria-label="Emülatör ekranı: 1000'den küçük 168 asal sayı, 8 sütun halinde.">
+          <pre class="cmd">&gt; py cli.py run examples/asal.asm --ref</pre>
+<pre> 1000&#x27;DEN KUCUK ASAL SAYILAR
+
+    2    3    5    7   11   13   17   19
+   23   29   31   37   41   43   47   53
+   59   61   67   71   73   79   83   89
+   97  101  103  107  109  113  127  131
+  137  139  149  151  157  163  167  173
+  179  181  191  193  197  199  211  223
+  227  229  233  239  241  251  257  263
+  269  271  277  281  283  293  307  311
+  313  317  331  337  347  349  353  359
+  367  373  379  383  389  397  401  409
+  419  421  431  433  439  443  449  457
+  461  463  467  479  487  491  499  503
+  509  521  523  541  547  557  563  569
+  571  577  587  593  599  601  607  613
+  617  619  631  641  643  647  653  659
+  661  673  677  683  691  701  709  719
+  727  733  739  743  751  757  761  769
+  773  787  797  809  811  821  823  827
+  829  839  853  857  859  863  877  881
+  883  887  907  911  919  929  937  941
+  947  953  967  971  977  983  991  997
+
+ TOPLAM ASAL SAYISI: 168</pre>
+        </div>
+        <p class="cap"><b>asal.asm:</b> 1000'den küçük asal sayılar, deneme bölmesiyle. 168 asalın hepsi doğru. 3.748.290 çevrim, gerçek makinede ~3,7 saniye.</p>
+      </div>
+      <div>
+        <div class="screen" role="img" aria-label="Emülatör ekranı: Fibonacci sayıları F0'dan F24 = 46368'e kadar.">
+          <pre class="cmd">&gt; py cli.py run examples/fibonacci.asm</pre>
+<pre> FIBONACCI SAYILARI (16-BIT)
+
+ F0  =     0
+ F1  =     1
+ F2  =     1
+ F3  =     2
+ F4  =     3
+ F5  =     5
+ F6  =     8
+ F7  =    13
+ F8  =    21
+ F9  =    34
+ F10 =    55
+ F11 =    89
+ F12 =   144
+ F13 =   233
+ F14 =   377
+ F15 =   610
+ F16 =   987
+ F17 =  1597
+ F18 =  2584
+ F19 =  4181
+ F20 =  6765
+ F21 = 10946
+ F22 = 17711
+ F23 = 28657
+ F24 = 46368</pre>
+        </div>
+        <p class="cap"><b>fibonacci.asm:</b> 16 bite sığan son terime (F24 = 46368) kadar. 33.170 çevrim = 33 ms.</p>
+      </div>
+    </div>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Rutin</th><th>Ne yapar</th><th class="num">Ortalama</th><th class="num">En kötü</th><th class="num">Plan tahmini</th></tr></thead>
+        <tbody>
+          <tr><td>__mul16</td><td>16-bit çarpma</td><td class="num">1.070</td><td class="num">1.240</td><td class="num plan">250–400</td></tr>
+          <tr><td>__mul16</td><td>çarpan &lt; 256</td><td class="num">500</td><td class="num">630</td><td class="num"></td></tr>
+          <tr><td>__divmod16</td><td>16-bit bölme ve kalan</td><td class="num">1.250–1.380</td><td class="num">1.590</td><td class="num plan">600–900</td></tr>
+          <tr><td>print_u16</td><td>sayıyı ondalık yazar</td><td class="num">1.200</td><td class="num">2.050</td><td class="num"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap">Çevrim sayıları; 1 MHz'de 1 çevrim = 1 µs. 400'er rastgele girişle ölçüldü, CALL ve RET dahil.</p>
+
+    <div class="finding">
+      <h3>Bulgu: çarpma ve bölme plandakinden 2–3 kat yavaş</h3>
+      <p>Bu yüzden C derleyicisi sabitle çarpmayı kaydırmaya çevirecek (Snake'teki <code>satır*64</code> 6 kaydırma ile yapılır) ve döngülerde <code>* / %</code> kullanılmayacak. Snake'in tasarımı zaten bölme gerektirmiyor.</p>
+    </div>
+
+    <ul>
+      <li><b>34 otomatik test</b> geçiyor (geçen hafta 27). Çarpma ve bölme 400'er girişte Python'un sonucuyla aynı, iki emülatör aynı sonucu ve aynı çevrim sayısını veriyor.</li>
+      <li>Testlerin gerçekten hata yakaladığı denendi: çarpmada ADC yerine ADD yazınca 200 girişin 153'ünde hata çıkıyor.</li>
+      <li>Bu deneme sırasında bölme rutininde gereksiz bir taşma kontrolü bulundu ve kaldırıldı; bölme 48 çevrim kısaldı.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Gelecek hafta <span class="eyebrow">10–16 Kasım</span></h2>
+    <ol class="next">
+      <li><span>Yazılım: C derleyicisine (<code>tdcc</code>) başlamak. Emülatör ve runtime hazır olduğu için Ocak'ı beklemeye gerek yok. İlk hedef: C ile yazılmış "MERHABA" emülatörde.</span></li>
+      <li><span>Donanım: saat modülü testlerini bitirmek, adres registerlarına geçmek.</span></li>
+      <li><span>Sipariş: AliExpress flash paketi (en geç 16 Kasım).</span></li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>Ayrıntılar:</span>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Taha/hafta2/README.md">Araştırma notları</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/sim/lib/runtime.asm">runtime.asm</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/sim/examples">Demo programları</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim">GitHub deposu</a>
+  </footer>
+</main>
+</body>
+</html>

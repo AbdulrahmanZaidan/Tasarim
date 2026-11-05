@@ -14,12 +14,14 @@ Yazım:
             .text "metin"     (sonlandırıcısız)
             .asciz "metin"    (0 ile biter)
             .res 16           (16 sıfır byte)
+            .include "../lib/runtime.asm"   (yol, bu dosyanın klasörüne göre)
 
 Sayılar: $1F, 0x1F, %1010, 0b1010, 31, 'A'. İşlemler: + - * / & | ^ << >> ~ ( ).
 Komut adları büyük-küçük harf duyarsız; etiketler duyarlı.
 """
 
 import re
+from pathlib import Path
 
 from . import isa
 
@@ -263,22 +265,48 @@ def _mode(mnemonic, operand):
     return 'abs', operand
 
 
-def assemble(source, filename='<kaynak>'):
+_INCLUDE = re.compile(r'^\s*\.include\s+"([^"]+)"\s*$', re.IGNORECASE)
+
+
+def _expand(source, filename, base, depth=0):
+    """.include satırlarını açar: [(dosya, satır no, satır), ...].
+
+    Yol, içeren dosyanın klasörüne göredir (dosya adı yoksa `base`).
+    """
+    here = Path(filename).parent if filename != '<kaynak>' else Path(base)
+    out = []
+    for no, raw in enumerate(source.splitlines(), 1):
+        m = _INCLUDE.match(_strip_comment(raw))
+        if not m:
+            out.append((filename, no, raw))
+            continue
+        if depth >= 8:
+            raise AsmError(no, '.include çok derin (döngü olabilir)', filename)
+        path = here / m.group(1)
+        try:
+            text = path.read_text(encoding='utf-8')
+        except OSError:
+            raise AsmError(no, f'dosya açılamadı: {path}', filename) from None
+        out.extend(_expand(text, str(path), base, depth + 1))
+    return out
+
+
+def assemble(source, filename='<kaynak>', base='.'):
     """Kaynağı çevirir, Program döndürür. Hata varsa AsmError."""
-    lines = source.splitlines()
+    lines = _expand(source, filename, base)
     symbols = {}
     for final in (False, True):
         prog = Program()
         prog.symbols = symbols
         pc = 0
-        for no, raw in enumerate(lines, 1):
+        for fname, no, raw in lines:
             line = _strip_comment(raw)
             try:
                 pc = _line(prog, line, raw, no, pc, symbols, final)
             except AsmError:
                 raise
             except (ValueError, KeyError) as e:
-                raise AsmError(no, str(e), filename) from None
+                raise AsmError(no, str(e), fname) from None
     return prog
 
 

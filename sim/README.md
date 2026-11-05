@@ -30,6 +30,8 @@ py cli.py run examples/merhaba.asm --ref        komut seviyesi emülatörde çal
 py cli.py run examples/merhaba.asm --vga        VRAM penceresi beklemesini de modelle
 py cli.py run examples/merhaba.asm --trace 20   ilk 20 çevrimin izi (AB, DB, kontrol kelimesi)
 py cli.py run examples/klavye.asm --keys 1C,F0,1C --cycles 20000
+py cli.py run examples/fibonacci.asm           16-bit Fibonacci (runtime kütüphanesiyle)
+py cli.py run examples/asal.asm --ref --cycles 20000000   1000'den küçük asal sayılar
 py cli.py vectors alu -n 1000 > alu_test.txt    Digital ALU testi için vektörler
 py cli.py vectors urom -n 1000 > urom_test.txt  Digital kontrol ünitesi testi için vektörler
 py -m unittest                                  tüm testler (~20 s)
@@ -48,8 +50,9 @@ py -m unittest                                  tüm testler (~20 s)
 | `td8/emu_micro.py` | Mikroadım emülatörü: üretilen imajları aynen çalıştırır, çevrim çevrim iz verir |
 | `td8/emu_ref.py` | Komut seviyesi emülatör: mikrokoddan bağımsız, çapraz kontrol için |
 | `cli.py`, `gen_roms.py` | Komut satırı |
-| `examples/` | `merhaba.asm` (ekrana yazı), `klavye.asm` (PS/2 byte'larını gösterir) |
-| `tests/` | ALU (8 milyon girişin hepsi), mikrokod kuralları, assembler, iki emülatörün eşdeğerliği, VGA zamanlaması |
+| `lib/runtime.asm` | Çalışma zamanı kütüphanesi: `__mul16`, `__divmod16`, `print_u16`, `puts`. Programa `.include "../lib/runtime.asm"` ile eklenir; çağırma kuralı dosyanın başında |
+| `examples/` | `merhaba.asm` (ekrana yazı), `klavye.asm` (PS/2 byte'larını gösterir), `fibonacci.asm`, `asal.asm` (runtime örnekleri) |
+| `tests/` | ALU (8 milyon girişin hepsi), mikrokod kuralları, assembler, iki emülatörün eşdeğerliği, VGA zamanlaması, runtime rutinleri |
 | `build/` | Üretilen imajlar. Git'e girmez, `py gen_roms.py` ile yeniden üretilir. |
 
 ## Testler neyi garanti ediyor
@@ -66,6 +69,10 @@ py -m unittest                                  tüm testler (~20 s)
   - INCW/DECW'de zincirli Z, CALL/RET, stack ve JMPI çalışıyor.
   - Örnek programlar beklenen ekranı üretiyor.
   - Bu testlerin gerçek hataları yakaladığı denendi: PLA'dan bir adım silmek ya da ADC'yi ADD yapmak testi bozuyor.
+- **Runtime (`lib/runtime.asm`):**
+  - `__mul16` ve `__divmod16` 400'er girişte Python'un sonucuyla aynı (bölen 0 durumu dahil); 30 girişte iki emülatör aynı sonucu ve aynı çevrim sayısını veriyor.
+  - `print_u16` 0, 9, 10, 9999, 10000, 65535 gibi sınırlarda ve 100 rastgele sayıda doğru yazıyor.
+  - `fibonacci.asm` ve `asal.asm` beklenen ekranı üretiyor (168 asal).
 - **VGA:**
   - 400 nokta × 525 satır; HSYNC 48 nokta, VSYNC 2 satır, 40 × 480 görünür alan.
   - VRAM pencereleri doğru iç içe.
@@ -95,5 +102,5 @@ py -m unittest                                  tüm testler (~20 s)
 | Simülasyon 3. hafta | Emülatör izinden çevrim çevrim Digital test vektörü üreticisi (bütün CPU testi) |
 | Simülasyon 7. hafta | Gerçek font: `font8x8_basic.h` (kamu malı) → `py cli.py roms --font ...` |
 | Simülasyon 9. hafta | Arduino iz ve yükleme yazılımı |
-| Yapım 1–11. hafta | C derleyicisi (`tdcc`), runtime (`__mul16`, `__divmod16`), `crt0`, `hw.h` |
+| Yapım 1–11. hafta | C derleyicisi (`tdcc`), `crt0`, `hw.h` (runtime'ın ilk sürümü `lib/runtime.asm`'de hazır) |
 | Yapım 12–17. hafta | Snake (C), açılış test ROM'u |
