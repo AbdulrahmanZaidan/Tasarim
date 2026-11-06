@@ -82,24 +82,234 @@ footer { font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap;
   .summary, .duo { grid-template-columns: 1fr; }
   .q { grid-template-columns: 1fr; gap: 6px; }
 }
+
+/* Sekmeler: genel bakış (ilerleme çubukları), Deniz (yazılım), Abdurrahman (donanım) */
+:root { --todo: #dde3de; --on-accent: #ffffff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --todo: #2a332d; --on-accent: #0c140f; } }
+:root[data-theme="dark"] { --todo: #2a332d; --on-accent: #0c140f; }
+[hidden] { display: none !important; }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); }
+.tabs a { padding: 10px 14px; font-weight: 600; font-size: .95rem; color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tabs a small { font-weight: 500; color: var(--muted); }
+.panel { display: grid; gap: 40px; }
+
+.goal-text { font: 600 1.55rem/1.25 var(--f-display); max-width: 32ch; text-wrap: balance; }
+.cal { display: grid; gap: 8px; }
+.cal-bar { display: grid; grid-template-columns: 10fr 23fr; gap: 3px; }
+.cal-bar div { height: 10px; border-radius: 3px; background: var(--todo); overflow: hidden; }
+.cal-bar i { display: block; height: 100%; background: var(--ink); }
+.cal-lbl { display: grid; grid-template-columns: 10fr 23fr; gap: 3px; font-size: .78rem; color: var(--muted); }
+.cal-lbl b { color: var(--ink); font-weight: 600; }
+
+.tracks { display: grid; gap: 14px; }
+.track { display: grid; gap: 14px; padding: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; }
+.track-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; }
+.track-head h3 { font: 600 1.4rem/1.1 var(--f-display); }
+.track-head h3 small { display: block; font: 500 .8rem var(--f-body); color: var(--muted); margin-top: 4px; }
+.pct { font: 600 2.8rem/1 var(--f-display); font-variant-numeric: tabular-nums; text-align: right; }
+.pct small { display: block; font: 500 .8rem var(--f-body); color: var(--muted); margin-top: 4px; }
+.segs { display: flex; gap: 3px; height: 30px; }
+.segs span { min-width: 0; border-radius: 3px; background: var(--todo); color: var(--muted); font-size: .72rem; line-height: 30px; padding: 0; white-space: nowrap; overflow: hidden; }
+.segs span:not(:empty) { padding-left: 8px; }
+.wrap > *, .panel > *, .tracks > * { min-width: 0; }
+.segs .done { background: var(--accent); color: var(--on-accent); }
+.segs .doing { background: var(--copper); color: var(--on-accent); }
+.parts { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, auto); grid-auto-flow: column; gap: 5px 20px; font-size: .84rem; }
+.parts li { display: grid; grid-template-columns: 10px 1fr auto; gap: 8px; align-items: center; min-width: 0; }
+.parts li::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--todo); border: 1px solid var(--line); box-sizing: border-box; }
+.parts li.done::before { background: var(--accent); border-color: var(--accent); }
+.parts li.doing::before { background: var(--copper); border-color: var(--copper); }
+.parts li em { font-style: normal; font-family: var(--f-mono); font-size: .72rem; color: var(--muted); white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .78rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend span::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--todo); border: 1px solid var(--line); box-sizing: border-box; }
+.legend .l-done::before { background: var(--accent); border-color: var(--accent); }
+.legend .l-doing::before { background: var(--copper); border-color: var(--copper); }
+
+.cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.col { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.col h3 { font: 600 1.5rem/1 var(--f-display); display: flex; align-items: baseline; gap: 8px; }
+.col h3 small { font: 500 .8rem var(--f-mono); color: var(--muted); }
+.col.done h3 { color: var(--accent); } .col.doing h3 { color: var(--copper); }
+.col ul { list-style: none; padding: 0; gap: 10px; }
+.col li { display: grid; grid-template-columns: 16px 1fr; gap: 6px; line-height: 1.35; font-size: .92rem; }
+.col li::before { font-family: var(--f-mono); font-weight: 600; }
+.col.done li::before { content: "✓"; color: var(--accent); }
+.col.doing li::before { content: "→"; color: var(--copper); }
+.col.todo li::before { content: "○"; color: var(--muted); }
+.col li small { display: block; color: var(--muted); font-size: .8rem; }
+
+.miles { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(6, 1fr); }
+.miles li { position: relative; padding: 18px 10px 0 0; border-top: 2px solid var(--line); font-size: .82rem; line-height: 1.3; min-width: 0; }
+.miles li::before { content: ""; position: absolute; top: -8px; left: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--paper); border: 2px solid var(--line); box-sizing: border-box; }
+.miles li b { display: block; font: 500 .72rem var(--f-mono); color: var(--muted); margin-bottom: 2px; }
+.miles li.now::before { background: var(--copper); border-color: var(--copper); }
+.miles li.now b { color: var(--copper); }
+
+.person { display: grid; gap: 6px; }
+.person p { max-width: 66ch; }
+figure { margin: 0; display: grid; gap: 8px; }
+figure .img { background: #ffffff; border: 1px solid var(--line); border-radius: 6px; padding: 8px; overflow-x: auto; }
+figure img { display: block; width: 100%; min-width: 520px; height: auto; }
+figcaption { font-size: .8rem; color: var(--muted); }
+.note { border: 1px solid var(--line); border-left: 3px solid var(--copper); border-radius: 0 6px 6px 0; padding: 12px 14px; display: grid; gap: 8px; max-width: 70ch; background: var(--card); }
+.note ul { font-size: .9rem; }
+
+@media (max-width: 620px) {
+  .cols, .parts { grid-template-columns: 1fr; }
+  .parts { grid-template-rows: none; grid-auto-flow: row; }
+  .miles { grid-template-columns: 1fr; }
+  .miles li { border-top: 0; border-left: 2px solid var(--line); padding: 0 0 14px 18px; }
+  .miles li::before { top: 0; left: -8px; }
+  .pct { font-size: 2.2rem; text-align: left; }
+}
 </style>
+</head>
+<body>
 </head>
 <body>
 <main class="wrap">
   <header>
     <span class="eyebrow">Bitirme projesi · Haftalık durum</span>
     <h1>TD-8: 2. hafta raporu</h1>
-    <p class="meta mono">3–9 Kasım 2026 · Simülasyon dönemi, hafta 2 / 10 · <a href="hafta1.html">1. hafta</a></p>
+    <p class="meta mono">3–9 Kasım 2026 · Simülasyon dönemi, hafta 2 / 10 · <a href="hafta1.html">1. hafta raporu</a></p>
   </header>
 
-  <section>
-    <h2>Bu hafta</h2>
-    <div class="summary">
-      <div><span class="eyebrow">Araştırma</span><p>Komut seti, programlama dili, assembler ve hazır kitler: neyi neden seçtiğimizi karşılaştırmalarla belgeledik.</p></div>
-      <div><span class="eyebrow">Assembly simülasyonu</span><p>Çarpma, bölme ve ekrana sayı yazma rutinleri TD-8 assembly'sinde yazıldı. İki demo program emülatörde çalışıyor.</p></div>
-      <div><span class="eyebrow">Donanım</span><p>Abdurrahman saat modülünün testleri üzerinde çalışıyor (Proteus).</p></div>
-    </div>
-  </section>
+  <nav class="tabs" role="tablist" aria-label="Rapor bölümleri">
+    <a href="#genel" id="t-genel" role="tab" aria-controls="genel" aria-selected="true">Genel bakış</a>
+    <a href="#deniz" id="t-deniz" role="tab" aria-controls="deniz" aria-selected="false">Deniz <small>· yazılım</small></a>
+    <a href="#abdurrahman" id="t-abdurrahman" role="tab" aria-controls="abdurrahman" aria-selected="false">Abdurrahman <small>· donanım</small></a>
+  </nav>
+
+  <div class="panel" id="genel" role="tabpanel" aria-labelledby="t-genel">
+    <section>
+      <span class="eyebrow">Hedef · Haziran 2027</span>
+      <p class="goal-text">74HC entegrelerle breadboard üzerinde kendi 8-bit bilgisayarımız. Sonunda C ile yazılmış Snake oyunu onda çalışacak.</p>
+      <div class="cal" aria-label="Takvim: 33 haftanın 2. haftası">
+        <div class="cal-bar"><div><i style="width: 20%"></i></div><div></div></div>
+        <div class="cal-lbl"><span><b>Simülasyon</b> · hafta 2 / 10</span><span><b>Breadboard yapımı</b> · Ocak – Haziran 2027</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>İlerleme</h2>
+      <div class="tracks">
+        <div class="track">
+          <div class="track-head">
+            <h3>Yazılım<small>Deniz</small></h3>
+            <div class="pct">%18<small>22 haftalık işin 4 haftası bitti</small></div>
+          </div>
+          <div class="segs" role="img" aria-label="Yazılım: 4 iş bitti, 4 iş sırada">
+            <span class="done" style="flex: 1" title="Komut seti ve ROM üreticileri: bitti"></span>
+            <span class="done" style="flex: 1" title="Assembler: bitti"></span>
+            <span class="done" style="flex: 1" title="Emülatörler ve testler: bitti"></span>
+            <span class="done" style="flex: 1" title="Runtime kütüphanesi: bitti"></span>
+            <span style="flex: 1" title="Devre test vektörü üretici: sırada"></span>
+            <span style="flex: 1" title="Arduino iz ve yükleme yazılımı: sırada"></span>
+            <span style="flex: 10" title="C derleyicisi: sırada">C derleyicisi</span>
+            <span style="flex: 6" title="Snake oyunu ve açılış test ROM'u: sırada">Snake</span>
+          </div>
+          <ul class="parts">
+            <li class="done">Komut seti ve ROM üreticileri <em>bitti</em></li>
+            <li class="done">Assembler <em>bitti</em></li>
+            <li class="done">Emülatörler ve 34 test <em>bitti</em></li>
+            <li class="done">Çarpma, bölme, yazdırma kütüphanesi <em>bitti</em></li>
+            <li>Devre test vektörü üretici <em>Kasım</em></li>
+            <li>Arduino iz ve yükleme yazılımı <em>Aralık</em></li>
+            <li>C derleyicisi <em>Kasım – Mart</em></li>
+            <li>Snake oyunu (C) <em>Mart – Nisan</em></li>
+          </ul>
+        </div>
+
+        <div class="track">
+          <div class="track-head">
+            <h3>Donanım<small>Abdurrahman</small></h3>
+            <div class="pct">%0<small>2 iş sürüyor · henüz testi biten modül yok</small></div>
+          </div>
+          <div class="segs" role="img" aria-label="Donanım: 2 iş sürüyor, 8 iş sırada">
+            <span class="doing" style="flex: 1" title="M1 saat modülü: sürüyor"></span>
+            <span class="doing" style="flex: 1" title="M4 ALU ve A, F, IR registerları: sürüyor"></span>
+            <span style="flex: 1" title="M3 adres registerları: sırada"></span>
+            <span style="flex: 1" title="M2 kontrol ünitesi: sırada"></span>
+            <span style="flex: 1" title="M5 bellek: sırada"></span>
+            <span style="flex: 1" title="İşlemcinin birleştirilmesi: sırada"></span>
+            <span style="flex: 2" title="M6 VGA: sırada"></span>
+            <span style="flex: 1" title="M7 PS/2 klavye: sırada"></span>
+            <span style="flex: 2" title="KiCad şemaları ve breadboard yerleşimi: sırada"></span>
+            <span style="flex: 20" title="Breadboard yapımı ve testleri: sırada">Breadboard yapımı</span>
+          </div>
+          <ul class="parts">
+            <li class="doing">M1 saat modülü <em>sürüyor</em></li>
+            <li class="doing">M4 registerlar (A, IR) ve ALU <em>sürüyor</em></li>
+            <li>M3 adres, M2 kontrol, M5 bellek <em>Kasım</em></li>
+            <li>İşlemcinin birleştirilmesi <em>Kasım</em></li>
+            <li>M6 VGA <em>Aralık</em></li>
+            <li>M7 PS/2 klavye <em>Aralık</em></li>
+            <li>KiCad şemaları, yerleşim planı <em>Aralık</em></li>
+            <li>Breadboard yapımı ve testleri <em>Ocak – Mayıs</em></li>
+          </ul>
+        </div>
+        <div class="legend"><span class="l-done">bitti</span><span class="l-doing">sürüyor</span><span>sırada</span></div>
+        <p class="cap">Çubuklar işlerin plandaki sürelerine göre bölündü (SISTEM-PLANI bölüm 13–14). Yüzde yalnızca biten işleri sayar: bir modül, testleri geçince biter.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="cols">
+        <div class="col done">
+          <h3>Yaptık</h3>
+          <ul>
+            <li><span>Sistem planı ve bütçe<small>17.503 TL, sınır 30.000 TL</small></span></li>
+            <li><span>Kendi komut setimiz TD-8<small>53 komut, danışman onayladı</small></span></li>
+            <li><span>Simülasyon yazılımı<small>assembler, 2 emülatör, 34 test</small></span></li>
+            <li><span>Çarpma, bölme kütüphanesi ve 2 demo<small>asal sayılar, Fibonacci</small></span></li>
+            <li><span>Saat modülü Proteus'ta kuruldu<small>Abdurrahman</small></span></li>
+            <li><span>Seçimlerimizin araştırması<small>komut seti, dil, assembler, hazır kitler</small></span></li>
+          </ul>
+        </div>
+        <div class="col doing">
+          <h3>Yapıyoruz</h3>
+          <ul>
+            <li><span>Saat modülü testleri<small>Abdurrahman · ilk kilometre taşı</small></span></li>
+            <li><span>Register şemaları ve testleri<small>Abdurrahman</small></span></li>
+            <li><span>C derleyicisi<small>Deniz · 10 Kasım'da başlıyor</small></span></li>
+            <li><span>Flash çip siparişi<small>16 Kasım'a kadar</small></span></li>
+          </ul>
+        </div>
+        <div class="col todo">
+          <h3>Yapacağız</h3>
+          <ul>
+            <li><span>İşlemcinin bütün modülleri simülasyonda<small>Kasım</small></span></li>
+            <li><span>VGA ekran ve klavye simülasyonda<small>Aralık</small></span></li>
+            <li><span>Breadboard'da kurulum<small>Ocak – Haziran 2027</small></span></li>
+            <li><span>C ile yazılmış Snake demosu<small>Mayıs 2027</small></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Kilometre taşları</h2>
+      <ol class="miles">
+        <li class="now"><b>9 Kas · şimdi</b>Saat modülünün testleri geçiyor</li>
+        <li><b>23 Kas</b>İşlemci simülasyonda emülatörle sıfır farkla çalışıyor</li>
+        <li><b>14 Ara</b>Simülasyonda ekrana yazı</li>
+        <li><b>3 Oca</b>Tasarım donduruldu, yapıma hazır</li>
+        <li><b>Nisan 2027</b>Breadboard'da işlemci program çalıştırıyor</li>
+        <li><b>Mayıs 2027</b>Snake demosu çalışıyor</li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="panel" id="deniz" role="tabpanel" aria-labelledby="t-deniz">
+    <section class="person">
+      <span class="eyebrow">Yazılım ve kontrol</span>
+      <h2>Deniz</h2>
+      <p>Simülasyon yazılımı, komut seti ve ileride C derleyicisi. Bu hafta: seçimlerimizin araştırması ve TD-8 assembly'sinde ilk kütüphane. Notlar: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Taha/hafta2/README.md">Taha/hafta2</a>.</p>
+    </section>
 
   <section>
     <h2>Neyi neden seçtik</h2>
@@ -245,14 +455,66 @@ footer { font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap;
     </ul>
   </section>
 
-  <section>
-    <h2>Gelecek hafta <span class="eyebrow">10–16 Kasım</span></h2>
-    <ol class="next">
-      <li><span>Yazılım: C derleyicisine (<code>tdcc</code>) başlamak. Emülatör ve runtime hazır olduğu için Ocak'ı beklemeye gerek yok. İlk hedef: C ile yazılmış "MERHABA" emülatörde.</span></li>
-      <li><span>Donanım: saat modülü testlerini bitirmek, adres registerlarına geçmek.</span></li>
-      <li><span>Sipariş: AliExpress flash paketi (en geç 16 Kasım).</span></li>
-    </ol>
-  </section>
+
+    <section>
+      <h2>Gelecek hafta</h2>
+      <ol class="next">
+        <li><span>C derleyicisine (<code>tdcc</code>) başlamak. Emülatör ve kütüphane hazır olduğu için Ocak'ı beklemeye gerek yok. İlk hedef: C ile yazılmış "MERHABA" emülatörde.</span></li>
+        <li><span>Flash çip siparişi (en geç 16 Kasım).</span></li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="panel" id="abdurrahman" role="tabpanel" aria-labelledby="t-abdurrahman">
+    <section class="person">
+      <span class="eyebrow">Donanım ve testler</span>
+      <h2>Abdurrahman</h2>
+      <p>Devre modüllerini Proteus'ta kuruyor ve test ediyor. Kendi notları: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/Abdurrahman">Abdurrahman klasörü</a>.</p>
+    </section>
+
+    <section>
+      <h2>1. hafta: saat modülü</h2>
+      <p>Saat modülü (M1) Proteus'ta simüle edildi: 4 MHz osilatör, iki flip-flop ile 4 faz, CPU saati 1 MHz.</p>
+    </section>
+
+    <section>
+      <h2>2. hafta: register şemaları</h2>
+      <p>Üç register için Proteus şeması hazırlandı: A registerı, B registerı ve komut registerı (IR). Her biri aynı yapıda:</p>
+      <ul>
+        <li>8 bitlik veriyi tutmak için iki adet 74LS173 (4-bit register).</li>
+        <li>Veriyi ortak veri yoluna (BUS_0–BUS_7) vermek için bir 74LS245 sürücü.</li>
+        <li>Kontrol hatları: CLK, CLR, yükleme (AI, BI, II) ve veri yoluna çıkış (AO, BO).</li>
+        <li>Register içeriğini görmek için 8 LED ve 220 Ω dirençler; besleme için 0,1 µF kondansatör.</li>
+      </ul>
+      <figure>
+        <div class="img"><img src="img/hafta2-b-register.png" alt="B registerı şeması: iki 74LS173, bir 74LS245, veri yolu BUS_0–BUS_7, kontrol hatları CLK, CLR, BI, BO ve 8 LED." width="2670" height="1716"></div>
+        <figcaption>B registerı şeması (Abdurrahman).</figcaption>
+      </figure>
+      <p><b>Durum:</b> Şemalar çizildi. Yükleme, temizleme ve veri yoluna çıkış testleri henüz yapılmadı.</p>
+    </section>
+
+    <section>
+      <div class="note">
+        <h3>Sıradaki adım: şemaları TD-8 planına uyarlamak</h3>
+        <p>Şemalar klasik SAP-1 register yapısında. TD-8 planında (SISTEM-PLANI bölüm 5.1) registerlar farklı:</p>
+        <ul>
+          <li>TD-8'de B registerı yok. ALU'nun ikinci girişi doğrudan veri yolu.</li>
+          <li>A registerı bir 74HC377. Girişini veri yolundan değil ALU'nun sonucundan alır, veri yoluna 74HC245 ile çıkar.</li>
+          <li>Komut registerı (IR) bir 74HC377. 8 bitin hepsi mikrokod ROM'unun adresine gider, veri yoluna çıkmaz.</li>
+          <li>Entegre ailesi 74HC. Yükleme hatları ayrı anahtarlardan değil kontrol ünitesinin kod çözücüsünden gelir.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Gelecek hafta</h2>
+      <ol class="next">
+        <li><span>Saat modülünün testlerini bitirmek (ilk kilometre taşı).</span></li>
+        <li><span>Register şemalarını TD-8 planına uyarlayıp yükleme ve veri yolu testlerini yapmak.</span></li>
+        <li><span>Proteus proje dosyalarını ve test ekran görüntülerini klasöre eklemek.</span></li>
+      </ol>
+    </section>
+  </div>
 
   <footer>
     <span>Ayrıntılar:</span>
@@ -262,5 +524,21 @@ footer { font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap;
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim">GitHub deposu</a>
   </footer>
 </main>
+<script>
+(function () {
+  var ids = ['genel', 'deniz', 'abdurrahman'];
+  function show(scroll) {
+    var h = location.hash.slice(1);
+    var cur = ids.indexOf(h) >= 0 ? h : 'genel';
+    ids.forEach(function (id) {
+      document.getElementById(id).hidden = id !== cur;
+      document.getElementById('t-' + id).setAttribute('aria-selected', id === cur ? 'true' : 'false');
+    });
+    if (scroll) document.querySelector('.tabs').scrollIntoView({ block: 'start' });
+  }
+  window.addEventListener('hashchange', function () { show(true); });
+  show(false);
+})();
+</script>
 </body>
 </html>
