@@ -12,7 +12,6 @@ Bu hafta 8-bit breadboard bilgisayar projesinin ikinci simülasyon çalışması
 - Register çıkışları **A_0–A_7** olarak adlandırıldı ve sekiz LED üzerinden görsel izleme için bağlantılar oluşturuldu.
 - LED akım sınırlaması için 220 Ω dirençler ve besleme hattı için 0,1 µF bypass kondansatörü gösterildi.
 
-![A Register Proteus şeması](A-register.png)
 
 ### 2. Schematic: B Register
 
@@ -22,7 +21,6 @@ Bu hafta 8-bit breadboard bilgisayar projesinin ikinci simülasyon çalışması
 - Register çıkışları **B_0–B_7** olarak etiketlendi; sekiz LED ve 220 Ω dirençler ile gösterim bağlantıları eklendi.
 - Besleme hattı için 0,1 µF bypass kondansatörü gösterildi.
 
-![B Register Proteus şeması](B-register.png)
 
 ### 3. Schematic: Instruction Register
 
@@ -31,15 +29,18 @@ Bu hafta 8-bit breadboard bilgisayar projesinin ikinci simülasyon çalışması
 - Şemada üst dört bit **IR_4–IR_7** olarak dış bağlantılara çıkarıldı; LED'lerle 8-bit veri hatları için görsel gösterim oluşturuldu.
 - 220 Ω LED dirençleri ve 0,1 µF bypass kondansatörü eklendi.
 
-![Instruction Register Proteus şeması](Instruction-register.png)
+
+## Register Simülasyonlarının Görseli
+
+A Register, B Register ve Instruction Register devre şemaları aşağıdaki tek görselde birlikte sunulmuştur.
+
+![A Register, B Register ve Instruction Register Proteus şemaları](images/image.png)
 
 ## Dosyalar
 
 | Dosya | Açıklama |
 |---|---|
-| `A-register.png` | A Register devre şeması ekran görüntüsü |
-| `B-register.png` | B Register devre şeması ekran görüntüsü |
-| `Instruction-register.png` | Instruction Register devre şeması ekran görüntüsü |
+| `images/image.png` | A Register, B Register ve Instruction Register şemalarını birlikte gösteren görsel |
 
 **Not:** Bu klasöre henüz Proteus proje dosyaları (`.pdsprj`) eklenmedi; yalnızca paylaşılan devre şeması görselleri bulunmaktadır.
 
