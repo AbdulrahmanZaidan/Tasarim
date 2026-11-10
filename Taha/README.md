@@ -7,3 +7,7 @@ Yazılımın kendisi [`sim/`](../sim/) klasöründe kalır, burada yalnızca o h
 Hafta sonunda bu notlar `raporlar/haftaN.html` raporunda birleştirilir.
 
 Haftalık iş planı: [SISTEM-PLANI.md bölüm 13](../SISTEM-PLANI.md), "Kişi 2 (kontrol ve yazılım)" sütunu.
+
+**İletişim ve tasarım notları:**
+- [Taha'dan Abdurrahman'a (Tasarım kontrol listesi ve düzeltmeler)](../Tahadan-Abdurrahmana/README.md)
+- [Abdurrahman'dan Taha'ya (Sorular ve istekler)](../Abdurrahmandan-Tahaya/README.md)

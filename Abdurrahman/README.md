@@ -5,3 +5,7 @@ Her hafta için bir klasör: `hafta1/`, `hafta2/`, ... Her klasörde bir `README
 Hafta sonunda bu notlar `raporlar/haftaN.html` raporunda birleştirilir.
 
 Haftalık iş planı: [SISTEM-PLANI.md bölüm 13](../SISTEM-PLANI.md), "Kişi 1 (donanım)" sütunu.
+
+**İletişim ve tasarım notları:**
+- [Taha'dan Abdurrahman'a (Tasarım kontrol listesi ve düzeltmeler)](../Tahadan-Abdurrahmana/README.md)
+- [Abdurrahman'dan Taha'ya (Sorular ve istekler)](../Abdurrahmandan-Tahaya/README.md)
