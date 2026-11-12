@@ -201,7 +201,7 @@ py -3 ardu_cli.py load program.asm --port COM5 --reset
 Makine kendi saatinde (I0) çalışırken programın 8000–EFFF bölümü yazılır, her bayt ve
 sonunda bütün blok geri okunup doğrulanır. `--reset` yükledikten sonra makineyi resetler;
 programın 8000'den başlaması için SW0 = 1 ve SW0'ı okuyup 8000'e atlayan bir açılış ROM'u
-gerekir (**henüz yazılmadı**, bkz. aşağıda). Saat seçici I3'teyse `--mod iz`.
+gerekir (`sim/examples/acilis_testi.asm` bunu yapıyor: SW0 = 1 ise büyük RAM testini atlayıp 8000'e geçer). Saat seçici I3'teyse `--mod iz`.
 
 ### 4. Donanımsız deneme
 
@@ -258,7 +258,8 @@ pull-down'ı gerekir).
    STOP yalnız C'de etkilidir, yani istek sırasında en çok bir çevrim daha çalışır
    ("kaldığı yerden devam eder" doğru, ama "hemen durur" değil). İz modunda bu çevrim kaydedilir.
 7. **SW0 ile 8000'den başlatma:** plan (7.3, ISA-v0-sentez 4.8) açılış ROM'unun SW0 = 1 ise
-   8000'e atladığını söylüyor; `sim/lib/crt0.asm` bunu yapmıyor, böyle bir açılış ROM'u yok.
+   8000'e atladığını söylüyor. Bunu `sim/examples/acilis_testi.asm` yapıyor; C programlarının açılış kodu
+   `sim/lib/crt0.asm` yapmıyor. Yüklenen program EF00'a kadar uzanmamalı (yığın sayfası).
 8. **Arduino'nun saat seçiciyi okuyamaması:** seçici bir anahtar; sketch I3'te olup olmadığını
    bilemez, yalnız reset sonrası fazın kendiliğinden değişip değişmediğine bakar.
 9. **Kabul ölçütü 3** için RAM'in açılış içeriği, klavye ve DIP anahtarları emülatörle aynı
