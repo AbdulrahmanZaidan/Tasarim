@@ -143,6 +143,22 @@ class ExprGen:
     def g_Deref(self, e, n):
         return self.read_lv(self.lvalue(e), n)
 
+    def i_Deref(self, e, dest):
+        """16-bit *p doğrudan hedefe: LDA (X+) / STA d / LDA (X) / STA d+1 (geçici yok).
+        X, hedefe yazmadan önce yüklendiği için hedef adres ifadesinde geçse de doğru."""
+        if e.type.size != 2 or len(dest) != 2:
+            return False
+        lv = self.lvalue(e)
+        if lv.kind == 'direct':
+            self.store_bytes(self.read_lv(lv, 2), dest)
+            return True
+        self.load_x(lv)
+        self.e.ins('LDA', '(X+)')
+        self.e.ins('STA', dest[0].text)
+        self.e.ins('LDA', '(X)')
+        self.e.ins('STA', dest[1].text)
+        return True
+
     def g_AddrOf(self, e, n):
         lv = self.lvalue(e.operand)
         if not n:
@@ -272,6 +288,59 @@ class ExprGen:
             return self.divmod(e, n, dest)
         return self.shift(e, n, dest)
 
+    def logic_byte(self, op, l, r):
+        """Bir byte'lık & | ^ : sonuç A'da."""
+        if op == '&':
+            if is_imm_val(r, 0) or is_imm_val(l, 0):
+                self.e.ins('LDA', '#$00')
+            elif is_imm_val(r, 0xFF):
+                self.load(l)
+            elif is_imm_val(l, 0xFF):
+                self.load(r)
+            else:
+                self.load(l)
+                self.alu('AND', r)
+        elif op == '|':
+            if is_imm_val(r, 0xFF) or is_imm_val(l, 0xFF):
+                self.e.ins('LDA', '#$FF')
+            elif is_imm_val(r, 0):
+                self.load(l)
+            elif is_imm_val(l, 0):
+                self.load(r)
+            else:
+                self.load(l)
+                self.alu('OR', r)
+        else:   # '^'
+            if is_imm_val(r, 0):
+                self.load(l)
+            elif is_imm_val(l, 0):
+                self.load(r)
+            elif is_imm_val(r, 0xFF):
+                self.load(l)
+                self.e.ins('NOT')
+            elif is_imm_val(l, 0xFF):
+                self.load(r)
+                self.e.ins('NOT')
+            else:
+                self.load(l)
+                self.alu('XOR', r)
+
+    @staticmethod
+    def logic_const(op, l, r):
+        """Mantık işleminin bir byte'ı derleme anında belli mi: değer ya da None."""
+        known = l.kind == 'imm' and l.val is not None and r.kind == 'imm' and r.val is not None
+        if op == '&':
+            if is_imm_val(l, 0) or is_imm_val(r, 0):
+                return 0
+            return l.val & r.val if known else None
+        if op == '|':
+            if is_imm_val(l, 0xFF) or is_imm_val(r, 0xFF):
+                return 0xFF
+            return l.val | r.val if known else None
+        if op == '^' and known:
+            return l.val ^ r.val
+        return None
+
     def bytewise(self, op, L, R, n, dest):
         """Byte byte toplama/çıkarma/mantık işlemi. n == 1 ve dest yoksa sonuç A'da."""
         if has_acc(R):
@@ -279,6 +348,24 @@ class ExprGen:
                 L, R = R, L
             else:
                 R = self.spill(R)
+        if dest is None and n > 1 and op in ('&', '|', '^'):
+            # Derleme anında belli byte'lar anında değer olarak döner (ör. `c & 0x80`'in
+            # üst byte'ı 0): geçiciye yazılmaz; koşul ve karşılaştırma o byte'ı atlar.
+            known = [self.logic_const(op, L[i], R[i]) for i in range(n)]
+            if any(k is not None for k in known):
+                out = []
+                for i in range(n):
+                    if known[i] is not None:
+                        out += imm(known[i], 1)
+                        continue
+                    self.logic_byte(op, L[i], R[i])
+                    if i == 0 and all(k is not None for k in known[1:]):
+                        out.append(ACC)         # tek değişken byte 0. byte: A'da kalır
+                    else:
+                        t = self.temp(1)[0]
+                        self.e.ins('STA', t.text)
+                        out.append(t)
+                return out
         if dest is None and n > 1:
             dest = self.temp(n)
         out = dest
@@ -303,40 +390,8 @@ class ExprGen:
                     else:
                         self.alu('SBC' if carry else 'SUB', r)
                     carry = True
-            elif op == '&':
-                if is_imm_val(r, 0) or is_imm_val(l, 0):
-                    self.e.ins('LDA', '#$00')
-                elif is_imm_val(r, 0xFF):
-                    self.load(l)
-                elif is_imm_val(l, 0xFF):
-                    self.load(r)
-                else:
-                    self.load(l)
-                    self.alu('AND', r)
-            elif op == '|':
-                if is_imm_val(r, 0xFF) or is_imm_val(l, 0xFF):
-                    self.e.ins('LDA', '#$FF')
-                elif is_imm_val(r, 0):
-                    self.load(l)
-                elif is_imm_val(l, 0):
-                    self.load(r)
-                else:
-                    self.load(l)
-                    self.alu('OR', r)
-            else:   # '^'
-                if is_imm_val(r, 0):
-                    self.load(l)
-                elif is_imm_val(l, 0):
-                    self.load(r)
-                elif is_imm_val(r, 0xFF):
-                    self.load(l)
-                    self.e.ins('NOT')
-                elif is_imm_val(l, 0xFF):
-                    self.load(r)
-                    self.e.ins('NOT')
-                else:
-                    self.load(l)
-                    self.alu('XOR', r)
+            else:
+                self.logic_byte(op, l, r)
             if out is not None:
                 self.e.ins('STA', out[i].text)
         if out is None:
@@ -414,7 +469,7 @@ class ExprGen:
             return self.place([ACC], dest)
         if len(bits) == 1:
             return self.shl16(X, bits[0], dest)
-        cur = self.shl16(X, bits[0], None)
+        cur = self.shl16(X, bits[0], self.temp(2))     # cur sonra hedef olarak da kullanılır
         total = self.to_temp(cur)
         for i in range(1, len(bits)):
             cur = self.shl16(cur, bits[i] - bits[i - 1], cur)
@@ -565,6 +620,22 @@ class ExprGen:
         X = self.spill(X)
         if k >= 16:
             return self.place(imm(0, 2), dest)
+        if k == 8 and dest is None:
+            return imm(0, 1) + [X[0]]               # kod yok: düşük byte üste geçer
+        if k == 1 and is_imm_val(X[1], 0):
+            # sıfır genişletilmiş 8-bit değer * 2 (ör. int dizisinde char indeks):
+            # lo = x << 1, hi = dışarı kayan bit (LDA flag'leri bozmaz, C korunur)
+            out = self._out16(X, dest, {})
+            self.load(X[0])
+            self.e.ins('SHL')
+            self.e.ins('STA', out[0].text)
+            self.e.ins('LDA', '#$00')
+            self.e.ins('ROL')
+            self.e.ins('STA', out[1].text)
+            if dest is not None and out is not dest:
+                self.store_bytes(out, dest)
+                return dest
+            return out
         if 1 <= k <= 7 and is_imm_val(X[1], 0):
             # sıfır genişletilmiş 8-bit değer: hi = x >> (8-k), lo = x << k
             out = self._out16(X, dest, {1: [X[0]]})
@@ -624,6 +695,8 @@ class ExprGen:
         X = self.spill(X)
         sh = 'ASR' if signed else 'SHR'
         k = min(k, 16)
+        if k == 8 and not signed and dest is None:
+            return [X[1]] + imm(0, 1)               # kod yok: üst byte, üstü 0
         if k >= 8:
             out = self._out16(X, dest, {})
             self.load(X[1])
@@ -780,6 +853,10 @@ class ExprGen:
             L, R = self.gen_pair(a, 1, b, 1)
         else:
             L, R = self.gen_pair(e.left, 2, e.right, 2)
+            if is_imm_val(L[1], 0) and is_imm_val(R[1], 0):
+                # iki üst byte da 0 (ör. `(c ^ 2) != d`): değerler 0..255, 8 bit yeter
+                width, signed = 1, False
+                L, R = L[:1], R[:1]
         if has_acc(R):
             L, R = R, L
             op = MIRROR[op]

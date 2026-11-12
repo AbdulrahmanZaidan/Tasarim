@@ -1204,6 +1204,65 @@ int main(void)
         cond = sum(ins_cycles(l.strip())[1] for l in lines[k + 1:k + 5])
         self.assertEqual(body + cond, 41)
 
+    SNAKE_SRC = '''
+unsigned char s, y, d, i, h;
+unsigned w, q, x;
+int tablo[200];
+int r[8];
+int main(void)
+{
+    unsigned char k;
+    for (k = 0; k < 200; k++)
+        tablo[k] = k * 3 + 1;
+    if (s & 0x80)
+        r[0] = 1;
+    if (w & 1)
+        r[1] = 1;
+    if ((y ^ 2) != d)
+        r[2] = 1;
+    r[3] = tablo[i];
+    if (w & 0x0100)
+        r[4] = 1;
+    r[5] = (s & 0x0F) | 0x0F00;
+    r[6] = tablo[i - 100];
+    if ((w >> 8) == 1)
+        r[7] = 1;
+    h = w >> 8;
+    q = w * 0x0300;
+    x = (w ^ (w >> 8)) & 0x7FF;
+    return 0;
+}'''
+
+    def test_snake_optimizations(self):
+        """Yılan oyunu için eklenen iyileştirmeler (sim/examples/snake.c):
+        `c & sabit` koşulu 8 bitte, üst byte'ı 0 olan karşılaştırma 8 bitte,
+        int dizisinde char indeks SHL/ROL ile, 16-bit *p doğrudan hedefe,
+        işaretsiz `x >> 8` kodsuz (üst byte)."""
+        text = compile_c(self.SNAKE_SRC).asm
+        self.assertEqual(stmt_cost(text, 'if (s & 0x80)'), (9, 10))       # LDA AND BEQ
+        self.assertEqual(stmt_cost(text, 'if (w & 1)'), (9, 10))
+        self.assertEqual(stmt_cost(text, 'if ((y ^ 2) != d)'), (13, 14))  # LDA XOR CMP BEQ
+        self.assertEqual(stmt_cost(text, 'r[3] = tablo[i];'), (46, 46))   # önce 76
+        self.assertEqual(stmt_cost(text, 'if ((w >> 8) == 1)'), (9, 10))  # LDA w+1 CMP BNE
+        self.assertEqual(stmt_cost(text, 'h = w >> 8;'), (8, 8))          # LDA w+1 STA
+        for s, w, y, d, i in ((0x80, 0x0101, 2, 0, 150), (0x7F, 0x00FE, 3, 1, 7),
+                              (0xFF, 0x8001, 0, 2, 199), (0, 0, 255, 253, 128)):
+            src = self.SNAKE_SRC.replace('unsigned char s, y, d, i, h;',
+                                         f'unsigned char s = {s}, y = {y}, d = {d}, i = {i}, h;')
+            src = src.replace('unsigned w, q, x;', f'unsigned w = {w}, q, x;')
+            m = compile_run(src)
+            want = [int(bool(s & 0x80)), w & 1, int((y ^ 2) != d), i * 3 + 1,
+                    int(bool(w & 0x100)), (s & 0x0F) | 0x0F00, ((i - 100) & 0xFF) * 3 + 1,
+                    int(w >> 8 == 1)]
+            if i - 100 < 0:
+                want[6] = None                  # dizi dışı: karşılaştırılmaz
+            got = m.ints('r', 8)
+            self.assertEqual([g for g, v in zip(got, want) if v is not None],
+                             [v for v in want if v is not None], (s, w, y, d, i))
+            self.assertEqual(m.c('h'), w >> 8)
+            self.assertEqual(m.u('q'), w * 0x300 & 0xFFFF)
+            self.assertEqual(m.u('x'), (w ^ (w >> 8)) & 0x7FF)
+
     def test_constant_folding_and_8bit(self):
         text = compile_c('char c, d; int i;\nint main(void)\n{\n    i = 3 * 4 + (1 << 4);\n'
                          '    c = d & 0x0F;\n    return 0;\n}').asm
