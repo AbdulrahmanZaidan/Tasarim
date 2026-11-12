@@ -52,12 +52,13 @@ py cli.py hw wiring -o tablo.md                 bağlantı tablosu: her entegren
 py cli.py hw digital                            digital/ altındaki .dig dosyalarını yeniden üret
 py cli.py hw digital --program examples/komut_testi.asm --run 800   Digital'de koştur, emülatörle karşılaştır
 py -m tdcc examples/merhaba.c -o build/merhaba_c.asm --run    C programını derle ve çalıştır
+py cli.py run examples/acilis_testi.asm --ref --cycles 5000000    açılış kendi kendini test ROM'u (1,5 sn @ 1 MHz)
 py play.py examples/snake.c                     Snake'i oyna: ok tuşları ya da WASD, Boşluk/Enter yeniden başlat, Esc çıkış
 py play.py examples/snake.c --demo              hazır tuş senaryosunu oynat (~38 sn)
 py ardu_cli.py trace examples/merhaba.asm --fake            Arduino aracını sahte cihazla dene
 py ardu_cli.py trace examples/merhaba.asm --port COM5       gerçek kart: izi al, emülatörle karşılaştır (pyserial gerekir)
 py ardu_cli.py load PROGRAM.asm --port COM5                 programı RAM'e 8000'den yükle ve doğrula
-py -m unittest                                  tüm testler (~1 dk)
+py -m unittest discover -s tests -t .           tüm testler (298 test, ~3 dk)
 ```
 
 Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODING=utf-8` yazın.
@@ -87,7 +88,7 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
 | `td8/ardu.py`, `ardu_cli.py` | Arduino hata ayıklama kartının bilgisayar tarafı: seri protokol, iz alma ve karşılaştırma, RAM'e yükleme. Sketch ve pin tablosu: [`../arduino/`](../arduino/README.md) |
 | `cli.py`, `gen_roms.py` | Komut satırı |
 | `lib/runtime.asm` | Çalışma zamanı kütüphanesi: `__mul16`, `__divmod16`, `print_u16`, `puts`. Programa `.include "../lib/runtime.asm"` ile eklenir; çağırma kuralı dosyanın başında |
-| `examples/` | `merhaba.asm` (ekrana yazı), `klavye.asm` (PS/2 byte'larını gösterir), `fibonacci.asm`, `asal.asm` (runtime örnekleri), `komut_testi.asm` (88 opcode'un hepsi); C örnekleri `merhaba.c`, `fib.c`, `sayac.c`, `snake.c` |
+| `examples/` | `merhaba.asm` (ekrana yazı), `klavye.asm` (PS/2 byte'larını gösterir), `fibonacci.asm`, `asal.asm` (runtime örnekleri), `komut_testi.asm` (88 opcode'un hepsi), `acilis_testi.asm` (açılış kendi kendini test ROM'u; LED ve hata kodları dosyanın başında); C örnekleri `merhaba.c`, `fib.c`, `sayac.c`, `snake.c` |
 | `tests/` | ALU (8 milyon girişin hepsi), mikrokod kuralları, assembler, iki emülatörün eşdeğerliği, VGA zamanlaması, runtime rutinleri, vektörler, entegre modelleri, bütün işlemci, C derleyicisi |
 | `digital/` | Üretilen Digital devreleri (`.dig`) |
 | `build/` | Üretilen imajlar. Git'e girmez, `py gen_roms.py` ile yeniden üretilir. |
@@ -125,6 +126,10 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
   - 200 rastgele C programı (~4.400 ifade) emülatörde ve bağımsız bir Python hesaplayıcıda aynı sonucu veriyor.
   - Kontrol akışı, fonksiyonlar, işaretçiler, diziler, switch, başlangıç değerleri, `const` tablolar, `volatile` erişimleri.
   - Desteklenmeyen yapılar (özyineleme, struct, long, float, fonksiyon işaretçisi) satır numaralı Türkçe hata veriyor.
+- **Açılış testi (`examples/acilis_testi.asm`):**
+  - Sağlam makinede iki emülatörde de "TEST TAMAM", aynı çevrim sayısı.
+  - Bilerek konan arızalar yakalanıyor: RAM'de yapışık bit, bozuk yığın hücresi, kısa devre adres hattı (15 hattın her biri), ters çevrilmiş dallanma koşulları, bozuk mikroadımlar. ALU tablosu bozulmalarında kapsam işleme göre değişiyor (CLC, SEC, TST'de düşük).
+  - SW0 = 1 iken RAM'deki program bozulmadan 8000'e geçiliyor.
 - **Snake (`examples/snake.c`):**
   - Her hamleden sonra ekranın tamamı, yılanın konumu, skor ve LED'ler bağımsız bir Python modeliyle aynı.
   - Dönüşler, ters yön reddi, yem ve uzama, hızlanma, skor geçişleri, duvara ve kendine çarpma, yeniden başlama, kazanma.
