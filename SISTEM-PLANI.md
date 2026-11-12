@@ -222,12 +222,19 @@ STOP = BRQ_s | ((HALT_L | BRK_L | (STEPMODE_s & (MICRO | NEXT_L))) & !GO)
 74HC27 Türkiye'de bulunmadığı için bunun yerine 4. bir 74HC138 kullanılır:
 
 ```
-74HC138: G1 = VCC, /G2A = /FPAGE, /G2B = A11, A = /MEMW_L, B = VWR_s, C = GND
-Y0 = /WAIT   (F000–F7FF'ye yazma VE pencere kapalı)
-Johnson: Q2' = NAND(/Q1, OR(/WAIT, /Q2))
+74HC138: G1 = CLK (= Q2), /G2A = /FPAGE, /G2B = A11, A = /MEMW_L, B = VWR_s, C = GND
+Y0 = /WAIT   (F000–F7FF'ye yazma VE pencere kapalı VE Q2 = 1)
+Johnson: Q2' = NAND(/Q1, /WAIT)
 ```
 
-En kötü durum gecikmesi ~236 ns. D fazı 1 MHz'de 250 ns olduğu için sığar.
+**Düzeltme (12 Kasım 2026, çip seviyesi simülasyon bulgusu).** İlk tasarımda G1 = VCC ve `Q2' = NAND(/Q1, OR(/WAIT, /Q2))` idi; elle hesap ~236 ns veriyordu. O hesap süreyi LCLK'ten sayıyordu. Oysa karar D→A MCLK kenarında örneklenir ve LCLK, MCLK kenarından Johnson 74HC74'ün kendi gecikmesi kadar (en kötü ~44 ns) geç yükselir; flip-flop'un kurulum süresi de hesapta yoktu. Simülasyonda en kötü gecikmelerle karar C→D kenarından ~257 ns sonra geldi (kurulum süresiyle ~272 ns) ve pencere kapalıyken yapılan VRAM yazmaları beklemeden geçti. G1'i CLK'ye bağlamak OR işlemini 138'in içine alır (mantık aynıdır: Q2 = 0 iken /WAIT zaten pasif), bir kapı seviyesi kalkar.
+
+| | Tipik | En kötü | Pencere |
+|---|---|---|---|
+| İlk tasarım (G1 = VCC) | 111 ns | 272 ns ✘ | 250 ns |
+| Düzeltilmiş (G1 = CLK) | 102 ns | 247 ns | 250 ns |
+
+En kötü durumda pay yalnız ~3 ns. Tipik değerlerle rahat; yine de **osiloskopla doğrulanacak** (prototip a). Gecikme tablosunun bir kısmı tahmindir (`sim/td8/hw/chips.py`).
 
 ---
 
@@ -454,7 +461,7 @@ Her adım bir tam çevrimdir. Gösterim: `adres kaynağı / DB kaynağı / hedef
 | Adres | İçerik |
 |---|---|
 | `0000–7FFF` | ROM, 32 KB (SST39SF010). A15 ve A16 jumper'la seçilir → 4 program bankı. |
-| `8000–EFFF` | RAM, 28 KB (CY62256). `8000–80FF` runtime pseudo-registerları, `EF00–EFFF` stack. |
+| `8000–EFFF` | RAM, 28 KB (CY62256). `8000–801F` runtime yuvaları (`__rv` vb.), `8020`'den itibaren C değişkenleri, `EF00–EFFF` stack. |
 | `F000–F7FF` | VRAM, yalnızca yazılır. Karakterin adresi `F000 + 64·satır + sütun`. 0–39. sütunlar görünür. |
 | `F800–FFFF` | I/O. Kayıtlar her 8 byte'ta bir tekrarlanır. |
 
@@ -603,7 +610,9 @@ sim/td8/isa.py ──► gen_roms.py ──► build/urom0..2, alu_lo/hi, vga_ti
        ├──► emu_micro.py: mikroadım emülatörü, ROM imajlarını aynen çalıştırır
        └──► emu_ref.py: komut seviyesi referans; mikrokodu çapraz kontrol eder
 
-C kaynağı ──► tdcc (Python C derleyicisi, yapımın 1–11. haftası) ──► assembly ──► asm.py
+C kaynağı ──► tdcc (Python C derleyicisi, `sim/tdcc/`) ──► assembly ──► asm.py
+
+isa.py + ROM imajları ──► td8/hw (çip seviyesi netlist, 59 entegre) ──► sıfır fark testi, bağlantı tablosu, Digital .dig
 ```
 
 ### 11.2 C alt kümesi
@@ -648,7 +657,9 @@ C kaynağı ──► tdcc (Python C derleyicisi, yapımın 1–11. haftası) �
 | Araç | Ne için |
 |---|---|
 | **Digital** (hneemann, Java 11+) | Devre simülasyonu; 74xx kütüphanesi, test vektörleri, VGA monitörü |
-| **Python 3.12** | `sim/`: ROM imajları, assembler, emülatörler, testler; ileride C derleyicisi |
+| **Python 3.12** | `sim/`: ROM imajları, assembler, emülatörler, testler, C derleyicisi |
+| **Çip seviyesi simülatör** (`sim/td8/hw/`) | İşlemcinin pin pin bağlantı listesi; gecikmeli simülasyon (Digital'in modellemediği zamanlama), bus çakışması ve kurulum/tutma denetimi; Digital dosyaları ve bağlantı tablosu buradan üretilir |
+| Proteus | Abdurrahman'ın şema ve modül testleri; ROM dosyaları `sim/build/proteus/` |
 | KiCad | 13–15. haftada temiz şemalar ve breadboard yerleşimi |
 | PulseView | Lojik analizör (yapım döneminde) |
 | Git | Her çalışan durumun kaydı (ROM imajları dahil) |
@@ -721,7 +732,7 @@ Başlangıç sınav takvimine göre 4 ya da 18 Ocak. Ocak'taki sınav haftaları
 | 1–2 | Güç dağıtımı (önce çipsiz ölçüm), M1 saat ve durdurma. Paralel iş: VGA zamanlaması, monitör kilitlenene kadar. | C derleyici: lexer, parser |
 | 3–5 | M2 kontrol latch'i + manuel panel. Paralel iş: VGA metin hattı, test fontuyla. | C derleyici: ifadeler, deyimler, kod üretimi |
 | 6–8 | M4 ALU + A + F + IR, DB switch'leriyle. PS/2 tek başına. | C derleyici: fonksiyonlar, statik çerçeve, çağrı grafiği |
-| 9–11 | M3: PC, AR, X, SP | `crt0`, `hw.h` (runtime'ın ilk sürümü simülasyonun 2. haftasında yazıldı); C'den "MERHABA" emülatörde |
+| 9–11 | M3: PC, AR, X, SP | `crt0`, `hw.h` (runtime'ın ilk sürümü simülasyonun 2. haftasında yazıldı); C'den "MERHABA" emülatörde. |
 | 12–13 | M5 bellek + I/O, Arduino kartı | Snake (C), emülatörde oynanıyor |
 | 14–15 | Mikrokod takılır; Arduino izi emülatörle karşılaştırılır | Açılış kendi kendini test ROM'u |
 | 16–17 | VGA ve PS/2 CPU'ya bağlanır | Snake ince ayarı: hız, skor, yem |
@@ -812,7 +823,9 @@ Satın alma listesi ve fiyatlar: PROJE-PLANI.md bölüm 14.
 
 | Konu | Ne zaman |
 |---|---|
-| Digital'in 74xx kütüphanesinde 191, 166, 540 ve 688 var mı | 1. hafta |
+| ~~Digital'in 74xx kütüphanesinde 191, 166, 540 ve 688 var mı~~ **Kapandı (12 Kasım):** Digital v0.31'de kullandığımız 23 entegrenin hepsi var | 3. hafta |
+| WAIT yolunun en kötü durum payı ~3 ns (bölüm 3.6) | Prototip a, osiloskop |
+| I/O'dan ROM'a geçişte DB'de ~18 ns çakışma (en kötü gecikmelerle; I/O seçimi 20→139→138 zinciriyle geç kapanıyor) | Osiloskop |
 | T48 cihaz listesinde A'sız SST39SF010 (-90) var mı | Parçalar gelince |
 | Gerçek 8×8 font: font8x8_basic (kamu malı); `sim/td8/vga.py` dönüştürücüsüyle | 7. hafta |
 | VOH, PS/2 susturma, 80 ns'lik LD yolu | Prototip b, c, d |

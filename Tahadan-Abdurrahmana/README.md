@@ -4,6 +4,49 @@ Selam Abdurrahman, tasarımda gözden kaçmış veya unutulmuş olabilecek tekni
 
 ---
 
+## 0. YENİ (12 Kasım): Sorularının Cevabı ve Senin İçin Hazırlananlar
+
+### Soru 1: Proteus'ta ROM'lara `.bin` mi `.hex` mi yükleyeceğiz?
+
+**`.bin` kullan.** Ama `sim/build/` altındaki eski dosyaları değil, yeni `sim/build/proteus/` klasöründekileri:
+
+- `sim/build/*.hex` dosyaları Digital programının biçiminde (Intel HEX değil). **Proteus bunları okuyamaz.**
+- `cd sim` → `py cli.py roms` komutu artık `sim/build/proteus/` klasörünü de üretiyor: her ROM için 64 KB'lık `.bin` ve Intel HEX biçiminde `.hex`. (`build/` klasörü GitHub'a girmiyor; komutu kendi bilgisayarında çalıştırman gerek. Python 3.12 yeterli, ek paket yok.)
+- Proteus kütüphanesinde SST39SF010 (128 KB flash) büyük olasılıkla yok. Yerine **27C512** (64 KB EPROM) koy: A0–A15 bacakları aynı işi görüyor. Bizim devrede flash'ların A16 bacağı zaten 0'a bağlı olduğu için 64 KB yetiyor.
+
+| Proteus'taki ROM | Yüklenecek dosya |
+|---|---|
+| Mikrokod ROM'ları (3 adet) | `build/proteus/urom0.bin`, `urom1.bin`, `urom2.bin` |
+| ALU ROM'ları (2 adet) | `build/proteus/alu_lo.bin`, `alu_hi.bin` |
+| Program ROM'u | `py cli.py asm examples/merhaba.asm --ihex` → `examples/merhaba.bin` (32 KB) ve `merhaba.hex` (Intel HEX) |
+
+Proteus tarafını ben deneyemedim (bende kurulu değil); bilgi forumlardan. 27C512'nin özellikler penceresindeki imaj dosyası alanına `.bin`'i verip dene, olmazsa aynı adlı `.hex`'i dene ve hangisinin çalıştığını `Abdurrahmandan-Tahaya` dosyasına yaz.
+
+### Soru 2: Sinyal adları şemadaki etiketlerle aynı olsun
+
+Bunun için **[TD8-baglanti-tablosu.md](TD8-baglanti-tablosu.md)** hazır: işlemcinin 59 entegresinin **her bacağının** hangi sinyale bağlandığı, modül modül (M1, M2, M3, M4, yardımcı kapılar, M5). Proteus'ta net etiketlerini bu tablodaki adlarla aynı verirsen modüller birleşirken ad uyuşmazlığı olmaz.
+
+- Tablo elle yazılmadı, `sim/td8/hw/cpu.py` dosyasındaki bağlantı listesinden üretildi. Bu bağlantı listesi simülasyonda emülatörle **çevrim çevrim sıfır farkla** çalışıyor (6 program, 88 komutun hepsi). Yani tablodaki gibi bağlanan devre çalışır.
+- İki ad sözlükte yoktu, ben verdim: A registerının çıkışları `ACC0..ACC7`, AR registerının çıkışları `AR0..AR15`.
+- Tablo yalnız kablo bağlantısını söyler. Şemayı çizmek, Proteus'ta çalıştırmak ve test etmek yine sende.
+
+### M1'de bir değişiklik: WAIT 138'inin G1 bacağı CLK'ye
+
+Simülasyon planda bir zamanlama hatası buldu: VRAM'e yazarken bekleme (WAIT) kararı en kötü gecikmelerle 250 ns'ye yetişmiyordu (flip-flop'un kurulum süresiyle ~272 ns). Düzeltme tek kablo:
+
+- **Eski:** WAIT 74HC138'inde G1 = VCC; Johnson `Q2' = NAND(/Q1, OR(/WAIT, /Q2))`.
+- **Yeni:** G1 = **CLK**; Johnson `Q2' = NAND(/Q1, /WAIT)`. Aradaki OR kapısı kalktı.
+
+Bağlantı tablosu ve [SISTEM-PLANI.md bölüm 3.6](../SISTEM-PLANI.md) yeni haliyle. Düzeltilmiş halde süre 247 ns, pay yalnız ~3 ns; saat modülünün prototipinde (prototip a) osiloskopla bakmamız gerekecek.
+
+### Test etmek için
+
+- **Modül testleri için hazır tablolar:** `py cli.py vectors alu`, `urom`, `cs` (kod çözücüler), `decode` (adres çözme). `--format csv` eklersen Excel'de açılır. Her satır "bu girişleri ver, şu çıkışları görmelisin" diyor.
+- **Bütün işlemci için:** `py cli.py vectors trace examples/merhaba.asm --format csv` her çevrimde adres yolunda, veri yolunda ve 24 kontrol hattında ne olması gerektiğini veriyor (573 satır). Proteus'ta aynı programı çalıştırıp karşılaştırabiliriz.
+- **Digital kullanmak istersen:** ücretsiz, Java ile çalışıyor. Bende kurulu; kurulum notu `sim/README.md`'de.
+
+---
+
 ## 1. ÖNEMLİ: 2. Hafta Register Şemalarında Düzeltilecek Noktalar (SAP-1 → TD-8 Farkı)
 
 2. haftada çizdiğin **A Register**, **B Register** ve **Instruction Register (IR)** şemaları klasik **Ben Eater (SAP-1)** yapısına göre (`74LS173` + `B registerı`) olmuş. Bizim **TD-8 Sistem Planımızda ([SISTEM-PLANI.md bölüm 5.1](../SISTEM-PLANI.md#51-registerlar-hepsi-clk--ile-yüklenir-senkron-izinli))** tasarımımız şu şekilde:

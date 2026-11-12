@@ -8,8 +8,10 @@ Selam Taha, donanım ve Proteus simülasyonu tarafında ilerlerken senden (yazı
 
 <!-- Abdurrahman: Taha'dan istediğin ROM imajı (.bin/.hex), test vektörü veya sinyallerle ilgili soruları buraya madde madde yazabilirsin. -->
 
-- [ ] Proteus'taki ROM bileşenlerine `urom0..2` ve `alu_lo / alu_hi` dosyalarını yüklerken `.bin` mi yoksa `.hex` mi kullanacağımızı birlikte netleştirelim.
-- [ ] M2 Kontrol Ünitesi ve M5 Bellek/Adres Çözme modüllerini birleştirirken sinyal isimlerinin (`ASRC`, `DSRC`, `DDST`, `ALUOP`, `/MRD`, `/MWR`) şemadaki etiketlerle bire bir aynı olmasını kontrol edelim.
+- [x] Proteus'taki ROM bileşenlerine `urom0..2` ve `alu_lo / alu_hi` dosyalarını yüklerken `.bin` mi yoksa `.hex` mi kullanacağımızı birlikte netleştirelim.
+  - **Taha'nın cevabı (12 Kasım):** `.bin`, ama `sim/build/proteus/` klasöründeki 64 KB'lık dosyalar. Ayrıntı: [Tahadan-Abdurrahmana, bölüm 0](../Tahadan-Abdurrahmana/README.md). Proteus'ta deneyip sonucu buraya yazar mısın?
+- [x] M2 Kontrol Ünitesi ve M5 Bellek/Adres Çözme modüllerini birleştirirken sinyal isimlerinin (`ASRC`, `DSRC`, `DDST`, `ALUOP`, `/MRD`, `/MWR`) şemadaki etiketlerle bire bir aynı olmasını kontrol edelim.
+  - **Taha'nın cevabı (12 Kasım):** Bütün sinyal adları ve her entegrenin bacak bacak bağlantısı: [TD8-baglanti-tablosu.md](../Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md).
 
 ---
 
