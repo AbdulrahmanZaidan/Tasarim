@@ -8,6 +8,8 @@ Bu klasör devre simülasyonunun yazılım tarafıdır. Buradaki araçlar:
 4. **Test vektörleri:** Digital'in test bileşenine yapıştırılır ya da Proteus/Arduino kaydıyla karşılaştırılır.
 5. **Çip seviyesi devre (`td8/hw/`):** İşlemcinin 59 entegresi pin pin bağlı ve gecikmeli olarak simüle ediliyor; emülatörle çevrim çevrim sıfır fark veriyor. Aynı bağlantı listesinden Digital dosyaları ve Proteus/breadboard için bağlantı tablosu üretilir.
 6. **C derleyicisi (`tdcc/`):** C alt kümesini TD-8 assembly'sine çevirir.
+7. **Snake (`examples/snake.c`) ve `play.py`:** Final demosunun oyunu; emülatörde klavyeyle oynanır.
+8. **Arduino aracı (`ardu_cli.py`, `../arduino/`):** Breadboard'daki makinenin izini alıp emülatörle karşılaştırır, RAM'e program yükler. Donanımda henüz denenmedi.
 
 Tasarımın tamamı: [../SISTEM-PLANI.md](../SISTEM-PLANI.md)
 
@@ -50,6 +52,11 @@ py cli.py hw wiring -o tablo.md                 bağlantı tablosu: her entegren
 py cli.py hw digital                            digital/ altındaki .dig dosyalarını yeniden üret
 py cli.py hw digital --program examples/komut_testi.asm --run 800   Digital'de koştur, emülatörle karşılaştır
 py -m tdcc examples/merhaba.c -o build/merhaba_c.asm --run    C programını derle ve çalıştır
+py play.py examples/snake.c                     Snake'i oyna: ok tuşları ya da WASD, Boşluk/Enter yeniden başlat, Esc çıkış
+py play.py examples/snake.c --demo              hazır tuş senaryosunu oynat (~38 sn)
+py ardu_cli.py trace examples/merhaba.asm --fake            Arduino aracını sahte cihazla dene
+py ardu_cli.py trace examples/merhaba.asm --port COM5       gerçek kart: izi al, emülatörle karşılaştır (pyserial gerekir)
+py ardu_cli.py load PROGRAM.asm --port COM5                 programı RAM'e 8000'den yükle ve doğrula
 py -m unittest                                  tüm testler (~1 dk)
 ```
 
@@ -76,9 +83,11 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
 | `td8/hw/digital.py`, `td8/hw/digital_cpu.py` | Bağlantı listesini Digital'in `.dig` dosyasına çevirir; Digital'i komut satırından çalıştırıp izini alır |
 | `tdcc/` | C derleyicisi: ön işlemci, lexer, parser, tip denetimi, kod üretimi |
 | `lib/crt0.asm`, `lib/rt_c.asm`, `lib/hw.h` | C programlarının açılış kodu, derleyicinin yardımcı rutinleri, donanım tanımları (`VRAM`, `LEDS`, `KBD`, `KSTAT`) |
+| `play.py` | Etkileşimli çalıştırıcı: programı gerçek zamanlı koşturur, ekranı terminalde gösterir, tuşları PS/2 kodlarına çevirir |
+| `td8/ardu.py`, `ardu_cli.py` | Arduino hata ayıklama kartının bilgisayar tarafı: seri protokol, iz alma ve karşılaştırma, RAM'e yükleme. Sketch ve pin tablosu: [`../arduino/`](../arduino/README.md) |
 | `cli.py`, `gen_roms.py` | Komut satırı |
 | `lib/runtime.asm` | Çalışma zamanı kütüphanesi: `__mul16`, `__divmod16`, `print_u16`, `puts`. Programa `.include "../lib/runtime.asm"` ile eklenir; çağırma kuralı dosyanın başında |
-| `examples/` | `merhaba.asm` (ekrana yazı), `klavye.asm` (PS/2 byte'larını gösterir), `fibonacci.asm`, `asal.asm` (runtime örnekleri), `komut_testi.asm` (88 opcode'un hepsi); C örnekleri `merhaba.c`, `fib.c`, `sayac.c` |
+| `examples/` | `merhaba.asm` (ekrana yazı), `klavye.asm` (PS/2 byte'larını gösterir), `fibonacci.asm`, `asal.asm` (runtime örnekleri), `komut_testi.asm` (88 opcode'un hepsi); C örnekleri `merhaba.c`, `fib.c`, `sayac.c`, `snake.c` |
 | `tests/` | ALU (8 milyon girişin hepsi), mikrokod kuralları, assembler, iki emülatörün eşdeğerliği, VGA zamanlaması, runtime rutinleri, vektörler, entegre modelleri, bütün işlemci, C derleyicisi |
 | `digital/` | Üretilen Digital devreleri (`.dig`) |
 | `build/` | Üretilen imajlar. Git'e girmez, `py gen_roms.py` ile yeniden üretilir. |
@@ -116,6 +125,14 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
   - 200 rastgele C programı (~4.400 ifade) emülatörde ve bağımsız bir Python hesaplayıcıda aynı sonucu veriyor.
   - Kontrol akışı, fonksiyonlar, işaretçiler, diziler, switch, başlangıç değerleri, `const` tablolar, `volatile` erişimleri.
   - Desteklenmeyen yapılar (özyineleme, struct, long, float, fonksiyon işaretçisi) satır numaralı Türkçe hata veriyor.
+- **Snake (`examples/snake.c`):**
+  - Her hamleden sonra ekranın tamamı, yılanın konumu, skor ve LED'ler bağımsız bir Python modeliyle aynı.
+  - Dönüşler, ters yön reddi, yem ve uzama, hızlanma, skor geçişleri, duvara ve kendine çarpma, yeniden başlama, kazanma.
+  - Hamle başına ortalama 532 çevrim (~0,53 ms); VRAM yazmaları pencereye sığıyor.
+- **Arduino aracı (`td8/ardu.py`):**
+  - Sahte cihazdan alınan iz emülatör iziyle aynı; bilerek konan hatalar doğru çevrimde ve doğru alanda bulunuyor.
+  - RAM'e yükleme ve doğrulama, zaman aşımı, bozuk çerçeveden sonra yeniden senkron.
+  - Sketch'teki protokol sabitleri Python'dakilerle aynı. Sketch `arduino:avr:mega` için derleniyor; **donanımda denenmedi.**
 - **VGA:**
   - 400 nokta × 525 satır; HSYNC 48 nokta, VSYNC 2 satır, 40 × 480 görünür alan.
   - VRAM pencereleri doğru iç içe.
@@ -152,6 +169,6 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
 | Simülasyon 5. hafta | Breakpoint ve BUSREQ mantığını netlist'e eklemek |
 | Simülasyon 5–7. hafta | VGA (M6) ve PS/2 (M7) netlist'i; taklitlerin yerine gerçek modüller |
 | Simülasyon 7. hafta | Gerçek font: `font8x8_basic.h` (kamu malı) → `py cli.py roms --font ...` |
-| Simülasyon 9. hafta | Arduino iz ve yükleme yazılımı |
+| Kart kurulunca | Arduino yazılımını donanımda denemek; pin tablosunu kesinleştirmek (`../arduino/README.md`) |
 | Sürekli | C derleyicisi (`tdcc`): ilk sürüm hazır. Eksikler: `switch` için atlama tablosu, struct |
-| Yapım 12–17. hafta | Snake (C), açılış test ROM'u |
+| Yapım 12–17. hafta | Snake'in ince ayarı (hız, skor, yem) gerçek ekran ve klavyeyle |

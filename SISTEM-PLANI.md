@@ -825,6 +825,8 @@ Satın alma listesi ve fiyatlar: PROJE-PLANI.md bölüm 14.
 |---|---|
 | ~~Digital'in 74xx kütüphanesinde 191, 166, 540 ve 688 var mı~~ **Kapandı (12 Kasım):** Digital v0.31'de kullandığımız 23 entegrenin hepsi var | 3. hafta |
 | WAIT yolunun en kötü durum payı ~3 ns (bölüm 3.6) | Prototip a, osiloskop |
+| /ARD_RD ve /ARD_WR hatlarında pull-up yok. Arduino takılı değilken ya da resetlenirken boşta kalırlar: /RD düşerse veri yolunda çakışma, /WR düşerse RAM bozulması olur. Öneri: 10k pull-up (simülasyondaki bağlantı listesi böyle kuruldu) | Arduino kartı kablolanmadan önce |
+| Arduino kartı ayrıntıları: MCLK girişinde (153 I3) pull-down, kontrol kelimesi ve durum hatlarında da 470 Ω, Arduino /RESET hattının bağlanacağı nokta, RAM'in açılış içeriği (iz karşılaştırması için) | Arduino kartı kablolanmadan önce; taslak pin tablosu `arduino/README.md` |
 | I/O'dan ROM'a geçişte DB'de ~18 ns çakışma (en kötü gecikmelerle; I/O seçimi 20→139→138 zinciriyle geç kapanıyor) | Osiloskop |
 | T48 cihaz listesinde A'sız SST39SF010 (-90) var mı | Parçalar gelince |
 | Gerçek 8×8 font: font8x8_basic (kamu malı); `sim/td8/vga.py` dönüştürücüsüyle | 7. hafta |
