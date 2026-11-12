@@ -8,7 +8,7 @@
 | Devre test vektörü üreticisi | 5 çeşit vektör: ALU, mikrokod, kod çözücüler, adres çözme, bütün işlemcinin çevrim çevrim izi |
 | Proteus için ROM dosyaları | `sim/build/proteus/` altında 64 KB'lık `.bin` ve Intel HEX |
 | Abdurrahman'ın soruları | İkisi de cevaplandı: ROM dosyası biçimi ve sinyal adları |
-| C derleyicisi `tdcc` | Başlandı (lexer ve parser), sürüyor |
+| C derleyicisi `tdcc` | Üzerinde çalışılıyor; 6. hafta notunda anlatılacak |
 | Otomatik testler | 34'ten 54'e çıktı, hepsi geçiyor |
 
 ## 1. İndirilen programlar
@@ -76,7 +76,7 @@ Proteus tarafı henüz denenmedi (Proteus bende kurulu değil; bilgi forumlardan
 
 ## 5. C derleyicisi: `tdcc`
 
-Başlandı (lexer ve parser), sürüyor.
+Üzerinde çalışılıyor; 6. hafta notunda anlatılacak.
 
 ## 6. Testler
 
