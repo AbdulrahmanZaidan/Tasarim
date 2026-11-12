@@ -1,11 +1,13 @@
 # TD-8 simülasyon araçları
 
-Bu klasör devre simülasyonunun yazılım tarafıdır. **Devrenin kendisi Digital'de çizilir.** Buradaki araçlar:
+Bu klasör devre simülasyonunun yazılım tarafıdır. Buradaki araçlar:
 
 1. **ROM imajları:** Digital'deki ROM bileşenlerine ve gerçek flash çiplerine yüklenecek içerikler (mikrokod, ALU tabloları, VGA zamanlaması, font).
 2. **Assembler:** TD-8 programlarını çevirir.
 3. **İki emülatör:** Programı çalıştırır ve devrenin vermesi gereken doğru sonucu söyler. Digital'deki devre ya da breadboard ondan farklı davranırsa hata bulunmuş olur.
-4. **Test vektörleri:** Digital'in test bileşenine yapıştırılır.
+4. **Test vektörleri:** Digital'in test bileşenine yapıştırılır ya da Proteus/Arduino kaydıyla karşılaştırılır.
+5. **Çip seviyesi devre (`td8/hw/`):** İşlemcinin 59 entegresi pin pin bağlı ve gecikmeli olarak simüle ediliyor; emülatörle çevrim çevrim sıfır fark veriyor. Aynı bağlantı listesinden Digital dosyaları ve Proteus/breadboard için bağlantı tablosu üretilir.
+6. **C derleyicisi (`tdcc/`):** C alt kümesini TD-8 assembly'sine çevirir.
 
 Tasarımın tamamı: [../SISTEM-PLANI.md](../SISTEM-PLANI.md)
 
@@ -14,8 +16,10 @@ Tasarımın tamamı: [../SISTEM-PLANI.md](../SISTEM-PLANI.md)
 | Ne | Nasıl |
 |---|---|
 | Python 3.12 | Kurulu (`py --version`). Ek paket gerekmez, yalnızca standart kütüphane kullanılıyor. |
-| Java 17 | [adoptium.net](https://adoptium.net) → Temurin 17 (LTS) → Windows x64 `.msi`. Digital için gerekli. |
-| Digital | [github.com/hneemann/Digital/releases](https://github.com/hneemann/Digital/releases) → `Digital.zip` indirin, bir klasöre açın, `Digital.exe`'yi çalıştırın. |
+| Java 17 ya da üstü | [adoptium.net](https://adoptium.net) → Temurin (LTS) → Windows x64. Digital için gerekli. `.zip` sürümü kurulum gerektirmez: bir klasöre açmak yeter. |
+| Digital | [github.com/hneemann/Digital/releases](https://github.com/hneemann/Digital/releases) → `Digital.zip` indirin, bir klasöre açın. Java PATH'teyse `Digital.exe`, değilse `java -jar Digital.jar`. |
+
+Taha'nın bilgisayarında ikisi de `Desktop\bitirme ödevi\araclar\` altında (JDK 21.0.13, Digital 0.31; masaüstünde "Digital (TD-8)" kısayolu). Digital'i kullanan testler bu klasörü arar; başka yerdeyse `TD8_DIGITAL_HOME` ortam değişkeniyle gösterilir, bulunamazsa o testler atlanır.
 
 Komutların hepsi bu klasörde (`sim/`) çalıştırılır.
 
@@ -32,10 +36,24 @@ py cli.py run examples/merhaba.asm --trace 20   ilk 20 çevrimin izi (AB, DB, ko
 py cli.py run examples/klavye.asm --keys 1C,F0,1C --cycles 20000
 py cli.py run examples/fibonacci.asm           16-bit Fibonacci (runtime kütüphanesiyle)
 py cli.py run examples/asal.asm --ref --cycles 20000000   1000'den küçük asal sayılar
-py cli.py vectors alu -n 1000 > alu_test.txt    Digital ALU testi için vektörler
-py cli.py vectors urom -n 1000 > urom_test.txt  Digital kontrol ünitesi testi için vektörler
-py -m unittest                                  tüm testler (~20 s)
+py cli.py roms                                  ayrıca build/proteus/: Proteus için 64 KB .bin + Intel HEX
+py cli.py asm examples/merhaba.asm --ihex       program ROM'unun Intel HEX'i (Proteus)
+py cli.py vectors alu -n 10000 -o alu_test.txt  ALU testi için vektörler
+py cli.py vectors urom -n 1000 -o urom_test.txt kontrol ünitesi (mikrokod) testi için vektörler
+py cli.py vectors cs                            kod çözücüler: tam tablo
+py cli.py vectors decode                        adres çözme: her bölgenin sınır adresleri
+py cli.py vectors trace examples/merhaba.asm    bütün işlemci: çevrim çevrim AB, DB, kontrol kelimesi
+        (hepsinde --format csv ve -o DOSYA kullanılabilir)
+py cli.py hw run examples/komut_testi.asm       çip seviyesindeki devreyi çalıştır, emülatörle karşılaştır
+py cli.py hw run examples/merhaba.asm --corner max    en kötü gecikmelerle; zamanlama özetini de yazar
+py cli.py hw wiring -o tablo.md                 bağlantı tablosu: her entegrenin her bacağı
+py cli.py hw digital                            digital/ altındaki .dig dosyalarını yeniden üret
+py cli.py hw digital --program examples/komut_testi.asm --run 800   Digital'de koştur, emülatörle karşılaştır
+py -m tdcc examples/merhaba.c -o build/merhaba_c.asm --run    C programını derle ve çalıştır
+py -m unittest                                  tüm testler (~1 dk)
 ```
+
+Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODING=utf-8` yazın.
 
 ## Dosyalar
 
@@ -49,10 +67,20 @@ py -m unittest                                  tüm testler (~20 s)
 | `td8/bus.py` | Bellek haritası, I/O (klavye, KSTAT, LED), VRAM penceresi modeli |
 | `td8/emu_micro.py` | Mikroadım emülatörü: üretilen imajları aynen çalıştırır, çevrim çevrim iz verir |
 | `td8/emu_ref.py` | Komut seviyesi emülatör: mikrokoddan bağımsız, çapraz kontrol için |
+| `td8/vectors.py`, `td8/ihex.py` | Test vektörü üreticisi, iz karşılaştırma (`compare_traces`), Intel HEX |
+| `td8/hw/kernel.py` | Çip seviyesi simülatörün çekirdeği: gecikmeli, olay tabanlı; bus çakışması, boş giriş, kurulum/tutma ihlallerini yakalar |
+| `td8/hw/chips.py` | 23 çeşit 74HC entegresi, SST39SF010 flash ve CY62256 SRAM modelleri; pin adları ve bacak numaraları dosyanın başında. Gecikme tablosunun bir kısmı tahmindir (işaretli) |
+| `td8/hw/cpu.py` | **İşlemcinin bağlantı listesi (netlist):** M1–M5 ve yardımcı kapılar, 59 entegre |
+| `td8/hw/harness.py` | Devreyi resetler, çalıştırır, her çevrimde izini alır ve emülatörle karşılaştırır |
+| `td8/hw/wiring.py` | Bağlantı tablosu ve entegre sayımı |
+| `td8/hw/digital.py`, `td8/hw/digital_cpu.py` | Bağlantı listesini Digital'in `.dig` dosyasına çevirir; Digital'i komut satırından çalıştırıp izini alır |
+| `tdcc/` | C derleyicisi: ön işlemci, lexer, parser, tip denetimi, kod üretimi |
+| `lib/crt0.asm`, `lib/rt_c.asm`, `lib/hw.h` | C programlarının açılış kodu, derleyicinin yardımcı rutinleri, donanım tanımları (`VRAM`, `LEDS`, `KBD`, `KSTAT`) |
 | `cli.py`, `gen_roms.py` | Komut satırı |
 | `lib/runtime.asm` | Çalışma zamanı kütüphanesi: `__mul16`, `__divmod16`, `print_u16`, `puts`. Programa `.include "../lib/runtime.asm"` ile eklenir; çağırma kuralı dosyanın başında |
-| `examples/` | `merhaba.asm` (ekrana yazı), `klavye.asm` (PS/2 byte'larını gösterir), `fibonacci.asm`, `asal.asm` (runtime örnekleri) |
-| `tests/` | ALU (8 milyon girişin hepsi), mikrokod kuralları, assembler, iki emülatörün eşdeğerliği, VGA zamanlaması, runtime rutinleri |
+| `examples/` | `merhaba.asm` (ekrana yazı), `klavye.asm` (PS/2 byte'larını gösterir), `fibonacci.asm`, `asal.asm` (runtime örnekleri), `komut_testi.asm` (88 opcode'un hepsi); C örnekleri `merhaba.c`, `fib.c`, `sayac.c` |
+| `tests/` | ALU (8 milyon girişin hepsi), mikrokod kuralları, assembler, iki emülatörün eşdeğerliği, VGA zamanlaması, runtime rutinleri, vektörler, entegre modelleri, bütün işlemci, C derleyicisi |
+| `digital/` | Üretilen Digital devreleri (`.dig`) |
 | `build/` | Üretilen imajlar. Git'e girmez, `py gen_roms.py` ile yeniden üretilir. |
 
 ## Testler neyi garanti ediyor
@@ -73,6 +101,21 @@ py -m unittest                                  tüm testler (~20 s)
   - `__mul16` ve `__divmod16` 400'er girişte Python'un sonucuyla aynı (bölen 0 durumu dahil); 30 girişte iki emülatör aynı sonucu ve aynı çevrim sayısını veriyor.
   - `print_u16` 0, 9, 10, 9999, 10000, 65535 gibi sınırlarda ve 100 rastgele sayıda doğru yazıyor.
   - `fibonacci.asm` ve `asal.asm` beklenen ekranı üretiyor (168 asal).
+- **Çip seviyesi devre (`td8/hw/`):**
+  - Her entegre modeli datasheet doğruluk tablosuna uyuyor (59 test).
+  - 59 entegrelik işlemci, emülatörle çevrim çevrim aynı adres yolu, veri yolu ve kontrol kelimesini veriyor; sonunda registerlar, RAM, ekran belleği ve LED'ler de aynı. Programlar: `merhaba`, `komut_testi` (88 opcode), çarpma/bölme, `fibonacci` (33.170 çevrim), stack sınırları, `klavye`. Tipik ve en kötü gecikmelerde.
+  - Rastgele açılış durumundan reset ile toparlanıyor; çalışırken reset her fazda doğru.
+  - HALT/GO, mikroadım ve komut adımlama, VRAM beklemesi (WAIT) doğru.
+  - Bus çakışması, boş giriş, kurulum/tutma ihlali yok (bilinen kısa devir-teslim örtüşmeleri ayrı sayılıyor).
+  - Entegre sayısı modül modül plandaki listeyi aşmıyor.
+- **Digital (`tests/test_hw_digital.py`; Digital kurulu değilse atlanır):**
+  - Dışa aktarılan devreler Digital'de bizim simülatörle aynı sonucu veriyor (23 çeşit entegrenin hepsi).
+  - Planın kabul ölçütleri (12.3): ALU 10.000 vektör, mikrokod 1.000 vektör, kod çözücüler tam tablo, adres çözme sınır adresleri.
+  - Bütün işlemci Digital'de emülatörle çevrim çevrim sıfır fark: `merhaba`, `komut_testi`, `fibonacci`.
+- **C derleyicisi (`tdcc`):**
+  - 200 rastgele C programı (~4.400 ifade) emülatörde ve bağımsız bir Python hesaplayıcıda aynı sonucu veriyor.
+  - Kontrol akışı, fonksiyonlar, işaretçiler, diziler, switch, başlangıç değerleri, `const` tablolar, `volatile` erişimleri.
+  - Desteklenmeyen yapılar (özyineleme, struct, long, float, fonksiyon işaretçisi) satır numaralı Türkçe hata veriyor.
 - **VGA:**
   - 400 nokta × 525 satır; HSYNC 48 nokta, VSYNC 2 satır, 40 × 480 görünür alan.
   - VRAM pencereleri doğru iç içe.
@@ -80,13 +123,20 @@ py -m unittest                                  tüm testler (~20 s)
 
 ## Digital'de kullanım
 
-- **ROM bileşenleri:**
-  - Ayarlar: veri genişliği 8, adres genişliği 17.
-  - İçerik: veri alanında "Yükle" ile `build/` altındaki `.bin` dosyasını seçin. Kabul etmezse aynı adlı `.hex` dosyasını deneyin (Logisim "v2.0 raw" biçimi).
-- **Test bileşeni:** `py cli.py vectors ...` çıktısını yapıştırın. Devredeki giriş ve çıkışların etiketleri, vektörün ilk satırındaki adlarla **aynı** olmalı:
-  - ALU için `OP A B Cin Zin R Z C N V`;
-  - kontrol ünitesi için `STEP IR Z C N V CW0 CW1 CW2`.
-- **İlk modül:** M1 saat (SISTEM-PLANI bölüm 3 ve 12.3). Bitince sırasıyla M3, M2, M4 gelir.
+`digital/` klasöründeki `.dig` dosyaları elle çizilmedi; `td8/hw/cpu.py`'deki bağlantı listesinden `py cli.py hw digital` ile üretildi. Her entegre Digital'in kendi 74xx kütüphanesindeki bacaklı çipi olarak durur; her bacağın üstünde bağlı olduğu sinyalin adı yazar (tel çizilmez, aynı adlı uçlar bağlıdır).
+
+| Dosya | İçerik |
+|---|---|
+| `digital/td8.dig` | Bütün işlemci (59 entegre + VGA/klavye yerine 2 taklit) |
+| `digital/m1_saat.dig` … `m5_bellek.dig`, `aux_kapilar.dig` | Modüller tek tek; modül sınırındaki sinyaller giriş/çıkış |
+| `digital/TD8_*.dig` | Flash ve SRAM alt devreleri. ROM içerikleri dosyanın içine gömülü, ayrıca yükleme gerekmez |
+| `digital/ornek_*.dig` | Dışa aktarıcının denendiği küçük devreler |
+| `digital/arac/TD8Adim.java` | Digital'de saati adım adım çalıştırıp sinyalleri döken yardımcı |
+
+- **Açmak:** Digital'de `digital/td8.dig`'i açın, simülasyonu başlatın. Varsayılan program `merhaba.asm`. Başka program için `py cli.py hw digital --program examples/X.asm`. Arayüzde açma adımları henüz elle denenmedi; komut satırından yükleme ve çalıştırma doğrulandı.
+- **Mikrokod, ALU tablosu ya da bağlantı listesi değişince** `py cli.py hw digital` ile dosyaları yeniden üretin; iki test dosyaların güncel olduğunu denetler.
+- **Digital'in doğruladığı:** işlev. Digital gecikmeleri modellemez; zamanlama `py cli.py hw run ... --corner max` ile bizim simülatörde denetlenir.
+- **Kendi çizdiğiniz devreyi test etmek için:** test bileşenine `py cli.py vectors ...` çıktısını yapıştırın. Giriş ve çıkış etiketleri vektörün ilk satırındaki adlarla **aynı** olmalı (ALU için `OP A B Cin Zin R Z C N V`; kontrol ünitesi için `STEP IR Z C N V CW0 CW1 CW2`).
 
 ## Komut eklemek ya da değiştirmek
 
@@ -99,8 +149,9 @@ py -m unittest                                  tüm testler (~20 s)
 
 | Ne zaman | İş |
 |---|---|
-| Simülasyon 3. hafta | Emülatör izinden çevrim çevrim Digital test vektörü üreticisi (bütün CPU testi) |
+| Simülasyon 5. hafta | Breakpoint ve BUSREQ mantığını netlist'e eklemek |
+| Simülasyon 5–7. hafta | VGA (M6) ve PS/2 (M7) netlist'i; taklitlerin yerine gerçek modüller |
 | Simülasyon 7. hafta | Gerçek font: `font8x8_basic.h` (kamu malı) → `py cli.py roms --font ...` |
 | Simülasyon 9. hafta | Arduino iz ve yükleme yazılımı |
-| Yapım 1–11. hafta | C derleyicisi (`tdcc`), `crt0`, `hw.h` (runtime'ın ilk sürümü `lib/runtime.asm`'de hazır) |
+| Sürekli | C derleyicisi (`tdcc`): ilk sürüm hazır. Eksikler: `switch` için atlama tablosu, struct |
 | Yapım 12–17. hafta | Snake (C), açılış test ROM'u |

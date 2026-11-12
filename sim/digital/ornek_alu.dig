@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes>
+    <entry><string>Description</string><string>M4 ALU: 2× SST39SF010 (ALU-L, ALU-H) + 74HC32
+TD-8: td8.hw.digital ile üretildi (3 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+  </attributes>
+  <visualElements>
+    <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M4</string></entry><entry><string>RectWidth</string><int>60</int></entry><entry><string>RectHeight</string><int>45</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="480" y="0"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>M4 ALU: 2× SST39SF010 (ALU-L, ALU-H) + 74HC32</string></entry><entry><string>textFontSize</string><int>28</int></entry></elementAttributes><pos x="0" y="-240"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>ornek_alu</string></entry><entry><string>Testdata</string><testData><dataString>OP A B Cin Zin R Z C N V
+0x04 0x20 0x82 0 1 0x9D 0 0 1 1
+0x18 0xE6 0xF1 1 0 0xF1 0 1 1 0
+0x03 0xF9 0x0E 1 1 0xEB 0 1 1 0
+0x13 0x01 0xE4 1 0 0x01 0 1 0 0
+0x12 0x34 0xA2 0 0 0x34 0 0 0 0
+0x00 0x04 0xC3 0 1 0xC3 0 0 1 1
+0x17 0x0E 0x71 1 1 0x70 0 1 0 0
+0x11 0x77 0xB0 0 0 0x77 0 0 0 0
+0x18 0xEB 0x94 0 1 0x93 0 1 1 0
+0x11 0x33 0x5F 1 0 0x33 0 1 0 0
+0x17 0xAA 0xD8 0 1 0xD7 0 1 1 0
+0x09 0xFF 0xC9 0 1 0xFE 0 0 1 0
+0x07 0xCE 0xD4 0 1 0x1A 0 0 0 0
+0x11 0xBF 0x2C 1 0 0xBF 0 1 1 0
+0x18 0x53 0xC9 1 1 0xC9 0 1 1 0
+0x17 0x0F 0xF0 0 1 0xEF 0 1 1 0
+0x16 0xC9 0x57 0 0 0x57 0 0 0 0
+0x00 0x66 0x76 1 1 0x76 0 1 0 1
+0x12 0xB4 0xEB 1 0 0xB4 0 0 1 0
+0x0C 0x42 0x69 1 0 0x84 0 0 1 0
+0x0F 0xBA 0x66 1 1 0xDD 0 0 1 0
+0x0B 0xD4 0xB1 0 1 0x2C 0 0 0 0
+0x0E 0x0E 0x75 0 0 0x07 0 0 0 0
+0x02 0x82 0x10 0 0 0x92 0 0 1 0
+0x00 0xE7 0x07 1 0 0x07 0 1 0 0
+0x08 0x38 0x5E 1 1 0x39 0 1 0 0
+0x02 0x55 0x51 1 0 0xA7 0 0 1 1
+0x15 0x8B 0x96 1 1 0x97 0 0 1 0
+0x0F 0xF2 0x3A 0 1 0x79 0 0 0 0
+0x0C 0xAF 0xD7 0 1 0x5E 0 1 0 0
+0x03 0x81 0x6B 1 0 0x16 0 1 0 1
+0x07 0x09 0xCB 0 0 0xC2 0 0 1 0
+0x17 0x52 0xE4 1 0 0xE3 0 1 1 0
+0x14 0xE6 0x72 0 1 0xFF 0 0 1 0
+0x15 0xA4 0xDA 0 1 0xDB 0 0 1 0
+0x04 0x6C 0x18 1 0 0x54 0 1 0 0
+0x02 0x9E 0x98 0 1 0x36 0 1 0 1
+0x12 0x81 0x42 0 0 0x81 0 0 1 0
+0x12 0x6F 0xEB 0 0 0x6F 0 0 0 0
+0x0C 0x66 0xB1 0 0 0xCC 0 0 1 0
+0x12 0xDD 0x63 1 0 0xDD 0 0 1 0
+0x15 0xC7 0x97 1 0 0x98 0 0 1 0
+0x0A 0xCD 0x90 0 0 0x32 0 0 0 0
+0x06 0xA7 0x45 1 1 0xE7 0 1 1 0
+0x06 0x88 0x31 1 1 0xB9 0 1 1 0
+0x15 0xF8 0x78 0 0 0x79 0 0 0 0
+0x02 0x44 0x56 0 0 0x9A 0 0 1 1
+0x08 0xAA 0x82 1 1 0xAB 0 1 1 0
+0x0A 0x3A 0x95 0 1 0xC5 0 0 1 0
+0x04 0x35 0xA4 0 1 0x90 0 0 1 1
+0x02 0xC2 0x4B 0 1 0x0D 0 1 0 0
+0x03 0xC1 0x27 0 0 0x9A 0 1 1 0
+0x08 0xBA 0x97 0 1 0xBB 0 0 1 0
+0x08 0x37 0x17 1 0 0x38 0 1 0 0
+0x13 0x07 0x2E 1 0 0x07 0 1 0 0
+0x01 0x60 0x7A 1 0 0xDA 0 0 1 1
+0x03 0xE6 0x55 0 0 0x91 0 1 1 0
+0x17 0x34 0xDE 1 1 0xDD 0 1 1 0
+0x11 0x81 0xF4 1 0 0x81 0 1 1 0
+0x06 0xA2 0x14 0 0 0xB6 0 0 1 0
+0x09 0xA3 0xE6 1 1 0xA2 0 1 1 0
+0x0C 0x20 0x20 1 1 0x40 0 0 0 0
+0x03 0x80 0x6E 1 1 0x12 0 1 0 1
+0x08 0x5D 0x6A 1 0 0x5E 0 1 0 0
+0x07 0xB8 0x29 1 0 0x91 0 1 1 0
+0x18 0xE5 0x2E 1 0 0x2E 0 1 0 0
+0x0C 0x9D 0x15 1 0 0x3A 0 1 0 0
+0x0A 0x9B 0x7D 1 0 0x64 0 1 0 0
+0x11 0x2F 0x7D 0 0 0x2F 0 0 0 0
+0x07 0xCD 0x25 1 0 0xE8 0 1 1 0
+0x17 0x26 0x0B 0 1 0x0A 0 1 0 0
+0x18 0xB7 0xFC 1 0 0xFC 0 1 1 0
+0x03 0xA7 0x27 0 0 0x80 0 1 1 0
+0x18 0x4C 0x48 1 1 0x48 0 1 0 0
+0x03 0x96 0x40 0 0 0x56 0 1 0 1
+0x11 0x10 0xA1 0 0 0x10 0 0 0 0
+0x09 0xDD 0x50 0 0 0xDC 0 0 1 0
+0x08 0x20 0xE4 1 1 0x21 0 1 0 0
+0x11 0xE0 0xE8 0 1 0xE0 0 0 1 0
+0x0A 0x57 0x84 1 0 0xA8 0 1 1 0
+0x14 0xD5 0x09 0 1 0xFF 0 0 1 0
+0x12 0x46 0x40 0 1 0x46 0 0 0 0
+0x08 0xCB 0xCD 0 0 0xCC 0 0 1 0
+0x07 0xF8 0x03 0 1 0xFB 0 0 1 0
+0x10 0xE0 0x73 0 1 0xF0 0 0 1 0
+0x0F 0xF5 0x73 1 1 0xFA 0 1 1 0
+0x11 0x8C 0x70 0 0 0x8C 0 0 1 0
+0x18 0xBC 0x51 0 1 0x50 0 1 0 0
+0x09 0x99 0xBE 0 1 0x98 0 0 1 0
+0x13 0x2B 0x3F 1 0 0x2B 0 1 0 0
+0x04 0x80 0xDA 0 0 0xA5 0 0 1 0
+0x0F 0xC9 0xB2 1 0 0xE4 0 1 1 0
+0x11 0x14 0x2E 1 0 0x14 0 1 0 0
+0x08 0x2A 0x47 0 1 0x2B 0 0 0 0
+0x07 0xC3 0xDD 1 0 0x1E 0 1 0 0
+0x0A 0xE0 0x40 1 0 0x1F 0 1 0 0
+0x03 0xDC 0xD1 0 1 0x0B 0 1 0 0
+0x08 0x7F 0xC1 0 0 0x80 0 0 1 1
+0x10 0xE0 0x0A 0 0 0xF0 0 0 1 0
+0x08 0x69 0x58 1 0 0x6A 0 1 0 0
+0x11 0x66 0x8B 1 1 0x66 0 1 0 0
+0x15 0xE4 0x56 1 1 0x57 0 0 0 0
+0x0D 0x3E 0x6A 1 0 0x7D 0 0 0 0
+0x09 0x37 0x0C 0 0 0x36 0 0 0 0
+0x11 0x97 0x45 0 1 0x97 0 0 1 0
+0x12 0x9F 0xDF 1 1 0x9F 0 0 1 0
+0x00 0x3F 0xE2 1 1 0xE2 0 1 1 1
+0x09 0xCC 0xAD 1 0 0xCB 0 1 1 0
+0x14 0xC1 0xC3 0 0 0xFF 0 0 1 0
+0x08 0x65 0xEC 1 1 0x66 0 1 0 0
+0x16 0x57 0xE6 0 1 0xE6 0 0 1 0
+0x10 0x01 0xC7 1 1 0x00 1 1 0 0
+0x0A 0x22 0xFC 0 1 0xDD 0 0 1 0
+0x14 0x0A 0xD0 0 1 0x00 1 0 0 0
+0x08 0x5B 0x25 0 1 0x5C 0 0 0 0
+0x08 0xD2 0x9B 0 1 0xD3 0 0 1 0
+0x08 0xF8 0x56 1 0 0xF9 0 1 1 0
+0x08 0x32 0xD8 0 1 0x33 0 0 0 0
+0x02 0xE2 0x0A 0 0 0xEC 0 0 1 0
+0x16 0x2F 0xCD 1 1 0xCE 0 0 1 0
+0x06 0x6A 0x79 1 1 0x7B 0 1 0 0
+0x02 0x26 0xBC 1 0 0xE3 0 0 1 0
+0x05 0x98 0x8A 1 0 0x88 0 1 1 0
+0x0C 0xCC 0x58 1 1 0x98 0 1 1 0
+0x13 0xA8 0x71 1 0 0xA8 0 1 1 0
+0x15 0x0F 0xCE 1 1 0xCF 0 0 1 0
+0x18 0x7F 0x89 0 0 0x88 0 1 1 0
+0x14 0x54 0xE3 0 1 0x00 1 0 0 0
+0x0E 0x53 0x46 0 1 0x29 0 1 0 0
+0x0B 0x9E 0xCD 0 0 0x62 0 0 0 0
+0x16 0x69 0x9C 0 0 0x9C 0 0 1 0
+0x07 0xCB 0xA4 1 0 0x6F 0 1 0 0
+0x05 0x17 0x1C 0 0 0x14 0 0 0 0
+0x15 0x11 0xFD 1 1 0xFE 0 0 1 0
+0x15 0x8C 0x3C 0 0 0x3D 0 0 0 0
+0x07 0xCC 0x77 1 1 0xBB 0 1 1 0
+0x0C 0x56 0x76 0 1 0xAC 0 0 1 0
+0x0E 0xC7 0x6C 1 1 0x63 0 1 0 0
+0x0A 0xFE 0x38 0 0 0x01 0 0 0 0
+0x01 0x07 0x02 1 1 0x09 0 0 0 0
+0x0C 0x93 0x64 1 0 0x26 0 1 0 0
+0x18 0x4D 0x0F 0 1 0x0E 0 1 0 0
+0x04 0x1D 0xC2 1 0 0x5B 0 0 0 0
+0x02 0xEC 0x9B 0 0 0x87 0 1 1 0
+0x11 0x1F 0x42 0 1 0x1F 0 0 0 0
+0x18 0x3C 0xDD 0 0 0xDC 0 1 1 0
+0x00 0xFF 0x42 1 0 0x42 0 1 0 1
+0x15 0xE5 0xC7 1 1 0xC8 0 0 1 0
+0x08 0x7C 0x7D 0 0 0x7D 0 0 0 0
+0x0B 0xDB 0x1F 1 1 0x25 0 0 0 0
+0x11 0x66 0xD9 0 1 0x66 0 0 0 0
+0x17 0x25 0x80 0 0 0x7F 0 1 0 1
+0x04 0x1E 0x68 1 0 0xB6 0 0 1 0
+0x01 0x2E 0xF0 1 0 0x1E 0 1 0 0
+0x0A 0x14 0x40 0 1 0xEB 0 0 1 0
+0x15 0x41 0xCA 1 0 0xCB 0 0 1 0
+0x17 0x8A 0x2E 1 1 0x2D 0 1 0 0
+0x02 0x9A 0x11 1 0 0xAC 0 0 1 0
+0x17 0x85 0xA0 0 1 0x9F 0 1 1 0
+0x0C 0x3B 0x9B 0 1 0x76 0 0 0 0
+0x07 0x69 0xA9 1 1 0xC0 0 1 1 0
+0x12 0xF6 0x35 0 1 0xF6 0 0 1 0
+0x10 0x0F 0x95 0 0 0x07 0 1 0 0
+0x0B 0xC7 0xA6 0 1 0x39 0 0 0 0
+0x0B 0x40 0x21 0 1 0xC0 0 0 1 0
+0x14 0xA0 0xD5 1 1 0xFF 0 1 1 0
+0x0B 0x8B 0xA6 0 0 0x75 0 0 0 0
+0x04 0xA2 0xA6 1 0 0xFC 0 0 1 0
+0x0E 0x8F 0xF5 1 1 0x47 0 1 0 0
+0x17 0xC2 0x28 0 0 0x27 0 1 0 0
+0x01 0xFB 0x80 0 1 0x7B 0 1 0 1
+0x0B 0xBD 0xCE 1 1 0x43 0 0 0 0
+0x13 0xAE 0x55 0 0 0xAE 0 1 1 0
+0x08 0x71 0x44 0 0 0x72 0 0 0 0
+0x18 0xD2 0x19 0 1 0x18 0 1 0 0
+0x16 0x36 0x68 1 0 0x69 0 0 0 0
+0x14 0x28 0x25 0 0 0x00 1 0 0 0
+0x10 0xDD 0x0B 1 1 0xEE 0 1 1 0
+0x16 0x91 0x70 0 1 0x70 0 0 0 0
+0x07 0xD9 0xE7 1 0 0x3E 0 1 0 0
+0x0F 0x25 0x83 1 0 0x92 0 1 1 0
+0x00 0xC2 0xF9 0 1 0xF9 0 0 1 1
+0x13 0xD9 0x14 1 1 0xD9 0 1 1 0
+0x00 0x61 0x99 0 0 0x99 0 0 1 0
+0x09 0xA1 0x90 1 1 0xA0 0 1 1 0
+0x13 0x9D 0xE7 1 0 0x9D 0 1 1 0
+0x10 0xE3 0x47 0 1 0xF1 0 1 1 0
+0x14 0x04 0xD9 0 1 0x00 1 0 0 0
+0x0D 0xCD 0x90 0 0 0x9A 0 1 1 0
+0x02 0x02 0xC4 1 1 0xC7 0 0 1 0
+0x08 0xBE 0xF6 1 1 0xBF 0 1 1 0
+0x0E 0x3B 0xF7 1 0 0x1D 0 1 0 0
+0x0D 0x4B 0x09 0 1 0x96 0 0 1 0
+0x0B 0x41 0x93 1 1 0xBF 0 0 1 0
+0x10 0x93 0xD7 1 1 0xC9 0 1 1 0
+0x0A 0xF8 0x6E 1 1 0x07 0 1 0 0
+0x16 0xD9 0x2E 0 0 0x2E 0 0 0 0
+0x06 0x4C 0x75 0 0 0x7D 0 0 0 0
+0x08 0x4F 0xF5 0 1 0x50 0 0 0 0
+0x14 0x5F 0x01 0 1 0x00 1 0 0 0
+</dataString></testData></entry></elementAttributes><pos x="0" y="-160"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>Dış bağlantılar</string></entry><entry><string>textFontSize</string><int>20</int></entry></elementAttributes><pos x="0" y="-80"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>OP</string></entry><entry><string>Bits</string><int>5</int></entry></elementAttributes><pos x="100" y="0"/></visualElement>
+    <visualElement><elementName>Splitter</elementName><elementAttributes><entry><string>Input Splitting</string><string>5</string></entry><entry><string>Output Splitting</string><string>1,1,1,1,1</string></entry></elementAttributes><pos x="100" y="0"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP0</string></entry></elementAttributes><pos x="120" y="0"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP1</string></entry></elementAttributes><pos x="120" y="20"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP2</string></entry></elementAttributes><pos x="120" y="40"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP3</string></entry></elementAttributes><pos x="120" y="60"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP4</string></entry></elementAttributes><pos x="120" y="80"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>A</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="100" y="140"/></visualElement>
+    <visualElement><elementName>Splitter</elementName><elementAttributes><entry><string>Input Splitting</string><string>8</string></entry><entry><string>Output Splitting</string><string>1,1,1,1,1,1,1,1</string></entry></elementAttributes><pos x="100" y="140"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>A0</string></entry></elementAttributes><pos x="120" y="140"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>A1</string></entry></elementAttributes><pos x="120" y="160"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>A2</string></entry></elementAttributes><pos x="120" y="180"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>A3</string></entry></elementAttributes><pos x="120" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>A4</string></entry></elementAttributes><pos x="120" y="220"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>A5</string></entry></elementAttributes><pos x="120" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>A6</string></entry></elementAttributes><pos x="120" y="260"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>A7</string></entry></elementAttributes><pos x="120" y="280"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>B</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="100" y="340"/></visualElement>
+    <visualElement><elementName>Splitter</elementName><elementAttributes><entry><string>Input Splitting</string><string>8</string></entry><entry><string>Output Splitting</string><string>1,1,1,1,1,1,1,1</string></entry></elementAttributes><pos x="100" y="340"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>DB0</string></entry></elementAttributes><pos x="120" y="340"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>DB1</string></entry></elementAttributes><pos x="120" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>DB2</string></entry></elementAttributes><pos x="120" y="380"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>DB3</string></entry></elementAttributes><pos x="120" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>DB4</string></entry></elementAttributes><pos x="120" y="420"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>DB5</string></entry></elementAttributes><pos x="120" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>DB6</string></entry></elementAttributes><pos x="120" y="460"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>DB7</string></entry></elementAttributes><pos x="120" y="480"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>Cin</string></entry></elementAttributes><pos x="100" y="540"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>CIN</string></entry></elementAttributes><pos x="100" y="540"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>Zin</string></entry></elementAttributes><pos x="100" y="580"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ZIN</string></entry></elementAttributes><pos x="100" y="580"/></visualElement>
+    <visualElement><elementName>VDD</elementName><elementAttributes/><pos x="100" y="620"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="100" y="620"/></visualElement>
+    <visualElement><elementName>Ground</elementName><elementAttributes/><pos x="180" y="620"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="180" y="620"/></visualElement>
+    <visualElement><elementName>Splitter</elementName><elementAttributes><entry><string>Input Splitting</string><string>1,1,1,1,1,1,1,1</string></entry><entry><string>Output Splitting</string><string>8</string></entry></elementAttributes><pos x="280" y="0"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R0</string></entry></elementAttributes><pos x="280" y="0"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R1</string></entry></elementAttributes><pos x="280" y="20"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R2</string></entry></elementAttributes><pos x="280" y="40"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R3</string></entry></elementAttributes><pos x="280" y="60"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R4</string></entry></elementAttributes><pos x="280" y="80"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R5</string></entry></elementAttributes><pos x="280" y="100"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R6</string></entry></elementAttributes><pos x="280" y="120"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R7</string></entry></elementAttributes><pos x="280" y="140"/></visualElement>
+    <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>R</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="300" y="0"/></visualElement>
+    <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>Z</string></entry></elementAttributes><pos x="300" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>ZOUT</string></entry></elementAttributes><pos x="300" y="200"/></visualElement>
+    <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>C</string></entry></elementAttributes><pos x="300" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>COUT</string></entry></elementAttributes><pos x="300" y="240"/></visualElement>
+    <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>N</string></entry></elementAttributes><pos x="300" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>NOUT</string></entry></elementAttributes><pos x="300" y="280"/></visualElement>
+    <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>V</string></entry></elementAttributes><pos x="300" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>VOUT</string></entry></elementAttributes><pos x="300" y="320"/></visualElement>
+    <visualElement><elementName>TD8_SST39SF010_alu_lo.dig</elementName><elementAttributes><entry><string>Label</string><string>U1</string></entry></elementAttributes><pos x="620" y="160"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U1  SST39SF010</string></entry></elementAttributes><pos x="620" y="80"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>ALU-L</string></entry></elementAttributes><pos x="620" y="110"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="620" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>A7</string></entry></elementAttributes><pos x="620" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>ALUOP2</string></entry></elementAttributes><pos x="620" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB3</string></entry></elementAttributes><pos x="620" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB2</string></entry></elementAttributes><pos x="620" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB1</string></entry></elementAttributes><pos x="620" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB0</string></entry></elementAttributes><pos x="620" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>A3</string></entry></elementAttributes><pos x="620" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>A2</string></entry></elementAttributes><pos x="620" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>A1</string></entry></elementAttributes><pos x="620" y="560"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>A0</string></entry></elementAttributes><pos x="620" y="600"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R0</string></entry></elementAttributes><pos x="620" y="640"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R1</string></entry></elementAttributes><pos x="620" y="680"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R2</string></entry></elementAttributes><pos x="620" y="720"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="620" y="760"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>R3</string></entry></elementAttributes><pos x="780" y="760"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>C4</string></entry></elementAttributes><pos x="780" y="720"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ZLO</string></entry></elementAttributes><pos x="780" y="680"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>CLO</string></entry></elementAttributes><pos x="780" y="640"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="780" y="560"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP0</string></entry></elementAttributes><pos x="780" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="780" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP1</string></entry></elementAttributes><pos x="780" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>A4</string></entry></elementAttributes><pos x="780" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>CIN</string></entry></elementAttributes><pos x="780" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP3</string></entry></elementAttributes><pos x="780" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP4</string></entry></elementAttributes><pos x="780" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="780" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="780" y="160"/></visualElement>
+    <visualElement><elementName>TD8_SST39SF010_alu_hi.dig</elementName><elementAttributes><entry><string>Label</string><string>U2</string></entry></elementAttributes><pos x="1020" y="160"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U2  SST39SF010</string></entry></elementAttributes><pos x="1020" y="80"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>ALU-H</string></entry></elementAttributes><pos x="1020" y="110"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1020" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>ALUOP4</string></entry></elementAttributes><pos x="1020" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>ALUOP1</string></entry></elementAttributes><pos x="1020" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB7</string></entry></elementAttributes><pos x="1020" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB6</string></entry></elementAttributes><pos x="1020" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB5</string></entry></elementAttributes><pos x="1020" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB4</string></entry></elementAttributes><pos x="1020" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>A7</string></entry></elementAttributes><pos x="1020" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>A6</string></entry></elementAttributes><pos x="1020" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>A5</string></entry></elementAttributes><pos x="1020" y="560"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>A4</string></entry></elementAttributes><pos x="1020" y="600"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R4</string></entry></elementAttributes><pos x="1020" y="640"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R5</string></entry></elementAttributes><pos x="1020" y="680"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>R6</string></entry></elementAttributes><pos x="1020" y="720"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1020" y="760"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>R7</string></entry></elementAttributes><pos x="1180" y="760"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ZOUT</string></entry></elementAttributes><pos x="1180" y="720"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>CHI</string></entry></elementAttributes><pos x="1180" y="680"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>NOUT</string></entry></elementAttributes><pos x="1180" y="640"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VOUT</string></entry></elementAttributes><pos x="1180" y="600"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1180" y="560"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ZIN</string></entry></elementAttributes><pos x="1180" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1180" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP0</string></entry></elementAttributes><pos x="1180" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ZLO</string></entry></elementAttributes><pos x="1180" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>C4</string></entry></elementAttributes><pos x="1180" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP2</string></entry></elementAttributes><pos x="1180" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP3</string></entry></elementAttributes><pos x="1180" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1180" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1180" y="160"/></visualElement>
+    <visualElement><elementName>7432.dig</elementName><elementAttributes><entry><string>Label</string><string>U3</string></entry></elementAttributes><pos x="1400" y="160"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U3  74HC32</string></entry></elementAttributes><pos x="1400" y="80"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>C = Clo OR Chi</string></entry></elementAttributes><pos x="1400" y="110"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>CLO</string></entry></elementAttributes><pos x="1400" y="160"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>CHI</string></entry></elementAttributes><pos x="1400" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>COUT</string></entry></elementAttributes><pos x="1400" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1400" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1400" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1400" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1520" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1520" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1520" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1520" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1520" y="160"/></visualElement>
+  </visualElements>
+  <wires/>
+</circuit>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes>
+    <entry><string>Description</string><string>Tri-state bus: 2× 74HC245 + 74HC540 kaynak, pull-down, 74HC245 okuyucu
+TD-8: td8.hw.digital ile üretildi (4 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+  </attributes>
+  <visualElements>
+    <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>BUS</string></entry><entry><string>RectWidth</string><int>71</int></entry><entry><string>RectHeight</string><int>33</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="520" y="0"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>Tri-state bus: 2× 74HC245 + 74HC540 kaynak, pull-down, 74HC245 okuyucu</string></entry><entry><string>textFontSize</string><int>28</int></entry></elementAttributes><pos x="0" y="-240"/></visualElement>
+    <visualElement><elementName>Testcase</elementName><elementAttributes><entry><string>Label</string><string>ornek_bus</string></entry><entry><string>Testdata</string><testData><dataString>SA SB SC OEA_n OEB_n OEC_n BUS RD
+0x20 0x82 0x3C 1 0 1 0x82 0x82
+0xFD 0xE6 0xF1 1 1 1 0x00 0x00
+0x6B 0x30 0xF9 1 1 1 0x00 0x00
+0x0E 0xC7 0xDD 1 1 1 0x00 0x00
+0xE4 0x88 0x75 0 1 1 0xE4 0xE4
+0x34 0xA2 0x0F 1 1 1 0x00 0x00
+0x0D 0x04 0xC3 0 1 1 0x0D 0x0D
+0x6E 0xD8 0x0E 1 1 1 0x00 0x00
+0xE0 0xFD 0x77 1 0 1 0xFD 0xFD
+0xB0 0x76 0x70 1 1 1 0x00 0x00
+0x94 0x0B 0xD5 1 1 1 0x00 0x00
+0x33 0x5F 0x97 1 1 1 0x00 0x00
+0xAA 0xD8 0x61 0 1 1 0xAA 0xAA
+0x9B 0x91 0xFF 1 1 1 0x00 0x00
+0x11 0xF5 0x7C 1 1 1 0x00 0x00
+0xCE 0xD4 0x58 1 1 1 0x00 0x00
+0xBF 0x2C 0xE0 1 1 0 0x1F 0x1F
+0x37 0x53 0xC9 1 1 1 0x00 0x00
+0xFA 0x0F 0xF0 1 1 0 0x0F 0x0F
+0x16 0x9D 0xC9 1 1 1 0x00 0x00
+0x56 0x74 0x06 1 0 1 0x74 0x74
+0x66 0x76 0xCF 1 1 1 0x00 0x00
+0xB4 0xEB 0x89 1 1 0 0x76 0x76
+0x02 0xC4 0x42 1 1 1 0x00 0x00
+0xDA 0x1C 0xF6 1 0 1 0x1C 0x1C
+0xBA 0x66 0xD3 1 1 1 0x00 0x00
+0xB6 0xD4 0xB1 1 1 1 0x00 0x00
+0x00 0xA9 0xEA 1 1 1 0x00 0x00
+0x75 0x5A 0x5C 0 1 1 0x75 0x75
+0x2E 0x82 0x10 1 1 1 0x00 0x00
+0x2A 0x08 0xE7 0 1 1 0x2A 0x2A
+0x07 0x8F 0x7F 1 1 1 0x00 0x00
+0x38 0x5E 0xB0 1 1 0 0x4F 0x4F
+0x94 0x23 0x55 1 1 1 0x00 0x00
+0x82 0x56 0x8B 1 0 1 0x56 0x56
+0x96 0xE8 0xA4 1 1 1 0x00 0x00
+0xF2 0x3A 0x0C 1 1 1 0x00 0x00
+0x9F 0xC5 0xAF 1 1 1 0x00 0x00
+0x60 0x84 0x37 1 1 1 0x00 0x00
+0x81 0x6B 0xDD 1 1 1 0x00 0x00
+0x73 0x09 0xCB 0 1 1 0x73 0x73
+0x4A 0x12 0x52 1 1 1 0x00 0x00
+0xDA 0x70 0xE6 1 1 1 0x00 0x00
+0x72 0x0F 0xCA 1 1 1 0x00 0x00
+0xDA 0x1E 0x98 1 1 0 0x67 0x67
+0x40 0x6C 0x18 1 1 1 0x00 0x00
+0x24 0x27 0x9E 1 1 0 0x61 0x61
+0x98 0x51 0xD5 1 1 1 0x00 0x00
+0x42 0x04 0x13 1 1 0 0xEC 0xEC
+0x6F 0xEB 0x57 1 1 1 0x00 0x00
+0xC1 0x66 0xB1 0 1 1 0xC1 0xC1
+0x32 0x69 0xDD 1 1 1 0x00 0x00
+0xFC 0x35 0xC7 1 0 1 0x35 0x35
+0x97 0xFF 0x08 1 1 1 0x00 0x00
+0xCD 0x90 0x09 1 1 0 0xF6 0xF6
+0x50 0x66 0xA7 1 1 1 0x00 0x00
+0xAD 0xDB 0x6D 1 0 1 0xDB 0xDB
+0x88 0x31 0xC2 1 1 1 0x00 0x00
+0xF8 0x78 0x21 1 1 0 0xDE 0xDE
+0x14 0x2B 0x44 1 1 1 0x00 0x00
+</dataString></testData></entry></elementAttributes><pos x="0" y="-160"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>Dış bağlantılar</string></entry><entry><string>textFontSize</string><int>20</int></entry></elementAttributes><pos x="0" y="-80"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>SA</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="120" y="0"/></visualElement>
+    <visualElement><elementName>Splitter</elementName><elementAttributes><entry><string>Input Splitting</string><string>8</string></entry><entry><string>Output Splitting</string><string>1,1,1,1,1,1,1,1</string></entry></elementAttributes><pos x="120" y="0"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SA0</string></entry></elementAttributes><pos x="140" y="0"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SA1</string></entry></elementAttributes><pos x="140" y="20"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SA2</string></entry></elementAttributes><pos x="140" y="40"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SA3</string></entry></elementAttributes><pos x="140" y="60"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SA4</string></entry></elementAttributes><pos x="140" y="80"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SA5</string></entry></elementAttributes><pos x="140" y="100"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SA6</string></entry></elementAttributes><pos x="140" y="120"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SA7</string></entry></elementAttributes><pos x="140" y="140"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>SB</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="120" y="200"/></visualElement>
+    <visualElement><elementName>Splitter</elementName><elementAttributes><entry><string>Input Splitting</string><string>8</string></entry><entry><string>Output Splitting</string><string>1,1,1,1,1,1,1,1</string></entry></elementAttributes><pos x="120" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SB0</string></entry></elementAttributes><pos x="140" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SB1</string></entry></elementAttributes><pos x="140" y="220"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SB2</string></entry></elementAttributes><pos x="140" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SB3</string></entry></elementAttributes><pos x="140" y="260"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SB4</string></entry></elementAttributes><pos x="140" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SB5</string></entry></elementAttributes><pos x="140" y="300"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SB6</string></entry></elementAttributes><pos x="140" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SB7</string></entry></elementAttributes><pos x="140" y="340"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>SC</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="120" y="400"/></visualElement>
+    <visualElement><elementName>Splitter</elementName><elementAttributes><entry><string>Input Splitting</string><string>8</string></entry><entry><string>Output Splitting</string><string>1,1,1,1,1,1,1,1</string></entry></elementAttributes><pos x="120" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SC0</string></entry></elementAttributes><pos x="140" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SC1</string></entry></elementAttributes><pos x="140" y="420"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SC2</string></entry></elementAttributes><pos x="140" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SC3</string></entry></elementAttributes><pos x="140" y="460"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SC4</string></entry></elementAttributes><pos x="140" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SC5</string></entry></elementAttributes><pos x="140" y="500"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SC6</string></entry></elementAttributes><pos x="140" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>SC7</string></entry></elementAttributes><pos x="140" y="540"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>OEA_n</string></entry><entry><string>InDefault</string><value v="1" z="false"/></entry></elementAttributes><pos x="120" y="600"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>OEA_n</string></entry></elementAttributes><pos x="120" y="600"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>OEB_n</string></entry><entry><string>InDefault</string><value v="1" z="false"/></entry></elementAttributes><pos x="120" y="640"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>OEB_n</string></entry></elementAttributes><pos x="120" y="640"/></visualElement>
+    <visualElement><elementName>In</elementName><elementAttributes><entry><string>Label</string><string>OEC_n</string></entry><entry><string>InDefault</string><value v="1" z="false"/></entry></elementAttributes><pos x="120" y="680"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>OEC_n</string></entry></elementAttributes><pos x="120" y="680"/></visualElement>
+    <visualElement><elementName>VDD</elementName><elementAttributes/><pos x="120" y="720"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="120" y="720"/></visualElement>
+    <visualElement><elementName>Ground</elementName><elementAttributes/><pos x="200" y="720"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="200" y="720"/></visualElement>
+    <visualElement><elementName>PullDown</elementName><elementAttributes/><pos x="120" y="800"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS0</string></entry></elementAttributes><pos x="120" y="800"/></visualElement>
+    <visualElement><elementName>PullDown</elementName><elementAttributes/><pos x="120" y="880"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS1</string></entry></elementAttributes><pos x="120" y="880"/></visualElement>
+    <visualElement><elementName>PullDown</elementName><elementAttributes/><pos x="120" y="960"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS2</string></entry></elementAttributes><pos x="120" y="960"/></visualElement>
+    <visualElement><elementName>PullDown</elementName><elementAttributes/><pos x="120" y="1040"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS3</string></entry></elementAttributes><pos x="120" y="1040"/></visualElement>
+    <visualElement><elementName>PullDown</elementName><elementAttributes/><pos x="120" y="1120"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS4</string></entry></elementAttributes><pos x="120" y="1120"/></visualElement>
+    <visualElement><elementName>PullDown</elementName><elementAttributes/><pos x="120" y="1200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS5</string></entry></elementAttributes><pos x="120" y="1200"/></visualElement>
+    <visualElement><elementName>PullDown</elementName><elementAttributes/><pos x="120" y="1280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS6</string></entry></elementAttributes><pos x="120" y="1280"/></visualElement>
+    <visualElement><elementName>PullDown</elementName><elementAttributes/><pos x="120" y="1360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS7</string></entry></elementAttributes><pos x="120" y="1360"/></visualElement>
+    <visualElement><elementName>Splitter</elementName><elementAttributes><entry><string>Input Splitting</string><string>1,1,1,1,1,1,1,1</string></entry><entry><string>Output Splitting</string><string>8</string></entry></elementAttributes><pos x="300" y="0"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>BUS0</string></entry></elementAttributes><pos x="300" y="0"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>BUS1</string></entry></elementAttributes><pos x="300" y="20"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>BUS2</string></entry></elementAttributes><pos x="300" y="40"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>BUS3</string></entry></elementAttributes><pos x="300" y="60"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>BUS4</string></entry></elementAttributes><pos x="300" y="80"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>BUS5</string></entry></elementAttributes><pos x="300" y="100"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>BUS6</string></entry></elementAttributes><pos x="300" y="120"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>BUS7</string></entry></elementAttributes><pos x="300" y="140"/></visualElement>
+    <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>BUS</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="320" y="0"/></visualElement>
+    <visualElement><elementName>Splitter</elementName><elementAttributes><entry><string>Input Splitting</string><string>1,1,1,1,1,1,1,1</string></entry><entry><string>Output Splitting</string><string>8</string></entry></elementAttributes><pos x="300" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD0</string></entry></elementAttributes><pos x="300" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD1</string></entry></elementAttributes><pos x="300" y="220"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD2</string></entry></elementAttributes><pos x="300" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD3</string></entry></elementAttributes><pos x="300" y="260"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD4</string></entry></elementAttributes><pos x="300" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD5</string></entry></elementAttributes><pos x="300" y="300"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD6</string></entry></elementAttributes><pos x="300" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD7</string></entry></elementAttributes><pos x="300" y="340"/></visualElement>
+    <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>RD</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="320" y="200"/></visualElement>
+    <visualElement><elementName>74245.dig</elementName><elementAttributes><entry><string>Label</string><string>U1</string></entry></elementAttributes><pos x="640" y="160"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U1  74HC245</string></entry></elementAttributes><pos x="640" y="80"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>SA → BUS</string></entry></elementAttributes><pos x="640" y="110"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="640" y="160"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SA0</string></entry></elementAttributes><pos x="640" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SA1</string></entry></elementAttributes><pos x="640" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SA2</string></entry></elementAttributes><pos x="640" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SA3</string></entry></elementAttributes><pos x="640" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SA4</string></entry></elementAttributes><pos x="640" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SA5</string></entry></elementAttributes><pos x="640" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SA6</string></entry></elementAttributes><pos x="640" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SA7</string></entry></elementAttributes><pos x="640" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="640" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS7</string></entry></elementAttributes><pos x="760" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS6</string></entry></elementAttributes><pos x="760" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS5</string></entry></elementAttributes><pos x="760" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS4</string></entry></elementAttributes><pos x="760" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS3</string></entry></elementAttributes><pos x="760" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS2</string></entry></elementAttributes><pos x="760" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS1</string></entry></elementAttributes><pos x="760" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS0</string></entry></elementAttributes><pos x="760" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>OEA_n</string></entry></elementAttributes><pos x="760" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="760" y="160"/></visualElement>
+    <visualElement><elementName>74245.dig</elementName><elementAttributes><entry><string>Label</string><string>U2</string></entry></elementAttributes><pos x="980" y="160"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U2  74HC245</string></entry></elementAttributes><pos x="980" y="80"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>SB → BUS</string></entry></elementAttributes><pos x="980" y="110"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="980" y="160"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SB0</string></entry></elementAttributes><pos x="980" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SB1</string></entry></elementAttributes><pos x="980" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SB2</string></entry></elementAttributes><pos x="980" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SB3</string></entry></elementAttributes><pos x="980" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SB4</string></entry></elementAttributes><pos x="980" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SB5</string></entry></elementAttributes><pos x="980" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SB6</string></entry></elementAttributes><pos x="980" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SB7</string></entry></elementAttributes><pos x="980" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="980" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS7</string></entry></elementAttributes><pos x="1100" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS6</string></entry></elementAttributes><pos x="1100" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS5</string></entry></elementAttributes><pos x="1100" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS4</string></entry></elementAttributes><pos x="1100" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS3</string></entry></elementAttributes><pos x="1100" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS2</string></entry></elementAttributes><pos x="1100" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS1</string></entry></elementAttributes><pos x="1100" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS0</string></entry></elementAttributes><pos x="1100" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>OEB_n</string></entry></elementAttributes><pos x="1100" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1100" y="160"/></visualElement>
+    <visualElement><elementName>74540.dig</elementName><elementAttributes><entry><string>Label</string><string>U3</string></entry></elementAttributes><pos x="1340" y="160"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U3  74HC540</string></entry></elementAttributes><pos x="1340" y="80"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>~SC → BUS</string></entry></elementAttributes><pos x="1340" y="110"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>OEC_n</string></entry></elementAttributes><pos x="1340" y="160"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SC0</string></entry></elementAttributes><pos x="1340" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SC1</string></entry></elementAttributes><pos x="1340" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SC2</string></entry></elementAttributes><pos x="1340" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SC3</string></entry></elementAttributes><pos x="1340" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SC4</string></entry></elementAttributes><pos x="1340" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SC5</string></entry></elementAttributes><pos x="1340" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SC6</string></entry></elementAttributes><pos x="1340" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SC7</string></entry></elementAttributes><pos x="1340" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1340" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS7</string></entry></elementAttributes><pos x="1460" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS6</string></entry></elementAttributes><pos x="1460" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS5</string></entry></elementAttributes><pos x="1460" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS4</string></entry></elementAttributes><pos x="1460" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS3</string></entry></elementAttributes><pos x="1460" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS2</string></entry></elementAttributes><pos x="1460" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS1</string></entry></elementAttributes><pos x="1460" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS0</string></entry></elementAttributes><pos x="1460" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1460" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1460" y="160"/></visualElement>
+    <visualElement><elementName>74245.dig</elementName><elementAttributes><entry><string>Label</string><string>U4</string></entry></elementAttributes><pos x="1660" y="160"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U4  74HC245</string></entry></elementAttributes><pos x="1660" y="80"/></visualElement>
+    <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>BUS → RD (B→A)</string></entry></elementAttributes><pos x="1660" y="110"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1660" y="160"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD0</string></entry></elementAttributes><pos x="1660" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD1</string></entry></elementAttributes><pos x="1660" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD2</string></entry></elementAttributes><pos x="1660" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD3</string></entry></elementAttributes><pos x="1660" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD4</string></entry></elementAttributes><pos x="1660" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD5</string></entry></elementAttributes><pos x="1660" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD6</string></entry></elementAttributes><pos x="1660" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>RD7</string></entry></elementAttributes><pos x="1660" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1660" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS7</string></entry></elementAttributes><pos x="1780" y="520"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS6</string></entry></elementAttributes><pos x="1780" y="480"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS5</string></entry></elementAttributes><pos x="1780" y="440"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS4</string></entry></elementAttributes><pos x="1780" y="400"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS3</string></entry></elementAttributes><pos x="1780" y="360"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS2</string></entry></elementAttributes><pos x="1780" y="320"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS1</string></entry></elementAttributes><pos x="1780" y="280"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUS0</string></entry></elementAttributes><pos x="1780" y="240"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1780" y="200"/></visualElement>
+    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1780" y="160"/></visualElement>
+  </visualElements>
+  <wires/>
+</circuit>
