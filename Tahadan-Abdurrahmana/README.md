@@ -1,10 +1,55 @@
 # Taha'dan Abdurrahman'a: Tasarım Notları ve Yapılacaklar Listesi
 
-Selam Abdurrahman, tasarımda gözden kaçmış veya unutulmuş olabilecek teknik detayları, 2. haftadaki şemalarda düzeltmemiz gereken yerleri ve 3. haftada yapılacakları senin için tek bir yerde topladım. Devreleri çizerken doğrudan buradaki pin ve çip listesini referans alabilirsin.
+Selam Abdurrahman, tasarımda gözden kaçmış veya unutulmuş olabilecek teknik detayları, 2. haftadaki şemalarda düzeltmemiz gereken yerleri ve 3. haftada yapılacakları senin için tek bir yerde topladım. Devreleri çizerken doğrudan buradaki pin ve çip listesini referans alabilirsin. **En yeni mesaj en üstte.**
 
 ---
 
-## 0. YENİ (12 Kasım): Sorularının Cevabı ve Senin İçin Hazırlananlar
+## YENİ (17 Kasım): 3. Hafta Notun ve Bu Haftanın (17–23 Kasım) İşleri
+
+13 Kasım'daki notunu (`Abdurrahman/hafta3/`) okudum, eline sağlık. 4. hafta raporu yayında: <https://abdulrahmanzaidan.github.io/Tasarim/raporlar/hafta4.html>. Senin sekmende notunu özetledim. Aşağıda notla ilgili üç konu ve bu hafta senden beklenenler var.
+
+### 1. Notundaki şemalar TD-8 değil, SAP-1
+
+Notundaki ALU, RAM ve MAR, Ben Eater'ın SAP-1 bilgisayarının devreleri. Bizim TD-8'de bu üç parça başka türlü yapılıyor:
+
+| Notunda | TD-8'de | Kimde / nerede |
+|---|---|---|
+| ALU: 2× 74LS283 + 2× 74LS86; yalnız toplama ve çıkarma | ALU **2 flash'ta tablo** (Proteus'ta 2× 27C512, `alu_lo.bin`, `alu_hi.bin`). 25 işlem: toplama, çıkarma, AND/OR/XOR, kaydırmalar… Toplayıcı entegresi yok | Sende (M4). Bağlantısı aşağıda bölüm 3.B; [SISTEM-PLANI 5.2–5.3](../SISTEM-PLANI.md#52-alu-2-flashta-tablo) |
+| Bayraklar: CF ve ZF, 74LS173 | Dört bayrak: **Z, C, N, V**. Register **74HC161** (4-bit register olarak, `/PE = NOT FL`). `C = Clo OR Chi` (1× 74HC32) | Sende (M4). Bölüm 1.E |
+| RAM: 2× 74189, **16 bayt**, 4-bit adres | RAM **CY62256, 32 KB** (28 KB'ı kullanılıyor: `8000–EFFF`), **16-bit adres** | **Bende (M5).** Digital'de test edildi (`sim/digital/m5_bellek.dig`). Senin çizmen gerekmiyor |
+| MAR: 4-bit 74LS173 | **Ayrı bir MAR yok.** Adres yolunu dört register sürüyor: PC, AR, X, SP (74HC161/191 + 74HC245). AR, MAR'ın işini görüyor ama 16 bit ve sayabiliyor | Sende (M3). Bölüm 3.A |
+| Elle programlama: PROG anahtarı, DIP ile veri, SW4 ile yazma | Yok. Program flash'a T48 programlayıcıyla yazılıyor ya da Arduino ile RAM'e yükleniyor | Sonraki iş (M8) |
+| 74LS ailesi | **74HC** ailesi | Hepsi |
+
+Yani bu üç şemayı TD-8'e uyarlamak yerine **RAM ve MAR'ı bırak**, M4 (A, IR, F, ALU flash'ları) ve M3 (PC, AR, X, SP) şemalarını çiz.
+
+### 2. Şemaların kaynağı ve notun başlığı
+
+- Şemalar, Ben Eater'ın sitesinde yayımladığı SAP-1 şemalarıyla aynı görünüyor: KiCad çizimi, entegre ve LED numaraları da aynı (U16–U34, D74–D81 gibi). Hocanın göreceği sayfada başkasının şeması bizim çizimimiz gibi durmasın diye **görselleri rapora koymadım**, yalnızca notunu özetledim. Kendi çizdiğin Proteus şemalarını koyarsan raporda onları gösteririz. Bir yerden şema ya da fikir alırsak kaynağını yazalım: "Ben Eater'ın şeması, şu adresten" gibi.
+- Notunda "simülasyon dosyası, zaman diyagramı veya ölçüm kaydı yok; tablolar beklenen sonuç" yazıyor. Raporda bir modülü "bitti" saymamız için **Proteus'ta çalışırken alınmış ekran görüntüsü** ve **ölçülen sonuç** gerekiyor (aşağıda bölüm 3).
+- Notunun başında "Hazırlayanlar: Abdel Rahman Zidan ve Taha Deniz Akgül" yazıyor. Bu not senin; yalnız kendi adını yazman yeterli.
+
+### 3. Bu hafta senden beklenenler (öncelik sırasıyla)
+
+Takvime göre ([SISTEM-PLANI bölüm 13](../SISTEM-PLANI.md#13-takvim-simülasyon-dönemi-10-hafta-27-ekim-2026--3-ocak-2027)) bu hafta bütün işlemcinin birleştirilmesi ve prototip a var, ama M1, M3 ve M4 henüz bitmedi. Önce onları bitirelim:
+
+| # | İş | Teslim | Nasıl test edilir |
+|---|---|---|---|
+| 1 | **M1 saat modülü testleri** (ilk kilometre taşı K1, 9 Kasım'dan beri gecikmede) | `.pdsprj` + 4 testin dalga şekli ekran görüntüsü | Aşağıdaki bölüm 2'deki 4 test: normal çalışma, STOP, WAIT, GO ve /RESET_s. WAIT 138'inin G1 bacağı artık **CLK**'ye bağlı (bölüm 0'daki düzeltme) |
+| 2 | **M4: A, IR, F ve ALU** (74HC377, 74HC377, 74HC161, 2× 27C512) | `.pdsprj` + ekran görüntüleri | `cd sim` → `py cli.py vectors alu -n 10 --format csv`. 10 satırın her birinde girişleri (OP, A, B, C, Z) ver, çıkışların (R, Z, C, N, V) tabloyla aynı olduğunu göster |
+| 3 | **ROM dosyası denemesi** | [Abdurrahmandan-Tahaya](../Abdurrahmandan-Tahaya/README.md)'ya tek satır | 27C512'ye `build/proteus/alu_lo.bin` yükle; `.bin` mi `.hex` mi çalıştı, yaz |
+| 4 | **M3: PC, AR, X, SP** | `.pdsprj` + ekran görüntüleri | PC sayıyor ve AR'dan yükleniyor; AR ve X veri yolundan iki parça halinde yükleniyor; SP reset'te FF, push'ta azalıp pop'ta artıyor; aynı anda tek bir register adres yolunu sürüyor |
+
+**Hazır yardımlar:**
+- **Digital'de M1, M3 ve M4 devreleri hazır:** `sim/digital/m1_saat.dig`, `m3_adres.dig`, `m4_alu.dig`. Her entegre Digital'in 74xx kütüphanesindeki bacaklı çip, her bacakta sinyal adı var. Proteus'ta aynı bağlantıları kurman için örnek olarak açabilirsin (Digital ücretsiz, kurulum `sim/README.md`'de).
+- **Her bacağın bağlantısı:** [TD8-baglanti-tablosu.md](TD8-baglanti-tablosu.md), bölüm M1, M3, M4.
+- Takıldığın yeri [Abdurrahmandan-Tahaya](../Abdurrahmandan-Tahaya/README.md)'ya yaz, aynı gün bakarım.
+
+**Teslim yeri ve tarihi:** `Abdurrahman/hafta4/README.md` + `.pdsprj` dosyaları + ekran görüntüleri, **23 Kasım Pazar akşamına kadar**. 5. hafta raporu bunlarla hazırlanacak. README'de her test için bir tablo olsun: *ne verildi, ne bekleniyordu, ne görüldü (ekran görüntüsü)*.
+
+---
+
+## 0. 12 Kasım: Sorularının Cevabı ve Senin İçin Hazırlananlar
 
 ### Soru 1: Proteus'ta ROM'lara `.bin` mi `.hex` mi yükleyeceğiz?
 
