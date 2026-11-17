@@ -298,8 +298,105 @@ class HwCpu:
         return self.n - n0
 
     def set(self, net, value, at=None):
-        """Bir anahtar/girişi sür (STEPMODE, MICRO, VWR_s, DIP0..5, GO_BTN, /RESET)."""
+        """Bir anahtar/girişi sür (STEPMODE, MICRO, VWR_s, DIP0..5, GO_BTN, /RESET, BP0..15,
+        /BP_EN)."""
         self.sim.set(net, value, at=at)
+
+    # ------------------------------------------------------------------ hata ayıklama
+    def set_breakpoint(self, addr):
+        """BP0..15 anahtarlarına adresi verir ve breakpoint'i açar; None: kapatır (/BP_EN = 1)."""
+        if addr is None:
+            self.sim.set('/BP_EN', 1)
+        else:
+            self.sim.set_bus('BP', 16, addr)
+            self.sim.set('/BP_EN', 0)
+
+    def run_to_stop(self, max_cycles=1_000_000):
+        """Makine C'de STOP ile park edene (HALT, breakpoint, BUSREQ, adım) ya da max_cycles
+        commit'e kadar çalıştırır. Bu çağrıda yapılan commit sayısını döndürür."""
+        self.power_on()
+        n0 = self.n
+        self.parked = 0
+        while self.n - n0 < max_cycles:
+            self.sim.run_for(self.cycle_ns)
+            if self.n > n0 and self.parked >= 2:
+                break
+        self.sim.run_for(2 * self.half)
+        return self.n - n0
+
+    def stopped_by(self):
+        """Duran makinede STOP'un nedenleri: {'HALT', 'BRK', 'BUSREQ', 'ADIM'} alt kümesi."""
+        g = self.sim.get
+        why = set()
+        if g('HALT_L'):
+            why.add('HALT')
+        if g('BRK_L'):
+            why.add('BRK')
+        if g('BRQ_s'):
+            why.add('BUSREQ')
+        if g('STOP_SM'):
+            why.add('ADIM')
+        return why
+
+    # Arduino (yükleme modu, arduino/README.md): /BUSREQ açık-drain, AB/DB/strobe'lar 'ARD'
+    # sürücüsü. Zamanlar Arduino'nun hızına göre cömert (her adım ≥ 250 ns).
+    def bus_request(self, timeout_mclk=64):
+        """/BUSREQ'i indirir, BUSACK = 1'i bekler; bekleme süresini (MCLK periyodu) döndürür."""
+        self.power_on()
+        self.sim.set('/BUSREQ', 0, who='ARD')
+        for k in range(1, timeout_mclk + 1):
+            self.sim.run_for(2 * self.half)
+            if self.sim.get('BUSACK') == 1:
+                self.sim.run_for(500)                    # Arduino BUSACK'ı okuyup pinleri açar
+                self.sim.set('/ARD_RD', 1, who='ARD')
+                self.sim.set('/ARD_WR', 1, who='ARD')
+                return k
+        raise RuntimeError(f'BUSACK {timeout_mclk} MCLK içinde gelmedi')
+
+    def _need_bus(self):
+        if self.sim.get('BUSACK') != 1:
+            raise RuntimeError('BUSACK = 0: bus Arduino\'da değil')
+
+    def ard_write(self, addr, data):
+        """BUSACK = 1 iken belleğe bir bayt yazar (AB, DB, sonra /ARD_WR darbesi)."""
+        self._need_bus()
+        s = self.sim
+        s.set_bus('AB', 16, addr, who='ARD')
+        s.set_bus('DB', 8, data, who='ARD')
+        s.run_for(250)
+        s.set('/ARD_WR', 0, who='ARD')
+        s.run_for(500)
+        s.set('/ARD_WR', 1, who='ARD')
+        s.run_for(250)
+
+    def ard_read(self, addr):
+        """BUSACK = 1 iken bellekten bir bayt okur (DB bırakılır, /ARD_RD darbesi)."""
+        self._need_bus()
+        s = self.sim
+        s.set_bus('DB', 8, None, who='ARD')
+        s.set_bus('AB', 16, addr, who='ARD')
+        s.run_for(250)
+        s.set('/ARD_RD', 0, who='ARD')
+        s.run_for(500)
+        v = s.bus('DB', 8)
+        s.set('/ARD_RD', 1, who='ARD')
+        s.run_for(250)
+        return v
+
+    def bus_release(self, timeout_mclk=64):
+        """Pinleri bırakır, sonra /BUSREQ'i; BUSACK = 0'ı bekler (MCLK periyodu döndürür)."""
+        s = self.sim
+        s.set_bus('AB', 16, None, who='ARD')
+        s.set_bus('DB', 8, None, who='ARD')
+        s.set('/ARD_RD', None, who='ARD')
+        s.set('/ARD_WR', None, who='ARD')
+        s.run_for(250)
+        s.set('/BUSREQ', None, who='ARD')
+        for k in range(1, timeout_mclk + 1):
+            s.run_for(2 * self.half)
+            if s.get('BUSACK') == 0:
+                return k
+        raise RuntimeError(f'BUSACK {timeout_mclk} MCLK içinde düşmedi')
 
     # ------------------------------------------------------------------ okuma
     def phase(self):

@@ -57,7 +57,7 @@ Vektörleri test vektörü üreticisi veriyor, Digital tabloyu satır satır den
 | Kod çözücüler | M2 | 512 (tam tablo) | geçti |
 | Adres çözme | M5 | 1.096 (96 sınır adresi + 1.000 rastgele) | geçti |
 
-Her dosyada modülün entegreleri ve test tablosu birlikte: `sim/digital/kabul/` (`m2_urom.dig`, `m2_cs.dig`, `m4_alu_tablo.dig`, `m5_cozme.dig`). Digital'de açıp araç çubuğundaki test düğmesiyle çalıştırılabilir; yeniden üretmek için `cd sim` → `py -3 digital/kabul/uret.py`.
+Her dosyada modülün entegreleri ve test tablosu birlikte: `sim/digital_kabul/` (`m2_urom.dig`, `m2_cs.dig`, `m4_alu_tablo.dig`, `m5_cozme.dig`). Digital'de açıp araç çubuğundaki test düğmesiyle çalıştırılabilir; yeniden üretmek için `cd sim` → `py -3 digital_kabul/uret.py`.
 
 Testlerin hata yakaladığı da denendi: bilerek bozulan devreler Digital'de kalıyor (ör. ALU'da iki adres bacağı yer değiştirince).
 

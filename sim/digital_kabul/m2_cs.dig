@@ -549,8 +549,6 @@ DSRC DDST ASRC BUSACK MRD_n OE_A_n OE_PCL_n OE_PCH_n DD_IR_n DD_A_n DD_XL_n DD_X
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>FPAGE_n</string></entry></elementAttributes><pos x="120" y="400"/></visualElement>
     <visualElement><elementName>PullUp</elementName><elementAttributes/><pos x="120" y="480"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>AB11</string></entry></elementAttributes><pos x="120" y="480"/></visualElement>
-    <visualElement><elementName>PullDown</elementName><elementAttributes/><pos x="120" y="560"/></visualElement>
-    <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>BUSACK</string></entry></elementAttributes><pos x="120" y="560"/></visualElement>
     <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>MRD_n</string></entry></elementAttributes><pos x="380" y="0"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>MRD_n</string></entry></elementAttributes><pos x="380" y="0"/></visualElement>
     <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>OE_A_n</string></entry></elementAttributes><pos x="380" y="40"/></visualElement>

@@ -15,4 +15,4 @@ Her `.dig` dosyasında bir modülün entegreleri ve test tablosu birlikte durur 
 
 **Komut satırında:** `araclar\digital-cli.cmd test -circ m2_cs.dig` → `m2_cs: passed`
 
-**Yeniden üretmek:** `cd sim` → `py -3 digital/kabul/uret.py`. Tablolar `tests/test_hw_digital.py`'deki kabul testleriyle aynı.
+**Yeniden üretmek:** `cd sim` → `py -3 digital_kabul/uret.py`. Tablolar `tests/test_hw_digital.py`'deki kabul testleriyle aynı.

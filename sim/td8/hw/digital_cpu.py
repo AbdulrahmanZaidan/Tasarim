@@ -8,10 +8,12 @@
           ve MicroEmu.trace ile aynı anlam; vectors.compare_traces ile karşılaştırılır.
 
 td8.dig'in dış bağlantıları:
-  girişler  RESET_n (/RESET, 1), GO_BTN, STEPMODE, MICRO, DIP (6 bit), VWR_s (1), KRDY, KSR (8 bit)
+  girişler  RESET_n (/RESET, 1), GO_BTN, STEPMODE, MICRO, DIP (6 bit), VWR_s (1), KRDY, KSR (8 bit),
+            BP (16 bit, breakpoint adresi), BP_EN_n (1), BUSREQ_n (1; gerçekte Arduino'nun
+            açık-drain hattı + 10k pull-up)
   saat      MCLK (Digital Clock; CPU çevrimi = 4 MCLK periyodu)
-  gözlem    AB DB CW(24 bit, latch çıkışları) CLK LCLK Q1 RESET_s_n STOP LED PC AR X SP ACC IR
-            STEP Z C N V
+  gözlem    AB DB CW(24 bit, latch çıkışları) CLK LCLK Q1 RESET_s_n STOP BRK BUSACK LED PC AR X
+            SP ACC IR STEP Z C N V
 Modül dosyalarında (dg.module_board) modül sınırındaki her net bir In ya da Out'tur; td8.dig'in
 gözlem çıkışları modül dosyalarında da (o modülün sürdüğü netler) Out olur.
 
@@ -42,11 +44,16 @@ def _bus(label, prefix, n, default=0):
 
 INPUTS = [dg.Port('RESET_n', '/RESET', 1), dg.Port('GO_BTN', 'GO_BTN'),
           dg.Port('STEPMODE', 'STEPMODE'), dg.Port('MICRO', 'MICRO'), _bus('DIP', 'DIP', 6),
-          dg.Port('VWR_s', 'VWR_s', 1), dg.Port('KRDY', 'KRDY'), _bus('KSR', 'KSR', 8)]
+          dg.Port('VWR_s', 'VWR_s', 1), dg.Port('KRDY', 'KRDY'), _bus('KSR', 'KSR', 8),
+          _bus('BP', 'BP', 16), dg.Port('BP_EN_n', '/BP_EN', 1)]
+# Arduino'nun açık-drain hatları: Sim'de yalnız pull-up (Board.pulls), Digital'de varsayılanı
+# pull değeri olan bir In (GUI'de elle ve digital_trace(sets=...) ile sürülebilsin diye).
+ARD_INPUTS = [dg.Port('BUSREQ_n', '/BUSREQ', 1)]
 
 OUTPUTS = [_bus('AB', 'AB', 16), _bus('DB', 'DB', 8), dg.Port('CW', cpu.CW_L),
            dg.Port('CLK', 'CLK'), dg.Port('LCLK', 'LCLK'), dg.Port('Q1', 'Q1'),
-           dg.Port('RESET_s_n', '/RESET_s'), dg.Port('STOP', 'STOP'), _bus('LED', 'LED', 8),
+           dg.Port('RESET_s_n', '/RESET_s'), dg.Port('STOP', 'STOP'), dg.Port('BRK', 'BRK_L'),
+           dg.Port('BUSACK', 'BUSACK'), _bus('LED', 'LED', 8),
            _bus('PC', 'PC', 16), _bus('AR', 'AR', 16), _bus('X', 'X', 16), _bus('SP', 'SP', 8),
            _bus('ACC', 'ACC', 8), _bus('IR', 'IR', 8), _bus('STEP', 'STEP', 4),
            dg.Port('Z', 'Z'), dg.Port('C', 'C'), dg.Port('N', 'N'), dg.Port('V', 'V')]
@@ -62,6 +69,7 @@ def td8_board(program=b'', program_tag='program', name='td8', **build_kw):
         raise dg.DigitalError(f'beklenmeyen saatler: {cb.clocks}')
     inputs = [dg.Port(p.label, p.nets, cb.inputs[p.nets[0]] if p.bits == 1 else p.default)
               for p in INPUTS]
+    inputs += [dg.Port(p.label, p.nets, cb.pulls[p.nets[0]]) for p in ARD_INPUTS]
     pulls = {**cb.pulls, **cb.ties}                # tie = 5. haftaya kalan sürücünün pasif değeri
     rom_files = {chip.ref: Path(f'{ROM_TAGS[k]}.hex') for k, chip in cb.memories.items()
                  if k in ROM_TAGS}

@@ -26,13 +26,9 @@ PLAN_COUNTS = {
 
 # Plan sayısından netlist'e girmeyenler ve nedeni.
 NOT_BUILT = {
-    'M1': [('NE555', 1, '5. hafta: yavaş saat kaynağı; MCLK test tezgâhından'),
-           ('74HC153', 1, '5. hafta: saat kaynağı seçici'),
-           ('74HC14', 1, '5. hafta: RC reset / buton debounce / 555 kare dalgası'),
-           ('74HC74', 1, '5. hafta: BRK ve BUSACK flip-flop\'ları (BRK_L = 0, BUSACK = 0)'),
-           ('74HC175', 1, '5. hafta: BRQ ×2 ve VWR ×2 senkronlayıcıları (BRQ_s = 0, VWR_s '
-                          'test tezgâhından)')],
-    'M2': [('74HC688', 2, '5. hafta: breakpoint/watchpoint karşılaştırıcıları')],
+    'M1': [('NE555', 1, 'kapsam dışı: yavaş saat kaynağı; MCLK test tezgâhından'),
+           ('74HC153', 1, 'kapsam dışı: saat kaynağı seçici'),
+           ('74HC14', 1, 'kapsam dışı: RC reset / buton debounce / 555 kare dalgası')],
     'AUX': [('74HC00', 1, 'kapsam dışı değil: 138\'li WAIT (DOGRULAMA 2.5) ve G1 = CLK '
                           'düzeltmesiyle NAND(MEMW_L, /VWR_s) ve OR kalktı; 12 NAND\'ın 7\'si '
                           'yetiyor, 2. yardımcı 74HC00 gereksiz')],

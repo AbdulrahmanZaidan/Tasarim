@@ -10,21 +10,18 @@ Kaynak: `sim/td8/hw/cpu.py` (üretilmiştir, elle düzenlemeyin). Bacak numarala
 
 | Modül | Plan (15.1) | Netlist | Kurulmayan | Açıklanmamış fark |
 |---|---:|---:|---:|---:|
-| M1 Saat / reset / durdurma | 14 | 9 | 5 | 0 |
-| M2 Kontrol ünitesi | 13 | 11 | 2 | 0 |
+| M1 Saat / reset / durdurma | 14 | 11 | 3 | 0 |
+| M2 Kontrol ünitesi | 13 | 13 | 0 | 0 |
 | M3 Adres registerları | 22 | 22 | 0 | 0 |
 | M4 Veri ve ALU | 8 | 8 | 0 | 0 |
 | CPU yardımcı kapıları | 4 | 3 | 1 | 0 |
 | M5 Bellek + I/O | 6 | 6 | 0 | 0 |
-| **Toplam (CPU, M6/M7 hariç)** | **67** | **59** | **8** | **0** |
+| **Toplam (CPU, M6/M7 hariç)** | **67** | **63** | **4** | **0** |
 
 Kurulmayanlar:
-- M1 NE555 ×1: 5. hafta: yavaş saat kaynağı; MCLK test tezgâhından
-- M1 74HC153 ×1: 5. hafta: saat kaynağı seçici
-- M1 74HC14 ×1: 5. hafta: RC reset / buton debounce / 555 kare dalgası
-- M1 74HC74 ×1: 5. hafta: BRK ve BUSACK flip-flop'ları (BRK_L = 0, BUSACK = 0)
-- M1 74HC175 ×1: 5. hafta: BRQ ×2 ve VWR ×2 senkronlayıcıları (BRQ_s = 0, VWR_s test tezgâhından)
-- M2 74HC688 ×2: 5. hafta: breakpoint/watchpoint karşılaştırıcıları
+- M1 NE555 ×1: kapsam dışı: yavaş saat kaynağı; MCLK test tezgâhından
+- M1 74HC153 ×1: kapsam dışı: saat kaynağı seçici
+- M1 74HC14 ×1: kapsam dışı: RC reset / buton debounce / 555 kare dalgası
 - AUX 74HC00 ×1: kapsam dışı değil: 138'li WAIT (DOGRULAMA 2.5) ve G1 = CLK düzeltmesiyle NAND(MEMW_L, /VWR_s) ve OR kalktı; 12 NAND'ın 7'si yetiyor, 2. yardımcı 74HC00 gereksiz
 
 ## M1 Saat / reset / durdurma
@@ -115,7 +112,7 @@ Johnson sonraki durum (3.1, 3.6): Q1' = NAND(Q2, NAND(STOP, Q1)) (= !Q2 | STOP&Q
 
 ### U105 · 74HC08
 
-STEPMODE_s & (MICRO|NEXT_L); (…) & !GO. 3. ve 4. kapı BUSACK D için ayrılmış (5. hafta), girişleri GND.
+STEPMODE_s & (MICRO|NEXT_L); (…) & !GO. 3. ve 4. kapı BUSACK D = BRQ_s & Q1 & Q2 (10): istek var ve makine C fazında.
 
 | Bacak | Pin | Net |
 |---:|---|---|
@@ -126,26 +123,26 @@ STEPMODE_s & (MICRO|NEXT_L); (…) & !GO. 3. ve 4. kapı BUSACK D için ayrılm�
 | 5 | `2B` | `/GO` |
 | 6 | `2Y` | `STOP_G` |
 | 7 | `GND` | *GND* (güç) |
-| 8 | `3Y` | — (boş) |
-| 9 | `3A` | `GND` |
-| 10 | `3B` | `GND` |
-| 11 | `4Y` | — (boş) |
-| 12 | `4A` | `GND` |
-| 13 | `4B` | `GND` |
+| 8 | `3Y` | `BRQ_Q1` |
+| 9 | `3A` | `BRQ_s` |
+| 10 | `3B` | `Q1` |
+| 11 | `4Y` | `BUSACK_D` |
+| 12 | `4A` | `BRQ_Q1` |
+| 13 | `4B` | `CLK` |
 | 14 | `VCC` | *VCC* (güç) |
 
 ### U106 · 74HC02
 
-WSTB = NOR(Q1, Q2): A fazında 1. 2. kapı BRK D için ayrılmış (5. hafta); 3, 4 boş. Kullanılmayan girişler GND.
+WSTB = NOR(Q1, Q2): A fazında. 2. kapı BRK D = NOR(/MATCH, /ACCESS): breakpoint adresine bu çevrimde okuma ya da yazma var (10). 3, 4 boş, girişleri GND.
 
 | Bacak | Pin | Net |
 |---:|---|---|
 | 1 | `1Y` | `WSTB` |
 | 2 | `1A` | `Q1` |
 | 3 | `1B` | `CLK` |
-| 4 | `2Y` | — (boş) |
-| 5 | `2A` | `GND` |
-| 6 | `2B` | `GND` |
+| 4 | `2Y` | `BRK_D` |
+| 5 | `2A` | `/MATCH` |
+| 6 | `2B` | `/ACCESS` |
 | 7 | `GND` | *GND* (güç) |
 | 8 | `3A` | `GND` |
 | 9 | `3B` | `GND` |
@@ -203,7 +200,7 @@ WAIT (3.6, DOGRULAMA 2.5): G1 = CLK (= Q2; planda VCC), /G2A = /FPAGE, /G2B = A1
 
 ### U109 · 74HC245
 
-CLK tamponu (3.5): her çıkış ayrı bir yıldız dal (gerçekte 47 Ω seri). Dallar: PC | AR | X | SP+STEP | A+F+IR (aynı dal, 3.5) | LED (+BRK, KCLR 5. hafta) | test noktası. 8. kanal boş: A7 = GND (çıkışı boşta salınmasın diye), B7 bağlı değil.
+CLK tamponu (3.5): her çıkış ayrı bir yıldız dal (gerçekte 47 Ω seri). Dallar: PC | AR | X | SP+STEP | A+F+IR (aynı dal, 3.5) | LED + BRK (+KCLR, M7) | test noktası. 8. kanal boş: A7 = GND (çıkışı boşta salınmasın diye), B7 bağlı değil.
 
 | Bacak | Pin | Net |
 |---:|---|---|
@@ -227,6 +224,50 @@ CLK tamponu (3.5): her çıkış ayrı bir yıldız dal (gerçekte 47 Ω seri). 
 | 18 | `B0` | `CLK_PC` |
 | 19 | `/OE` | `GND` |
 | 20 | `VCC` | *VCC* (güç) |
+
+### U110 · 74HC74
+
+FF1 BRK (10): commit'te (CLK, LED dalı) BRK D örneklenir. BRK_L = 1 → STOP → makine C'de durur; GO bir çevrim çalıştırır ve sonraki commit BRK'yi yeniden örnekler (o çevrimde erişim yoksa 0). FF2 BUSACK (10): MCLK ile, D = BRQ_s & C fazı. BUSACK = 1 → #DS ve #AS kapalı (AB, DB sürülmez). İkisi de /RESET_s ile temizlenir (3.4). /Q çıkışları boş.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/1RD` | `/RESET_s` |
+| 2 | `1D` | `BRK_D` |
+| 3 | `1CP` | `CLK_IO` |
+| 4 | `/1SD` | `VCC` |
+| 5 | `1Q` | `BRK_L` |
+| 6 | `/1Q` | — (boş) |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `/2Q` | — (boş) |
+| 9 | `2Q` | `BUSACK` |
+| 10 | `/2SD` | `VCC` |
+| 11 | `2CP` | `MCLK` |
+| 12 | `2D` | `BUSACK_D` |
+| 13 | `/2RD` | `/RESET_s` |
+| 14 | `VCC` | *VCC* (güç) |
+
+### U111 · 74HC175
+
+/BUSREQ senkronlayıcısı (10): 2 FF, BRQ_s = NOT /BUSREQ iki MCLK gecikmeyle (/Q1). BRQ_s → STOP (U503) ve BUSACK D (U105). /MR = VCC (U107 gibi). FF2, FF3 planda VWR ×2 senkronlayıcısı; VWR_s şimdilik test tezgâhından (M6 ile), girişleri GND.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/MR` | `VCC` |
+| 2 | `Q0` | `BRQ_S1n` |
+| 3 | `/Q0` | — (boş) |
+| 4 | `D0` | `/BUSREQ` |
+| 5 | `D1` | `BRQ_S1n` |
+| 6 | `/Q1` | `BRQ_s` |
+| 7 | `Q1` | — (boş) |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `CP` | `MCLK` |
+| 10 | `Q2` | — (boş) |
+| 11 | `/Q2` | — (boş) |
+| 12 | `D2` | `GND` |
+| 13 | `D3` | `GND` |
+| 14 | `/Q3` | — (boş) |
+| 15 | `Q3` | — (boş) |
+| 16 | `VCC` | *VCC* (güç) |
 
 ## M2 Kontrol ünitesi
 
@@ -490,6 +531,60 @@ Kontrol latch'i 2 (4.2): CP = LCLK (C→D), /MR = /RESET_s (NOP kelimesi). LCLK 
 | 14 | `2A0` | `AB11` |
 | 15 | `/2E` | `/FPAGE` |
 | 16 | `VCC` | *VCC* (güç) |
+
+### U212 · 74HC688
+
+Breakpoint karşılaştırıcısı, alt bayt (10): AB0..7 = BP0..7 ve /BP_EN = 0 ise /MATCH_LO = 0. BP0..15: 16 DIP anahtarı; /BP_EN: breakpoint açma anahtarı (pull-up, açık = kapalı; planda yok, 0000 adresinde istemeden durmasın diye).
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/G` | `/BP_EN` |
+| 2 | `P0` | `AB0` |
+| 3 | `Q0` | `BP0` |
+| 4 | `P1` | `AB1` |
+| 5 | `Q1` | `BP1` |
+| 6 | `P2` | `AB2` |
+| 7 | `Q2` | `BP2` |
+| 8 | `P3` | `AB3` |
+| 9 | `Q3` | `BP3` |
+| 10 | `GND` | *GND* (güç) |
+| 11 | `P4` | `AB4` |
+| 12 | `Q4` | `BP4` |
+| 13 | `P5` | `AB5` |
+| 14 | `Q5` | `BP5` |
+| 15 | `P6` | `AB6` |
+| 16 | `Q6` | `BP6` |
+| 17 | `P7` | `AB7` |
+| 18 | `Q7` | `BP7` |
+| 19 | `/P=Q` | `/MATCH_LO` |
+| 20 | `VCC` | *VCC* (güç) |
+
+### U213 · 74HC688
+
+Breakpoint karşılaştırıcısı, üst bayt, kademeli (10): /G = alt baytın sonucu. /MATCH = 0 ⇔ AB = BP ve breakpoint açık. BRK D = NOR(/MATCH, /ACCESS) (U106).
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/G` | `/MATCH_LO` |
+| 2 | `P0` | `AB8` |
+| 3 | `Q0` | `BP8` |
+| 4 | `P1` | `AB9` |
+| 5 | `Q1` | `BP9` |
+| 6 | `P2` | `AB10` |
+| 7 | `Q2` | `BP10` |
+| 8 | `P3` | `AB11` |
+| 9 | `Q3` | `BP11` |
+| 10 | `GND` | *GND* (güç) |
+| 11 | `P4` | `AB12` |
+| 12 | `Q4` | `BP12` |
+| 13 | `P5` | `AB13` |
+| 14 | `Q5` | `BP13` |
+| 15 | `P6` | `AB14` |
+| 16 | `Q6` | `BP14` |
+| 17 | `P7` | `AB15` |
+| 18 | `Q7` | `BP15` |
+| 19 | `/P=Q` | `/MATCH` |
+| 20 | `VCC` | *VCC* (güç) |
 
 ### U210 · 74HC161
 
@@ -1334,7 +1429,7 @@ SP üst /CE = NAND(SPCNT, MAX/MIN_alt) (5.1); RAM /CE = NAND(A15, /FPAGE) (7.2);
 
 ### U502 · 74HC08
 
-/RD = AND(/MRD, /ARD_RD), /WR = AND(/MWR, /ARD_WR) (2). 3. kapı /ACCESS (breakpoint, 5. hafta), 4. boş.
+/RD = AND(/MRD, /ARD_RD), /WR = AND(/MWR, /ARD_WR) (2). 3. kapı /ACCESS = AND(/MRD, /MEMW): bu çevrim belleği okuyor ya da yazıyor (breakpoint, 10). 4. boş.
 
 | Bacak | Pin | Net |
 |---:|---|---|
@@ -1345,9 +1440,9 @@ SP üst /CE = NAND(SPCNT, MAX/MIN_alt) (5.1); RAM /CE = NAND(A15, /FPAGE) (7.2);
 | 5 | `2B` | `/ARD_WR` |
 | 6 | `2Y` | `/WR` |
 | 7 | `GND` | *GND* (güç) |
-| 8 | `3Y` | — (boş) |
-| 9 | `3A` | `GND` |
-| 10 | `3B` | `GND` |
+| 8 | `3Y` | `/ACCESS` |
+| 9 | `3A` | `/MRD` |
+| 10 | `3B` | `/MEMW` |
 | 11 | `4Y` | — (boş) |
 | 12 | `4A` | `GND` |
 | 13 | `4B` | `GND` |
@@ -1638,14 +1733,29 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 | `DB7` | pull (10k aşağı) | 0 |
 | `/ARD_RD` | pull (10k yukarı) | 1 |
 | `/ARD_WR` | pull (10k yukarı) | 1 |
-| `BRK_L` | sabit (5. hafta, pasif değer) | 0 |
-| `BRQ_s` | sabit (5. hafta, pasif değer) | 0 |
+| `/BUSREQ` | pull (10k yukarı) | 1 |
 | `MANUAL` | sabit (5. hafta, pasif değer) | 0 |
-| `BUSACK` | sabit (5. hafta, pasif değer) | 0 |
 | `/RESET` | test tezgâhı girişi | varsayılan 1 |
 | `GO_BTN` | test tezgâhı girişi | varsayılan 0 |
 | `STEPMODE` | test tezgâhı girişi | varsayılan 0 |
 | `MICRO` | test tezgâhı girişi | varsayılan 0 |
+| `/BP_EN` | test tezgâhı girişi | varsayılan 1 |
+| `BP0` | test tezgâhı girişi | varsayılan 0 |
+| `BP1` | test tezgâhı girişi | varsayılan 0 |
+| `BP2` | test tezgâhı girişi | varsayılan 0 |
+| `BP3` | test tezgâhı girişi | varsayılan 0 |
+| `BP4` | test tezgâhı girişi | varsayılan 0 |
+| `BP5` | test tezgâhı girişi | varsayılan 0 |
+| `BP6` | test tezgâhı girişi | varsayılan 0 |
+| `BP7` | test tezgâhı girişi | varsayılan 0 |
+| `BP8` | test tezgâhı girişi | varsayılan 0 |
+| `BP9` | test tezgâhı girişi | varsayılan 0 |
+| `BP10` | test tezgâhı girişi | varsayılan 0 |
+| `BP11` | test tezgâhı girişi | varsayılan 0 |
+| `BP12` | test tezgâhı girişi | varsayılan 0 |
+| `BP13` | test tezgâhı girişi | varsayılan 0 |
+| `BP14` | test tezgâhı girişi | varsayılan 0 |
+| `BP15` | test tezgâhı girişi | varsayılan 0 |
 | `DIP0` | test tezgâhı girişi | varsayılan 0 |
 | `DIP1` | test tezgâhı girişi | varsayılan 0 |
 | `DIP2` | test tezgâhı girişi | varsayılan 0 |
@@ -1666,10 +1776,10 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 
 ## Notlar
 
-- M1 kapsam dışı (5. hafta): NE555, 74HC153 (kaynak seçici; MCLK doğrudan test tezgâhından), 74HC14 (RC/debounce), 3. 74HC74 (BRK + BUSACK FF'leri; BRK_L = 0, BUSACK = 0), 2. 74HC175 (BRQ ×2, VWR ×2 senkronlayıcıları; BRQ_s = 0, VWR_s test tezgâhından).
-- M2 kapsam dışı (5. hafta): 2× 74HC688 (breakpoint). MANUAL paneli yok: MANUAL = 0 (uROM /OE açık); 24 latch girişindeki 47k pull-down'lar ve DB DIP switch'leri de panelle birlikte 5. hafta.
+- M1 kapsam dışı: NE555, 74HC153 (kaynak seçici; MCLK doğrudan test tezgâhından), 74HC14 (RC/debounce), U111'in VWR ×2 senkronlayıcısı (VWR_s test tezgâhından).
+- M2 kapsam dışı: MANUAL paneli yok: MANUAL = 0 (uROM /OE açık); 24 latch girişindeki 47k pull-down'lar ve DB DIP anahtarları da panelle birlikte.
 - AB: 16× 10k pull-up (boşta FFFF).
 - DB: 8× 10k pull-down (boşta 00).
 - Planda yardımcı 74HC00 ×2. 138'li WAIT çözümüyle (DOGRULAMA 2.5) NAND(MEMW_L, /VWR_s) kapısı kalktı ve Johnson 3 NAND + 1 OR oldu; 12 NAND'ın 7'si kullanılıyor (M1 U103: 4, U501: 3). 2. yardımcı 74HC00 gereksiz, netlist'te yok.
-- /ARD_RD, /ARD_WR: Arduino takılı değilken 10k pull-up (BUSREQ 5. hafta).
+- /ARD_RD, /ARD_WR, /BUSREQ: Arduino takılı değilken 10k pull-up. /BUSREQ açık-drain (Arduino yalnız 0 sürer ya da bırakır).
 - VWR_s gerçekte M1'deki 2. 74HC175'te VWR'den (M6) senkronlanır; burada test tezgâhı doğrudan VWR_s'i sürer (varsayılan 1 = pencere açık, NO-VGA jumper'ı gibi).

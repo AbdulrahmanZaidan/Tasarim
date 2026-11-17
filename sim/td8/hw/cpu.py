@@ -21,12 +21,17 @@ Kontrol kelimesinin uROM çıkışları ASRC0, DSRC0, ..., HALT; 273 latch
 PC0..15, AR0..15 (= sözlükteki PCIN), X0..15, SP0..7, ACC0..7 (A), IR0..7,
 STEP0..3, Z C N V (F), LED0..7.
 
-Kapsam dışı (5. hafta; kodda `# 5. hafta` ile işaretli): NE555, kaynak seçici
-74HC153, RC/74HC14 kısımları (MCLK ve butonlar test tezgâhından temiz sayısal
-giriş), breakpoint (2× 74HC688, BRK), BUSREQ/BUSACK (BUSACK = 0, /ARD_RD =
-/ARD_WR = 1), MANUAL paneli (uROM /OE = 0). Bunların netleri `Board.ties`
-(pasif değer) ya da `Board.pulls` (gerçekte de var olan pull-up'lar) ile
-sabitlenir.
+Hata ayıklama (SISTEM-PLANI 3.3, 10): adımlama (STEPMODE, MICRO, GO), donanım
+breakpoint'i (2× 74HC688 + BRK flip-flop'u: BP0..15 anahtarlarındaki adres okunur ya
+da yazılırsa o çevrimin commit'inden sonra C'de durur; /BP_EN anahtarı) ve
+BUSREQ/BUSACK (Arduino /BUSREQ'i indirir; makine C'de durur, BUSACK = 1 iken AB ve
+DB sürücüleri kapalıdır, Arduino /ARD_RD ve /ARD_WR ile belleğe erişir).
+
+Kapsam dışı (kodda `# kapsam dışı` ile işaretli): NE555, kaynak seçici 74HC153,
+RC/74HC14 kısımları (MCLK ve butonlar test tezgâhından temiz sayısal giriş), VWR
+senkronlayıcısı (VWR_s test tezgâhından; M6 ile), MANUAL paneli (uROM /OE = 0).
+Bunların netleri `Board.ties` (pasif değer) ya da `Board.pulls` (gerçekte de var
+olan pull-up'lar) ile sabitlenir.
 
 Plan bir ayrıntıyı vermediğinde yapılan seçimler her çipin `note` alanında;
 planın yazıldığı gibi çalışmadığı yerler "PLAN DÜZELTMESİ" diye işaretli
@@ -38,7 +43,7 @@ from functools import lru_cache
 
 from .. import alu, isa, microcode
 from .chips import (CY62256, HC00, HC02, HC04, HC08, HC20, HC32, HC74, HC138, HC139, HC161,
-                    HC175, HC191, HC245, HC273, HC377, HC540, SST39SF010)
+                    HC175, HC191, HC245, HC273, HC377, HC540, HC688, SST39SF010)
 
 # ----------------------------------------------------------------------------
 # Net adları
@@ -256,14 +261,17 @@ def m1_clock(mclk_half=125, wait_fix=True):
         _chip(HC08, 'U105', {
             '1A': 'STEPMODE_s', '1B': 'STOP_MN', '1Y': 'STOP_SM',
             '2A': 'STOP_T', '2B': '/GO', '2Y': 'STOP_G',
-            **_unused_gates((3, 4)),   # 5. hafta: BUSACK D = BRQ_s & Q1 & Q2 (2 kapı)
-        }, M, 'STEPMODE_s & (MICRO|NEXT_L); (…) & !GO. 3. ve 4. kapı BUSACK D için '
-              'ayrılmış (5. hafta), girişleri GND.'),
+            '3A': 'BRQ_s', '3B': 'Q1', '3Y': 'BRQ_Q1',
+            '4A': 'BRQ_Q1', '4B': 'CLK', '4Y': 'BUSACK_D',
+        }, M, 'STEPMODE_s & (MICRO|NEXT_L); (…) & !GO. 3. ve 4. kapı BUSACK D = '
+              'BRQ_s & Q1 & Q2 (10): istek var ve makine C fazında.'),
         _chip(HC02, 'U106', {
             '1A': 'Q1', '1B': 'CLK', '1Y': 'WSTB',
-            **_unused_gates((2, 3, 4)),  # 5. hafta: 2. kapı BRK D = NOR(/MATCH, /ACCESS)
-        }, M, 'WSTB = NOR(Q1, Q2): A fazında 1. 2. kapı BRK D için ayrılmış (5. hafta); '
-              '3, 4 boş. Kullanılmayan girişler GND.'),
+            '2A': '/MATCH', '2B': '/ACCESS', '2Y': 'BRK_D',
+            **_unused_gates((3, 4)),
+        }, M, 'WSTB = NOR(Q1, Q2): A fazında. 2. kapı BRK D = NOR(/MATCH, /ACCESS): '
+              'breakpoint adresine bu çevrimde okuma ya da yazma var (10). 3, 4 boş, '
+              'girişleri GND.'),
         _chip(HC175, 'U107', {
             '/MR': 'VCC', 'CP': 'MCLK',
             'D0': 'GO_BTN', 'Q0': 'GO_S1',
@@ -288,18 +296,33 @@ def m1_clock(mclk_half=125, wait_fix=True):
             'B0': 'CLK_PC', 'B1': 'CLK_AR', 'B2': 'CLK_X', 'B3': 'CLK_SP',
             'B4': 'CLK_AFI', 'B5': 'CLK_IO', 'B6': 'CLK_TP',
         }, M, 'CLK tamponu (3.5): her çıkış ayrı bir yıldız dal (gerçekte 47 Ω seri). '
-              'Dallar: PC | AR | X | SP+STEP | A+F+IR (aynı dal, 3.5) | LED (+BRK, KCLR '
-              '5. hafta) | test noktası. 8. kanal boş: A7 = GND (çıkışı boşta '
+              'Dallar: PC | AR | X | SP+STEP | A+F+IR (aynı dal, 3.5) | LED + BRK '
+              '(+KCLR, M7) | test noktası. 8. kanal boş: A7 = GND (çıkışı boşta '
               'salınmasın diye), B7 bağlı değil.'),
+        _chip(HC74, 'U110', {
+            '/1RD': '/RESET_s', '/1SD': 'VCC', '1CP': 'CLK_IO', '1D': 'BRK_D', '1Q': 'BRK_L',
+            '/2RD': '/RESET_s', '/2SD': 'VCC', '2CP': 'MCLK', '2D': 'BUSACK_D', '2Q': 'BUSACK',
+        }, M, 'FF1 BRK (10): commit\'te (CLK, LED dalı) BRK D örneklenir. BRK_L = 1 → STOP → '
+              'makine C\'de durur; GO bir çevrim çalıştırır ve sonraki commit BRK\'yi yeniden '
+              'örnekler (o çevrimde erişim yoksa 0). FF2 BUSACK (10): MCLK ile, D = BRQ_s & C '
+              'fazı. BUSACK = 1 → #DS ve #AS kapalı (AB, DB sürülmez). İkisi de /RESET_s ile '
+              'temizlenir (3.4). /Q çıkışları boş.'),
+        _chip(HC175, 'U111', {
+            '/MR': 'VCC', 'CP': 'MCLK',
+            'D0': '/BUSREQ', 'Q0': 'BRQ_S1n',
+            'D1': 'BRQ_S1n', '/Q1': 'BRQ_s',
+            'D2': 'GND', 'D3': 'GND',      # kapsam dışı: VWR ×2 senkronlayıcısı (M6 ile)
+        }, M, '/BUSREQ senkronlayıcısı (10): 2 FF, BRQ_s = NOT /BUSREQ iki MCLK gecikmeyle '
+              '(/Q1). BRQ_s → STOP (U503) ve BUSACK D (U105). /MR = VCC (U107 gibi). FF2, FF3 '
+              'planda VWR ×2 senkronlayıcısı; VWR_s şimdilik test tezgâhından (M6 ile), '
+              'girişleri GND.'),
     ]
     b = Board(chips=chips,
-              ties={'BRK_L': 0, 'BRQ_s': 0},          # 5. hafta: breakpoint FF'i, BUSREQ senkronlayıcısı
               inputs={'/RESET': 1, 'GO_BTN': 0, 'STEPMODE': 0, 'MICRO': 0},
               clocks={'MCLK': mclk_half})
-    b.notes.append('M1 kapsam dışı (5. hafta): NE555, 74HC153 (kaynak seçici; MCLK doğrudan '
-                   'test tezgâhından), 74HC14 (RC/debounce), 3. 74HC74 (BRK + BUSACK FF\'leri; '
-                   'BRK_L = 0, BUSACK = 0), 2. 74HC175 (BRQ ×2, VWR ×2 senkronlayıcıları; '
-                   'BRQ_s = 0, VWR_s test tezgâhından).')
+    b.notes.append('M1 kapsam dışı: NE555, 74HC153 (kaynak seçici; MCLK doğrudan test '
+                   'tezgâhından), 74HC14 (RC/debounce), U111\'in VWR ×2 senkronlayıcısı '
+                   '(VWR_s test tezgâhından).')
     return b
 
 
@@ -350,6 +373,17 @@ def m2_control(urom=None, bank=0):
         }, M, '1. yarı #AS (4.3): /G = BUSACK, Y0..Y3 → PC/AR/X/SP AB tamponlarının /OE\'si. '
               '2. yarı #MS (7.2): /G = /FPAGE, A = A11, B = GND → Y0 /VRAMSEL, Y1 /IOSEL; '
               'Y2, Y3 boş.'),
+        _chip(HC688, 'U212', {
+            '/G': '/BP_EN', **pins('P', nets('AB', 8)), **pins('Q', nets('BP', 8)),
+            '/P=Q': '/MATCH_LO',
+        }, M, 'Breakpoint karşılaştırıcısı, alt bayt (10): AB0..7 = BP0..7 ve /BP_EN = 0 ise '
+              '/MATCH_LO = 0. BP0..15: 16 DIP anahtarı; /BP_EN: breakpoint açma anahtarı '
+              '(pull-up, açık = kapalı; planda yok, 0000 adresinde istemeden durmasın diye).'),
+        _chip(HC688, 'U213', {
+            '/G': '/MATCH_LO', **pins('P', nets('AB', 8, 8)), **pins('Q', nets('BP', 8, 8)),
+            '/P=Q': '/MATCH',
+        }, M, 'Breakpoint karşılaştırıcısı, üst bayt, kademeli (10): /G = alt baytın sonucu. '
+              '/MATCH = 0 ⇔ AB = BP ve breakpoint açık. BRK D = NOR(/MATCH, /ACCESS) (U106).'),
         _chip(HC161, 'U210', {
             '/MR': '/RESET_s', 'CP': 'CLK_SP', 'CEP': 'VCC', 'CET': 'VCC', '/PE': '/NEXT',
             **pins('D', ['GND'] * 4), **pins('Q', nets('STEP', 4)),
@@ -363,12 +397,11 @@ def m2_control(urom=None, bank=0):
               'SPCNT → SP /CE (alt), MEMW → /MEMW. 6. kapı boş (girişi GND).'),
     ]
     b = Board(chips=chips,
-              ties={'MANUAL': 0,     # 5. hafta: MANUAL paneli (uROM /OE açık)
-                    'BUSACK': 0},    # 5. hafta: BUSACK FF'i (M1'in 3. 74HC74'ü)
+              ties={'MANUAL': 0},    # kapsam dışı: MANUAL paneli (uROM /OE açık)
+              inputs={'/BP_EN': 1, **{f'BP{i}': 0 for i in range(16)}},
               memories={f'UROM{i}': chips[i] for i in range(3)})
-    b.notes.append('M2 kapsam dışı (5. hafta): 2× 74HC688 (breakpoint). MANUAL paneli yok: '
-                   'MANUAL = 0 (uROM /OE açık); 24 latch girişindeki 47k pull-down\'lar ve '
-                   'DB DIP switch\'leri de panelle birlikte 5. hafta.')
+    b.notes.append('M2 kapsam dışı: MANUAL paneli yok: MANUAL = 0 (uROM /OE açık); 24 latch '
+                   'girişindeki 47k pull-down\'lar ve DB DIP anahtarları da panelle birlikte.')
     return b
 
 
@@ -495,9 +528,11 @@ def aux_gates():
         _chip(HC08, 'U502', {
             '1A': '/MRD', '1B': '/ARD_RD', '1Y': '/RD',
             '2A': '/MWR', '2B': '/ARD_WR', '2Y': '/WR',
-            **_unused_gates((3, 4)),   # 5. hafta: 3. kapı /ACCESS = AND(/MRD, /MEMW)
-        }, M, '/RD = AND(/MRD, /ARD_RD), /WR = AND(/MWR, /ARD_WR) (2). 3. kapı /ACCESS '
-              '(breakpoint, 5. hafta), 4. boş.'),
+            '3A': '/MRD', '3B': '/MEMW', '3Y': '/ACCESS',
+            **_unused_gates((4,)),
+        }, M, '/RD = AND(/MRD, /ARD_RD), /WR = AND(/MWR, /ARD_WR) (2). 3. kapı /ACCESS = '
+              'AND(/MRD, /MEMW): bu çevrim belleği okuyor ya da yazıyor (breakpoint, 10). '
+              '4. boş.'),
         _chip(HC32, 'U503', {
             '1A': 'Clo', '1B': 'Chi', '1Y': 'Cnew',
             '2A': '/IOSEL', '2B': '/MEMW', '2Y': '/LED_E',
@@ -507,12 +542,13 @@ def aux_gates():
               'OR(/WR, /VRAMSEL) (7.2; VRAM M6\'da, burada taklit X1); STOP\'un son OR\'u '
               'BRQ_s | (…) (3.3).'),
     ]
-    b = Board(chips=chips, pulls={'/ARD_RD': 1, '/ARD_WR': 1})
+    b = Board(chips=chips, pulls={'/ARD_RD': 1, '/ARD_WR': 1, '/BUSREQ': 1})
     b.notes.append('Planda yardımcı 74HC00 ×2. 138\'li WAIT çözümüyle (DOGRULAMA 2.5) '
                    'NAND(MEMW_L, /VWR_s) kapısı kalktı ve Johnson 3 NAND + 1 OR oldu; '
                    '12 NAND\'ın 7\'si kullanılıyor (M1 U103: 4, U501: 3). 2. yardımcı 74HC00 '
                    'gereksiz, netlist\'te yok.')
-    b.notes.append('/ARD_RD, /ARD_WR: Arduino takılı değilken 10k pull-up (BUSREQ 5. hafta).')
+    b.notes.append('/ARD_RD, /ARD_WR, /BUSREQ: Arduino takılı değilken 10k pull-up. /BUSREQ '
+                   'açık-drain (Arduino yalnız 0 sürer ya da bırakır).')
     return b
 
 

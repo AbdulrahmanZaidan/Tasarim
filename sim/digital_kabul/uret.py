@@ -4,7 +4,7 @@ Her .dig dosyasında modülün entegreleri ve test tablosu birlikte durur. Digit
 dosyayı açıp "Run all tests" (F8) ile tablo satır satır denenir.
 
     cd sim
-    py -3 digital/kabul/uret.py
+    py -3 digital_kabul/uret.py
 
 Tablolar tests/test_hw_digital.py'deki kabul testleriyle (TestCpuModules) aynı.
 """
@@ -12,7 +12,7 @@ Tablolar tests/test_hw_digital.py'deki kabul testleriyle (TestCpuModules) aynı.
 import sys
 from pathlib import Path
 
-SIM = Path(__file__).resolve().parents[2]
+SIM = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SIM))
 
 from td8 import vectors                                  # noqa: E402

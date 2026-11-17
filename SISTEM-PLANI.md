@@ -199,6 +199,8 @@ STOP = BRQ_s | ((HALT_L | BRK_L | (STEPMODE_s & (MICRO | NEXT_L))) & !GO)
 - **GO butonu:** RC + 74HC14 + 74HC175 (sync1, sync2, prev). `GO = sync2 & !prev` tam bir MCLK sürer, böylece tam bir çevrim çalışır.
 - **MICRO anahtarı:** Her mikroadımda ya da yalnız komut sonunda (NEXT) durmayı seçer.
 - **HALT komutu:** Yazılım breakpoint'idir; GO ile devam edilir.
+- **Donanım breakpoint'i (BRK):** 2× 74HC688 AB'yi 16 DIP anahtarıyla (BP0..15) karşılaştırır, `/MATCH` üretir. `/ACCESS = AND(/MRD, /MEMW)` o çevrimin belleği okuduğunu ya da yazdığını söyler. BRK flip-flop'u commit'te `NOR(/MATCH, /ACCESS)`'i örnekler. Makine, o adrese erişen çevrimin commit'inden **sonra** C'de durur: komut getirmede komut IR'dadır ama yürütülmemiştir, yazmada değer belleğe yazılmıştır. GO bir çevrim çalıştırır; sonraki commit BRK'yi yeniden örnekler (erişim yoksa 0). Reset BRK'yi temizler. **Ek (17 Kasım):** 688'lerin ilkinin /G ucuna bir açma anahtarı (`/BP_EN`, pull-up, açık = kapalı); yoksa anahtarlar 0000'dayken makine her açılışta dururdu.
+- **BUSREQ:** /BUSREQ (açık-drain, 10k pull-up) 74HC175'te iki MCLK ile senkronlanır (`BRQ_s`). `BRQ_s` STOP'a girer; makine o anki çevrimi bitirip C'de durur. BUSACK flip-flop'u MCLK ile `BRQ_s & C fazı`'nı örnekler; BUSACK = 1 iken #DS ve #AS kapalıdır, AB ve DB'yi hiçbir CPU çipi sürmez. İstekten BUSACK'a en çok 7 MCLK, bırakmadan BUSACK = 0'a 3 MCLK (simülasyonda ölçüldü). Arduino AB/DB'yi yalnız BUSACK = 1 iken sürer, /ARD_RD ve /ARD_WR ile belleğe erişir.
 
 ### 3.4 Reset
 
@@ -590,7 +592,7 @@ Her adım bir tam çevrimdir. Gösterim: `adres kaynağı / DB kaynağı / hedef
 |---|---|
 | 24 kontrol LED'i + PC/AR/X (16'şar), A, IR, SP LED'leri + faz, STOP, WAIT, HALT, BRK, BUSACK, MARK | Her mikroadımda makinenin durumunu gözle görmek |
 | Manuel panel: MANUAL anahtarı + 24 DIP switch (47k/4.7k) + DB için 8 DIP switch (2.2k) | Mikrokod takılmadan her modülü elle test etmek. Örnek: `DDST=A ALUOP=PASSB FL`, veri 80, GO → A = 80, N = 1. |
-| Breakpoint/watchpoint: 2× 74HC688 kademeli + 16 DIP switch | Belirtilen adres okunduğunda ya da yazıldığında makineyi durdurmak |
+| Breakpoint/watchpoint: 2× 74HC688 kademeli + 16 DIP switch + açma anahtarı (3.3) | Belirtilen adres okunduğunda ya da yazıldığında makineyi durdurmak |
 | RUN/STEP + MICRO + GO | Mikroadım ya da komut bazında adımlamak |
 | HALT komutu, MARK biti | Yazılım breakpoint'i, osiloskop tetiği |
 | Arduino Mega (~58 pin, 470 Ω seri dirençlerle, çip yok) | **İz modu:** MCLK'yı Arduino verir, her commit'te AB, DB ve kontrol kelimesini kaydeder. **Yükleme modu:** BUSREQ → RAM'e yazar → bırakır → SW0 ile reset. |
@@ -612,7 +614,7 @@ sim/td8/isa.py ──► gen_roms.py ──► build/urom0..2, alu_lo/hi, vga_ti
 
 C kaynağı ──► tdcc (Python C derleyicisi, `sim/tdcc/`) ──► assembly ──► asm.py
 
-isa.py + ROM imajları ──► td8/hw (çip seviyesi netlist, 59 entegre) ──► sıfır fark testi, bağlantı tablosu, Digital .dig
+isa.py + ROM imajları ──► td8/hw (çip seviyesi netlist, 63 entegre) ──► sıfır fark testi, bağlantı tablosu, Digital .dig
 ```
 
 ### 11.2 C alt kümesi

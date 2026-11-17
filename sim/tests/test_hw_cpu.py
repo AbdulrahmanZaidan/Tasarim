@@ -8,15 +8,19 @@ K2 kilometre taşının yazılım tarafı: bütün CPU, gecikmeli simülatörde,
 
 Sınıflar: 1 sıfır fark (merhaba, komut_testi, __mul16/__divmod16; typ ve max), 2 fibonacci,
 3 açılış/reset, 4 SP sınırları, 5 HALT/GO ve adımlama, 6 WAIT, 7 ihlaller, 8 entegre sayımı,
-ayrıca 1.5 / 2 MHz denemesi ve klavye okuma yolu.
+9 breakpoint ve BUSREQ (Arduino'nun bus'ı alması, RAM'e yükleme), ayrıca 1.5 / 2 MHz denemesi
+ve klavye okuma yolu.
 """
 
 import os
 import unittest
+from collections import Counter
 from functools import lru_cache
 from pathlib import Path
 
 from td8 import asm, isa
+from td8.bus import Bus
+from td8.emu_micro import MicroEmu
 from td8.hw import cpu, wiring
 from td8.hw.harness import (HwCpu, classify_violations, compare, emu_like, emu_state,
                             emu_vram_writes, handover_summary, run_and_compare)
@@ -359,6 +363,208 @@ class TestHaltGoStep(HwCase):
 
 
 # ============================================================================
+# 9. Hata ayıklama: breakpoint ve BUSREQ (SISTEM-PLANI 3.3, 10; arduino/README.md)
+# ============================================================================
+WATCH = """
+; watchpoint denemesi: 8100'e 3 yazma ve 1 okuma
+        .org $0000
+        LDA #$11
+        STA $8100
+        LDA #$22
+        STA $8100
+        LDA $8100
+        ADD #$01
+        STA $8100
+        HALT
+"""
+
+BOOT = """
+; küçük açılış ROM'u: SW0 = 1 ise 8000'deki (Arduino'nun yüklediği) programa atlar
+        .org $0000
+KSTAT   = $F801
+        LDA KSTAT
+        AND #$01
+        BEQ dur
+        JMP $8000
+dur:    HALT
+"""
+
+LOADED = """
+; Arduino'nun RAM'e yüklediği program: 10 + 9 + ... + 1 = 55 (37h), sonuç LED'lere
+        .org $8000
+TOPLAM  = $9000
+SAYAC   = $9001
+        LDA #0
+        STA TOPLAM
+        LDA #10
+        STA SAYAC
+dongu:  LDA TOPLAM
+        ADD SAYAC
+        STA TOPLAM
+        LDA SAYAC
+        SUB #1
+        STA SAYAC
+        BNE dongu
+        LDA TOPLAM
+        STA $F800
+        HALT
+"""
+
+
+def accesses(trace, addr):
+    """İzde addr'e okuma (DSRC = MEM) ya da yazma (MEMW) yapılan çevrimlerin indeksleri."""
+    out = []
+    for i, ab, _, cw in trace:
+        rd = (cw >> isa.DSRC_SHIFT) & 7 == isa.DSRC['MEM']
+        if ab == addr and (rd or cw & isa.MEMW):
+            out.append(i)
+    return out
+
+
+def emu_from(image, ram, vram, dip, max_cycles):
+    """Verilen RAM/VRAM içeriğiyle başlayan MicroEmu (reset sonrası karşılaştırma için)."""
+    bus = Bus()
+    bus.load(bytes(image[:0x8000]))
+    bus.mem[0x8000:0xF000] = ram
+    bus.vram[:] = vram
+    bus.dip = dip
+    emu = MicroEmu(bus, cpu.default_urom(), cpu.default_alu())
+    emu.trace = []
+    emu.run(max_cycles)
+    return emu
+
+
+class TestBreakpoint(HwCase):
+    def test_fetch_breakpoint_stops_at_each_access(self):
+        """merhaba: döngüdeki bir ROM adresi. Her erişimin commit'inden sonra C'de durur,
+        GO ile devam eder; durma sayısı = emülatördeki erişim sayısı, sonunda sıfır fark."""
+        prog = program('merhaba')
+        emu = zero_diff_run('merhaba', 'typ')[1]
+        cnt = Counter(ab for _, ab, _, cw in emu.trace
+                      if (cw >> isa.DSRC_SHIFT) & 7 == isa.DSRC['MEM'] or cw & isa.MEMW)
+        bp = next(a for a, c in sorted(cnt.items()) if 3 <= c <= 20 and a < 0x8000)
+        hits = accesses(emu.trace, bp)
+        # kapalıyken (/BP_EN = 1) aynı adres durdurmaz
+        off = HwCpu(prog.image)
+        off.set_breakpoint(bp)
+        off.set_breakpoint(None)
+        off.run_to_stop(5000)
+        self.assertTrue(off.halted)
+        self.assertEqual(len(off.trace), len(emu.trace))
+        # açık
+        hw = HwCpu(prog.image)
+        hw.set_breakpoint(bp)
+        hw.run_to_stop(5000)
+        stops = []
+        while not hw.halted:
+            self.assertEqual(hw.phase(), 'C')
+            self.assertEqual(hw.stopped_by(), {'BRK'})
+            stops.append(len(hw.trace) - 1)               # son commit = erişim çevrimi
+            self.assertEqual(hw.trace[-1][1], bp)
+            hw.go(max_cycles=6000)
+            self.assertLess(len(stops), 50)
+        self.assertEqual(stops, hits)
+        self.assertZeroDiff(compare(hw, emu), 'breakpoint')
+        self.assertEqual(classify_violations(hw)['diger'], [])
+
+    def test_watchpoint_on_ram(self):
+        """8100'e her yazma ve okumada durur; durduğunda yazma commit'lenmiş olur."""
+        prog = asm.assemble(WATCH)
+        hw = HwCpu(prog.image)
+        hw.set_breakpoint(0x8100)
+        seen = []
+        hw.run_to_stop(200)
+        while not hw.halted:
+            cw = hw.trace[-1][3]
+            seen.append(('W' if cw & isa.MEMW else 'R', hw.ram()[0x100]))
+            hw.go(max_cycles=200)
+        self.assertEqual(seen, [('W', 0x11), ('W', 0x22), ('R', 0x22), ('W', 0x23)])
+        emu = emu_like(hw, prog.image, 200)
+        self.assertZeroDiff(compare(hw, emu), 'watchpoint')
+
+    def test_reset_clears_brk(self):
+        prog = asm.assemble(WATCH)
+        hw = HwCpu(prog.image)
+        hw.set_breakpoint(0x8100)
+        hw.run_to_stop(200)
+        self.assertEqual(hw.sim.get('BRK_L'), 1)
+        hw.set_breakpoint(None)
+        hw.reset()
+        self.assertEqual(hw.sim.get('BRK_L'), 0)
+        mark = hw.reset_marks[-1]
+        hw.run(200)
+        self.assertTrue(hw.halted)
+        self.assertEqual(len(hw.trace) - mark, len(emu_like(hw, prog.image, 200).trace))
+
+
+class TestBusRequest(HwCase):
+    BUS_NETS = [f'AB{i}' for i in range(16)] + [f'DB{i}' for i in range(8)]
+
+    def assertBusReleased(self, hw):
+        for net in self.BUS_NETS:
+            busy = [ref for ref, v in hw.sim.drivers_of(net) if v is not None]
+            self.assertEqual(busy, [], f'{net}: BUSACK = 1 iken süren çip')
+
+    def test_busreq_while_running(self):
+        """merhaba çalışırken, dört farklı fazda /BUSREQ: makine C'de durur, BUSACK = 1, AB ve
+        DB'yi hiçbir çip sürmez; Arduino ROM okur, RAM'e yazar ve geri okur; bırakınca program
+        kaldığı yerden devam eder ve emülatörle sıfır fark verir."""
+        prog = program('merhaba')
+        for k in range(4):
+            hw = HwCpu(prog.image)
+            hw.power_on()
+            hw.sim.run_for(150 * hw.cycle_ns + k * 2 * hw.half + 40)
+            n0 = hw.n
+            wait = hw.bus_request()
+            self.assertLessEqual(wait, 7, f'k={k}')         # 2 senkron + en çok 4 faz + 1
+            self.assertEqual((hw.phase(), hw.stopped_by()), ('C', {'BUSREQ'}))
+            self.assertBusReleased(hw)
+            self.assertEqual(hw.ard_read(0x0000), prog.image[0])
+            self.assertEqual(hw.ard_read(0x0123), prog.image[0x123])
+            hw.ard_write(0xE000, 0x5A)
+            hw.ard_write(0xE001, 0xA5)
+            self.assertEqual((hw.ard_read(0xE000), hw.ard_read(0xE001)), (0x5A, 0xA5))
+            n_hold = hw.n
+            hw.sim.run_for(20 * hw.cycle_ns)
+            self.assertEqual(hw.n, n_hold, 'bus Arduino\'dayken commit oldu')
+            self.assertLessEqual(hw.n - n0, 2)               # B'de gelen istek: 2 commit
+            self.assertLessEqual(hw.bus_release(), 4)
+            hw.run(5000)
+            emu = emu_like(hw, prog.image, 5000)
+            emu.bus.mem[0xE000:0xE002] = b'\x5a\xa5'        # programın kullanmadığı hücreler
+            self.assertZeroDiff(compare(hw, emu), f'BUSREQ (k={k})')
+            self.assertEqual(classify_violations(hw)['diger'], [], f'k={k}')
+
+    def test_load_program_and_boot_from_ram(self):
+        """Yükleme modu (SISTEM-PLANI 10): makine dururken Arduino bus'ı alır, programı
+        8000'e yazıp doğrular, bırakır; SW0 = 1 ile reset → açılış ROM'u 8000'e atlar ve
+        yüklenen program çalışır (sonuç LED'lerde 37h), emülatörle sıfır fark."""
+        boot = asm.assemble(BOOT)
+        loaded = asm.assemble(LOADED)
+        code = bytes(loaded.image[0x8000:0x8000 + sum(loaded.used[0x8000:0x9000])])
+        hw = HwCpu(boot.image, dip=1)
+        hw.run(200)                                   # RAM boş: 8000'de 00 = HALT
+        self.assertTrue(hw.halted)
+        self.assertEqual(hw.state()['pc'], 0x8001)
+        hw.bus_request()
+        for i, b in enumerate(code):
+            hw.ard_write(0x8000 + i, b)
+        self.assertEqual(bytes(hw.ard_read(0x8000 + i) for i in range(len(code))), code)
+        hw.bus_release()
+        hw.reset()
+        mark = hw.reset_marks[-1]
+        ram, vram = hw.ram(), hw.vram()
+        hw.run(2000)
+        self.assertTrue(hw.halted)
+        self.assertEqual(hw.leds(), 0x37)
+        self.assertEqual(hw.ram()[0x1000], 0x37)
+        emu = emu_from(boot.image, ram, vram, 1, 2000)
+        self.assertEqual(emu.bus.leds, 0x37)
+        self.assertZeroDiff(compare(hw, emu, trace_from=mark), 'yükleme + açılış')
+        self.assertEqual(classify_violations(hw)['diger'], [])
+
+
+# ============================================================================
 # 6. WAIT (VRAM penceresi)
 # ============================================================================
 class TestWait(HwCase):
@@ -446,10 +652,9 @@ class TestNetlist(HwCase):
         self.assertEqual([r for r in rows if r[5] != 0], [])  # açıklanmamış fark yok
         counts = wiring.chip_counts(board)
         self.assertEqual({m: sum(c.values()) for m, c in counts.items()},
-                         {'M1': 9, 'M2': 11, 'M3': 22, 'M4': 8, 'AUX': 3, 'M5': 6, 'toplam': 59})
-        # kurulmayanlar: M1'de 5 (NE555, 153, 14, BRK/BUSACK 74, BRQ/VWR 175), M2'de 2× 688,
-        # AUX'ta gereksiz kalan 2. 74HC00
-        self.assertEqual(sum(n for items in wiring.NOT_BUILT.values() for _, n, _ in items), 8)
+                         {'M1': 11, 'M2': 13, 'M3': 22, 'M4': 8, 'AUX': 3, 'M5': 6, 'toplam': 63})
+        # kurulmayanlar: M1'de 3 (NE555, 153, 14), AUX'ta gereksiz kalan 2. 74HC00
+        self.assertEqual(sum(n for items in wiring.NOT_BUILT.values() for _, n, _ in items), 4)
         for m, plan in wiring.PLAN_COUNTS.items():          # plan sayısını aşan parça yok
             for part, n in counts[m].items():
                 self.assertLessEqual(n, plan.get(part, 0), f'{m} {part}')

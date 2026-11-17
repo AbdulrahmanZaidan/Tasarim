@@ -13,6 +13,7 @@ denetler. Ayrıca Sim'in çıkışları Python'da bağımsız bir beklentiyle ka
 Digital bulunamazsa (TD8_DIGITAL_HOME ya da <depo>/../araclar) Digital'i çağıran testler atlanır.
 """
 
+from collections import Counter
 import os
 import random
 import shutil
@@ -883,10 +884,13 @@ def m1_board():
                                 P('STEPMODE', 'STEPMODE'), P('MICRO', 'MICRO'),
                                 P('NEXT_L', 'NEXT_L'), P('HALT_L', 'HALT_L'),
                                 P('FPAGE_n', '/FPAGE', 1), P('AB11', 'AB11'),
-                                P('MEMW_n', '/MEMW', 1), P('VWR_s', 'VWR_s', 1)],
+                                P('MEMW_n', '/MEMW', 1), P('VWR_s', 'VWR_s', 1),
+                                P('MATCH_n', '/MATCH', 1), P('ACCESS_n', '/ACCESS', 1),
+                                P('BUSREQ_n', '/BUSREQ', 1)],
                         outputs=[P('Q1', 'Q1'), P('CLK', 'CLK'), P('LCLK', 'LCLK'),
                                  P('WSTB', 'WSTB'), P('STOP', 'STOP'), P('GO_n', '/GO'),
-                                 P('RESET_s_n', '/RESET_s'), P('CLK_SP', 'CLK_SP')],
+                                 P('RESET_s_n', '/RESET_s'), P('CLK_SP', 'CLK_SP'),
+                                 P('BRK_L', 'BRK_L'), P('BUSACK', 'BUSACK')],
                         clock='MCLK', title='M1 saat/reset/STOP/WAIT + STOP OR\'u (U503)')
 
 
@@ -913,6 +917,17 @@ def m1_script():
     put({'FPAGE_n': 0, 'AB11': 0, 'MEMW_n': 0, 'VWR_s': 0}, 12)   # VRAM yazması, pencere kapalı
     marks['window'] = len(steps)
     put({'VWR_s': 1}, 6)
+    marks['brk'] = len(steps)                            # breakpoint adresine erişim: 1 çevrim
+    put({'FPAGE_n': 1, 'MEMW_n': 1, 'MATCH_n': 0, 'ACCESS_n': 0}, 4)
+    marks['brk_held'] = len(steps)
+    put({'MATCH_n': 1, 'ACCESS_n': 1}, 10)               # BRK tutuyor: C'de durur
+    marks['brk_go'] = len(steps)
+    put({'GO_BTN': 1}, 3)                                # bir çevrim; commit BRK'yi 0 örnekler
+    put({'GO_BTN': 0}, 12)
+    marks['busreq'] = len(steps)
+    put({'BUSREQ_n': 0}, 14)                             # Arduino bus'ı ister
+    marks['busrel'] = len(steps)
+    put({'BUSREQ_n': 1}, 10)
     marks['stepmode'] = len(steps)
     put({'FPAGE_n': 1, 'MEMW_n': 1, 'STEPMODE': 1, 'MICRO': 1}, 10)
     marks['go'] = len(steps)
@@ -1014,6 +1029,23 @@ class TestCpuModules(unittest.TestCase):
         # WAIT D'de tutar, pencere açılınca A'ya geçer
         self.assertEqual(set(ph[mk['wait'] + 4:mk['window']]), {'D'}, ph[mk['wait']:mk['window']])
         self.assertEqual(ph[mk['window']], 'A')          # VWR_s = 1 olduğu kenarda D → A
+        # breakpoint: erişimli çevrimin commit'i BRK'yi kurar, makine C'de durur; GO bir
+        # çevrim çalıştırır, o commit BRK'yi temizler ve makine serbest koşar
+        brk = [r['BRK_L'] for r in rows]
+        self.assertEqual(brk[mk['brk'] - 1], 0)
+        self.assertEqual(set(brk[mk['brk_held']:mk['brk_go']]), {1})
+        self.assertEqual(set(ph[mk['brk_held'] + 1:mk['brk_go']]), {'C'})
+        self.assertGreaterEqual(len([i for i in clk_up if mk['brk_go'] <= i < mk['busreq']]), 2)
+        self.assertEqual(brk[mk['busreq'] - 1], 0)
+        # BUSREQ: en çok 7 MCLK'de BUSACK = 1 ve C'de durma; bırakınca en çok 4 MCLK'de BUSACK = 0
+        ack = [r['BUSACK'] for r in rows]
+        first = ack.index(1, mk['busreq'])
+        self.assertLess(first - mk['busreq'], 7, ack[mk['busreq']:mk['busrel']])
+        self.assertEqual(set(ack[first:mk['busrel']]), {1})
+        self.assertEqual(set(ph[first:mk['busrel']]), {'C'})
+        self.assertEqual(set(r['STOP'] for r in rows[first:mk['busrel']]), {1})
+        self.assertLessEqual(ack.index(0, mk['busrel']) - mk['busrel'], 4)
+        self.assertGreaterEqual(len([i for i in clk_up if mk['busrel'] <= i < mk['stepmode']]), 1)
         # GO: tam bir çevrim (bir CLK yükselişi) sonra yine C'de
         go_ups = [i for i in clk_up if mk['go'] <= i < mk['reset2']]
         self.assertEqual(len(go_ups), 1, ph[mk['go']:mk['reset2']])
@@ -1084,6 +1116,34 @@ class TestCpuK2(unittest.TestCase):
         """Digital'in açılış yayılımı koşudan koşuya değişir; 10 koşunun hepsi sıfır fark."""
         for _ in range(10):
             self.check('fibonacci', K2_PROGRAMS['fibonacci'])
+
+    def test_breakpoint_and_busreq(self):
+        """td8.dig'de hata ayıklama: (1) BP anahtarları + BP_EN_n = 0 → ilk erişimin commit'inden
+        sonra durur, iz o çevrimde biter; (2) /BUSREQ 40 MCLK tutulur → makine durup devam eder,
+        iz yine MicroEmu'yla sıfır fark; (3) /BUSREQ bırakılmazsa iz kesilir."""
+        d = tmpdir(self)
+        prog = assemble('merhaba')
+        n = K2_PROGRAMS['merhaba']
+        dc.export_cpu(d, prog.image, 'merhaba', modules=False)
+        emu = dc.emu_reference(prog.image, n + 100)
+        acc = Counter(ab for _, ab, _, cw in emu.trace
+                      if (cw >> 2) & 7 == 1 or cw & (1 << 14))           # DSRC = MEM ya da MEMW
+        bp = next(a for a, c in sorted(acc.items()) if 3 <= c <= 20 and a < 0x8000)
+        first = next(i for i, ab, _, cw in emu.trace
+                     if ab == bp and ((cw >> 2) & 7 == 1 or cw & (1 << 14)))
+        run = dc.digital_trace(d / 'td8.dig', n, setup=SETUP,
+                               sets=[('BP', bp, 0), ('BP_EN_n', 0, 0)])
+        self.assertEqual(len(run.trace), first + 1, f'BP {bp:04X}')
+        self.assertIsNone(vectors.compare_traces(emu.trace[:first + 1], run.trace)[0])
+        m = dc.RESET_MCLK + 4 * 200
+        run = dc.digital_trace(d / 'td8.dig', n + 100, setup=SETUP, extra_mclk=200,
+                               sets=[('BUSREQ_n', 0, m), ('BUSREQ_n', 1, m + 40)])
+        ref = dc.emu_reference(prog.image, n + 100, run)
+        self.assertEqual(dc.compare_run(run, ref), [])
+        self.assertEqual(len(run.trace), n)
+        run = dc.digital_trace(d / 'td8.dig', n + 100, setup=SETUP, sets=[('BUSREQ_n', 0, m)])
+        self.assertLessEqual(abs(len(run.trace) - 200), 2)
+        self.assertIsNone(vectors.compare_traces(emu.trace[:len(run.trace)], run.trace)[0])
 
     def test_broken_netlist_is_caught(self):
         """Bozuk netlist (ALU-H'nin A8/A9'u yer değiştirmiş): iz farkı bulunmalı."""

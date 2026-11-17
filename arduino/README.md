@@ -6,6 +6,13 @@
 > **taslaktır**; kart kablolanınca kesinleşecek. Pin değişirse önce sketch'teki tablo, sonra bu
 > belge değişir.
 
+> **Makine tarafı (17 Kasım):** Yükleme modunun beklediği donanım çip seviyesindeki netlist'e girdi:
+> /BUSREQ senkronlayıcısı (74HC175), BUSACK flip-flop'u (74HC74) ve BUSACK = 1 iken AB/DB
+> sürücülerinin kapanması. Simülasyonda bu belgedeki adımlarla sınandı: /BUSREQ → BUSACK (en çok
+> 7 MCLK) → AB/DB'yi sür, /ARD_WR ile yaz, /ARD_RD ile geri oku → pinleri bırak → /BUSREQ'i bırak →
+> SW0 = 1 ile reset → program 8000'den çalışıyor (`sim/tests/test_hw_cpu.py`, `TestBusRequest`).
+> Sketch'in kendisi yine donanımda denenmedi.
+
 Plan: SISTEM-PLANI bölüm 10 (M8), 3.1–3.4, 4.2, 16 (kabul ölçütü 3);
 `tasarim-taslaklari/ISA-v0-sentez.md` 4.10 ve 6.5.
 

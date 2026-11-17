@@ -6,7 +6,7 @@ Bu klasör devre simülasyonunun yazılım tarafıdır. Buradaki araçlar:
 2. **Assembler:** TD-8 programlarını çevirir.
 3. **İki emülatör:** Programı çalıştırır ve devrenin vermesi gereken doğru sonucu söyler. Digital'deki devre ya da breadboard ondan farklı davranırsa hata bulunmuş olur.
 4. **Test vektörleri:** Digital'in test bileşenine yapıştırılır ya da Proteus/Arduino kaydıyla karşılaştırılır.
-5. **Çip seviyesi devre (`td8/hw/`):** İşlemcinin 59 entegresi pin pin bağlı ve gecikmeli olarak simüle ediliyor; emülatörle çevrim çevrim sıfır fark veriyor. Aynı bağlantı listesinden Digital dosyaları ve Proteus/breadboard için bağlantı tablosu üretilir.
+5. **Çip seviyesi devre (`td8/hw/`):** İşlemcinin 63 entegresi pin pin bağlı ve gecikmeli olarak simüle ediliyor; emülatörle çevrim çevrim sıfır fark veriyor. Aynı bağlantı listesinden Digital dosyaları ve Proteus/breadboard için bağlantı tablosu üretilir.
 6. **C derleyicisi (`tdcc/`):** C alt kümesini TD-8 assembly'sine çevirir.
 7. **Snake (`examples/snake.c`) ve `play.py`:** Final demosunun oyunu; emülatörde klavyeyle oynanır.
 8. **Arduino aracı (`ardu_cli.py`, `../arduino/`):** Breadboard'daki makinenin izini alıp emülatörle karşılaştırır, RAM'e program yükler. Donanımda henüz denenmedi.
@@ -58,7 +58,7 @@ py play.py examples/snake.c --demo              hazır tuş senaryosunu oynat (~
 py ardu_cli.py trace examples/merhaba.asm --fake            Arduino aracını sahte cihazla dene
 py ardu_cli.py trace examples/merhaba.asm --port COM5       gerçek kart: izi al, emülatörle karşılaştır (pyserial gerekir)
 py ardu_cli.py load PROGRAM.asm --port COM5                 programı RAM'e 8000'den yükle ve doğrula
-py -m unittest discover -s tests -t .           tüm testler (298 test, ~3 dk)
+py -m unittest discover -s tests -t .           tüm testler (304 test, ~5 dk)
 ```
 
 Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODING=utf-8` yazın.
@@ -113,15 +113,18 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
   - `fibonacci.asm` ve `asal.asm` beklenen ekranı üretiyor (168 asal).
 - **Çip seviyesi devre (`td8/hw/`):**
   - Her entegre modeli datasheet doğruluk tablosuna uyuyor (59 test).
-  - 59 entegrelik işlemci, emülatörle çevrim çevrim aynı adres yolu, veri yolu ve kontrol kelimesini veriyor; sonunda registerlar, RAM, ekran belleği ve LED'ler de aynı. Programlar: `merhaba`, `komut_testi` (88 opcode), çarpma/bölme, `fibonacci` (33.170 çevrim), stack sınırları, `klavye`. Tipik ve en kötü gecikmelerde.
+  - 63 entegrelik işlemci, emülatörle çevrim çevrim aynı adres yolu, veri yolu ve kontrol kelimesini veriyor; sonunda registerlar, RAM, ekran belleği ve LED'ler de aynı. Programlar: `merhaba`, `komut_testi` (88 opcode), çarpma/bölme, `fibonacci` (33.170 çevrim), stack sınırları, `klavye`. Tipik ve en kötü gecikmelerde.
   - Rastgele açılış durumundan reset ile toparlanıyor; çalışırken reset her fazda doğru.
   - HALT/GO, mikroadım ve komut adımlama, VRAM beklemesi (WAIT) doğru.
+  - Donanım breakpoint'i: komut getirmede ve RAM okuma/yazmada, adrese her erişimden sonra duruyor; GO ile devam edince emülatörle sıfır fark. Kapalıyken durmuyor, reset temizliyor.
+  - BUSREQ: dört farklı fazda istek, BUSACK en çok 7 MCLK'de; bu sırada AB ve DB'yi hiçbir çip sürmüyor; Arduino ROM okuyor, RAM'e yazıp okuyor; bırakınca program sıfır farkla devam ediyor. Yükleme modu baştan sona: program RAM'e yazılıyor, SW0 = 1 ile reset sonrası 8000'den çalışıyor.
   - Bus çakışması, boş giriş, kurulum/tutma ihlali yok (bilinen kısa devir-teslim örtüşmeleri ayrı sayılıyor).
   - Entegre sayısı modül modül plandaki listeyi aşmıyor.
 - **Digital (`tests/test_hw_digital.py`; Digital kurulu değilse atlanır):**
   - Dışa aktarılan devreler Digital'de bizim simülatörle aynı sonucu veriyor (23 çeşit entegrenin hepsi).
   - Planın kabul ölçütleri (12.3): ALU 10.000 vektör, mikrokod 1.000 vektör, kod çözücüler tam tablo, adres çözme sınır adresleri.
   - Bütün işlemci Digital'de emülatörle çevrim çevrim sıfır fark: `merhaba`, `komut_testi`, `fibonacci`.
+  - Breakpoint ve BUSREQ Digital'de de: M1 modülünde ve bütün işlemcide (breakpoint'te durma, BUSREQ ile durup devam).
 - **C derleyicisi (`tdcc`):**
   - 200 rastgele C programı (~4.400 ifade) emülatörde ve bağımsız bir Python hesaplayıcıda aynı sonucu veriyor.
   - Kontrol akışı, fonksiyonlar, işaretçiler, diziler, switch, başlangıç değerleri, `const` tablolar, `volatile` erişimleri.
@@ -149,13 +152,14 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
 
 | Dosya | İçerik |
 |---|---|
-| `digital/td8.dig` | Bütün işlemci (59 entegre + VGA/klavye yerine 2 taklit) |
+| `digital/td8.dig` | Bütün işlemci (63 entegre + VGA/klavye yerine 2 taklit) |
 | `digital/m1_saat.dig` … `m5_bellek.dig`, `aux_kapilar.dig` | Modüller tek tek; modül sınırındaki sinyaller giriş/çıkış |
 | `digital/TD8_*.dig` | Flash ve SRAM alt devreleri. ROM içerikleri dosyanın içine gömülü, ayrıca yükleme gerekmez |
 | `digital/ornek_*.dig` | Dışa aktarıcının denendiği küçük devreler |
 | `digital/arac/TD8Adim.java` | Digital'de saati adım adım çalıştırıp sinyalleri döken yardımcı |
+| `digital_kabul/` | Kabul testleri: her dosyada modülün entegreleri ve test tablosu birlikte; Digital'de açıp test düğmesiyle denenir. `digital/` dışında durur, çünkü Digital açılan dosyanın klasörünü alt klasörleriyle tarar ve aynı adlı alt devreler karışır |
 
-- **Açmak:** Digital'de `digital/td8.dig`'i açın, simülasyonu başlatın. Varsayılan program `merhaba.asm`. Başka program için `py cli.py hw digital --program examples/X.asm`. Arayüzde açma adımları henüz elle denenmedi; komut satırından yükleme ve çalıştırma doğrulandı.
+- **Açmak:** Digital'de `digital/td8.dig`'i açın, simülasyonu başlatın. Varsayılan program `merhaba.asm`. Başka program için `py cli.py hw digital --program examples/X.asm`. Dosyaların arayüzde açıldığı görüldü; testler komut satırından çalıştırılıyor. Breakpoint için `BP` girişine adresi verip `BP_EN_n`'i 0 yapın; `BUSREQ_n` = 0 makineyi durdurur (BUSACK çıkışı 1 olur).
 - **Mikrokod, ALU tablosu ya da bağlantı listesi değişince** `py cli.py hw digital` ile dosyaları yeniden üretin; iki test dosyaların güncel olduğunu denetler.
 - **Digital'in doğruladığı:** işlev. Digital gecikmeleri modellemez; zamanlama `py cli.py hw run ... --corner max` ile bizim simülatörde denetlenir.
 - **Kendi çizdiğiniz devreyi test etmek için:** test bileşenine `py cli.py vectors ...` çıktısını yapıştırın. Giriş ve çıkış etiketleri vektörün ilk satırındaki adlarla **aynı** olmalı (ALU için `OP A B Cin Zin R Z C N V`; kontrol ünitesi için `STEP IR Z C N V CW0 CW1 CW2`).
@@ -171,7 +175,7 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
 
 | Ne zaman | İş |
 |---|---|
-| Simülasyon 5. hafta | Breakpoint ve BUSREQ mantığını netlist'e eklemek |
+| Simülasyon 5. hafta | MANUAL paneli (uROM /OE, latch girişlerinde anahtarlar) ve saat kaynağı seçici (74HC153) |
 | Simülasyon 5–7. hafta | VGA (M6) ve PS/2 (M7) netlist'i; taklitlerin yerine gerçek modüller |
 | Simülasyon 7. hafta | Gerçek font: `font8x8_basic.h` (kamu malı) → `py cli.py roms --font ...` |
 | Kart kurulunca | Arduino yazılımını donanımda denemek; pin tablosunu kesinleştirmek (`../arduino/README.md`) |
