@@ -354,11 +354,19 @@ figcaption { font-size: .8rem; color: var(--muted); }
     <section>
       <h2>Digital'e dışa aktarım</h2>
       <p><code>sim/td8/hw/digital.py</code> bağlantı listesini Digital'in <code>.dig</code> dosyasına çeviriyor. Her entegre Digital'in kendi 74xx kütüphanesindeki bacaklı çip; her bacakta sinyal adı yazıyor.</p>
+      <figure>
+        <div class="img"><img src="img/hafta4-m2-digital.png" alt="Kontrol ünitesi M2, Digital'de: üstte 3 mikrokod ROM'u (U201–U203, SST39SF010) ve 3 kontrol latch'i (U204–U206, 74HC273); altta kod çözücüler (U207, U208 74HC138; U209 74HC139), adım sayacı (U210 74HC161) ve kutup düzeltme invertörü (U211 74HC04). Her bacakta sinyal adı var." width="2000" height="1096" loading="lazy"></div>
+        <figcaption>Kontrol ünitesi (M2) Digital'de: 3 mikrokod ROM'u ve 3 kontrol latch'i (üstte), kod çözücüler, adım sayacı ve invertör (altta). 11 entegre. Bacaklar aynı adlı sinyallerle birbirine bağlı.</figcaption>
+      </figure>
+      <figure>
+        <div class="img"><img src="img/hafta4-m5-digital.png" alt="Bellek M5, Digital'de: program ROM'u (U601 SST39SF010), RAM (U602 CY62256), adres çözme (U603 74HC20, U604 74HC138), LED portu (U605 74HC377) ve durum portu (U606 74HC245)." width="2000" height="769" loading="lazy"></div>
+        <figcaption>Bellek (M5) Digital'de: program ROM'u, RAM, adres çözme (74HC20 ve 74HC138), LED portu (74HC377) ve klavye/DIP durum portu (74HC245). 6 entegre.</figcaption>
+      </figure>
       <ul>
         <li>Dışa aktarılan devreler Digital'de ve bizim simülatörde aynı sonucu veriyor. 23 çeşit entegrenin hepsi, datasheet kurallarına uyan uyaranla denendi.</li>
         <li>Digital gecikmeleri modellemez: orada yalnız işlev doğrulanır, zamanlama bizim simülatörde.</li>
         <li><b>Bulgu:</b> Digital, ROM dosyasının göreli yolunu devre dosyasına göre çözmüyor. Bu yüzden ROM içerikleri <code>.dig</code> dosyasının içine gömüldü.</li>
-        <li>Digital'in arayüzünde dosyaları açma adımları henüz elle denenmedi; doğrulama komut satırından.</li>
+        <li>Dosyalar Digital'in arayüzünde açılıyor; testler komut satırından çalıştırılıyor (aşağıda).</li>
       </ul>
       <p class="cap">Dosyalar: <code>sim/digital/m2_kontrol.dig</code>, <code>m5_bellek.dig</code> ve diğer modüller.</p>
     </section>
@@ -377,6 +385,14 @@ figcaption { font-size: .8rem; color: var(--muted); }
           </tbody>
         </table>
       </div>
+      <div class="screen" role="img" aria-label="Digital'in komut satırı çıktısı: dört kabul testi dosyası, her biri passed.">
+        <pre class="cmd">&gt; digital-cli.cmd test -circ m2_urom.dig     (aynısı dört dosya için)</pre>
+<pre>m2_urom: passed          M2 mikrokod, 1.000 vektör
+m2_cs: passed            M2 kod çözücüler, 512 satır
+m4_alu_tablo: passed     M4 ALU tabloları, 10.000 vektör
+m5_cozme: passed         M5 adres çözme, 1.096 vektör</pre>
+      </div>
+      <p class="cap">Her dosyada modülün entegreleri ve test tablosu birlikte duruyor: <code>sim/digital/kabul/</code>. Digital'de açıp araç çubuğundaki test düğmesiyle de çalıştırılabilir.</p>
       <p>Testlerin hata yakaladığı da denendi: bilerek bozulan devreler Digital'de kalıyor (ör. ALU'da iki adres bacağı yer değiştirince).</p>
       <p class="cap">ALU'nun tabloları flash içeriği; M4 modülünün kendisi (registerlar ve şema) Abdurrahman'da.</p>
     </section>

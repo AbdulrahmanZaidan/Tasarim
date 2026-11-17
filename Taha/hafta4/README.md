@@ -42,7 +42,7 @@ Dosyalar: `sim/td8/hw/kernel.py` (çekirdek), `chips.py` (25 entegre modeli; gec
 - Dışa aktarılan devreler Digital'de ve bizim simülatörde aynı sonucu veriyor: 23 çeşit entegrenin hepsi, datasheet kurallarına uyan uyaranla denendi.
 - Digital gecikmeleri modellemez: orada yalnız işlev doğrulanır, zamanlama bizim simülatörde.
 - **Bulgu:** Digital, ROM dosyasının göreli yolunu devre dosyasına göre çözmüyor. Bu yüzden ROM içerikleri `.dig` dosyasının içine gömüldü.
-- Digital'in arayüzünde dosyaları açma adımları henüz elle denenmedi; doğrulama komut satırından.
+- Dosyalar Digital'in arayüzünde açılıyor; testler komut satırından çalıştırılıyor.
 
 Dosyalar: `sim/digital/m2_kontrol.dig`, `m5_bellek.dig` ve diğer modüller.
 
@@ -56,6 +56,8 @@ Vektörleri test vektörü üreticisi veriyor, Digital tabloyu satır satır den
 | Mikrokod (3 ROM + kontrol latch'i) | M2 | 1.000 | geçti |
 | Kod çözücüler | M2 | 512 (tam tablo) | geçti |
 | Adres çözme | M5 | 1.096 (96 sınır adresi + 1.000 rastgele) | geçti |
+
+Her dosyada modülün entegreleri ve test tablosu birlikte: `sim/digital/kabul/` (`m2_urom.dig`, `m2_cs.dig`, `m4_alu_tablo.dig`, `m5_cozme.dig`). Digital'de açıp araç çubuğundaki test düğmesiyle çalıştırılabilir; yeniden üretmek için `cd sim` → `py -3 digital/kabul/uret.py`.
 
 Testlerin hata yakaladığı da denendi: bilerek bozulan devreler Digital'de kalıyor (ör. ALU'da iki adres bacağı yer değiştirince).
 
