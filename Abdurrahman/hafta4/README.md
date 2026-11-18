@@ -2,9 +2,11 @@
 
 Hazırlayan: Abdurrahman
 
+> **Not:** Devre elle çizilmedi. `.dig` dosyası projenin netlist'inden (`sim/td8/hw/cpu.py`, Taha) Taha'nın Digital aracıyla (`sim/td8/hw/digital.py`) üretildi; bağlantılar `sim/digital/` altındaki dosyalarla aynı. Bu klasörde benim eklediklerim: testler, dalga şekilleri, ekran görüntüleri ve bu rapor.
+
 ## Özet
 
-- Modüller tek devrede birleştirildi: benim M1, M3, M4 modüllerim (hafta 1–3) ve Taha'nın M2 (kontrol ünitesi) ile M5 (bellek) modülleri, yardımcı kapılarla birlikte. **63 entegre** + henüz olmayan VGA/klavye (M6, M7) için 2 taklit.
+- Modüller tek devrede birleştirildi: hafta 1–3'te test ettiğim M1, M3, M4 ve Taha'nın M2 (kontrol ünitesi) ile M5 (bellek) modülleri, yardımcı kapılarla birlikte. Bu, Taha'nın `sim/digital/td8.dig` dosyasıyla aynı devre; Taha bu karşılaştırmayı daha önce yapmıştı (`sim/README.md`), burada aynı araçla yeniden koşturulup belgelendi. **63 entegre** + henüz olmayan VGA/klavye (M6, M7) için 2 taklit.
 - Üç program Digital'de koşturuldu ve emülatörle (`MicroEmu`) **çevrim çevrim** karşılaştırıldı: her çevrimde adres yolu, veri yolu ve 24 bitlik kontrol kelimesi; sonunda LED, RAM ve ekran belleği.
 - **Üçünde de sıfır fark.** Bu, ikinci kilometre taşı **K2 (CPU Digital'de sıfır farkla çalışıyor)**.
 
@@ -32,10 +34,10 @@ Hazırlayan: Abdurrahman
 
 | Modül | Entegre | Kimde | Ayrı test |
 |---|---:|---|---|
-| M1 saat / reset / durdurma | 11 | Abdurrahman | [hafta1](../hafta1/README.md) |
+| M1 saat / reset / durdurma | 11 | Abdurrahman (test) | [hafta1](../hafta1/README.md) |
 | M2 kontrol ünitesi (3 mikrokod ROM'u, kontrol latch'i, kod çözücüler, adım sayacı, breakpoint) | 13 | Taha | Taha'nın 4. hafta raporu |
-| M3 adres registerları (PC, AR, X, SP) | 22 | Abdurrahman | [hafta3](../hafta3/README.md) |
-| M4 A, IR, F, ALU flash'ları, DB tamponları | 8 | Abdurrahman | [hafta2](../hafta2/README.md), [hafta3](../hafta3/README.md) |
+| M3 adres registerları (PC, AR, X, SP) | 22 | Abdurrahman (test) | [hafta3](../hafta3/README.md) |
+| M4 A, IR, F, ALU flash'ları, DB tamponları | 8 | Abdurrahman (test) | [hafta2](../hafta2/README.md), [hafta3](../hafta3/README.md) |
 | AUX yardımcı kapılar | 3 | ortak | |
 | M5 program ROM'u, RAM, adres çözme, LED ve durum portu | 6 | Taha | Taha'nın 4. hafta raporu |
 | TB: VGA (M6) ve klavye (M7) yerine taklit (VRAM, PS/2) | 2 | | M6 ve M7 Aralık'ta |

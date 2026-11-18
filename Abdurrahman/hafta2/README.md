@@ -2,6 +2,8 @@
 
 Hazırlayan: Abdurrahman
 
+> **Not:** Devre elle çizilmedi. `.dig` dosyası projenin netlist'inden (`sim/td8/hw/cpu.py`, Taha) Taha'nın Digital aracıyla (`sim/td8/hw/digital.py`) üretildi; bağlantılar `sim/digital/` altındaki dosyalarla aynı. Bu klasörde benim eklediklerim: testler, dalga şekilleri, ekran görüntüleri ve bu rapor.
+
 ## Özet
 
 - İlk sürümdeki A, B ve IR şemaları SAP-1 yapısındaydı (74LS173, B registerı). TD-8 planına göre ([SISTEM-PLANI 5.1](../../SISTEM-PLANI.md)) **Digital'de yeniden kuruldu** (18 Kasım):

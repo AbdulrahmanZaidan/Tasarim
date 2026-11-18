@@ -2,6 +2,8 @@
 
 Hazırlayan: Abdurrahman
 
+> **Not:** Devre elle çizilmedi. `.dig` dosyası projenin netlist'inden (`sim/td8/hw/cpu.py`, Taha) Taha'nın Digital aracıyla (`sim/td8/hw/digital.py`) üretildi; bağlantılar `sim/digital/` altındaki dosyalarla aynı. Bu klasörde benim eklediklerim: testler, dalga şekilleri, ekran görüntüleri ve bu rapor.
+
 ## Özet
 
 - İlk sürümdeki ALU, RAM ve MAR şemaları SAP-1 yapısındaydı (74LS283 toplayıcı, 16 baytlık RAM, 4-bit MAR). TD-8 planında bu parçalar farklı; plana göre **Digital'de yeniden kuruldu** (18 Kasım):
