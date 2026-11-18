@@ -1,0 +1,35 @@
+{
+ "merhaba": {
+  "cycles": 573,
+  "emu_cycles": 573,
+  "halted": true,
+  "emu_halted": true,
+  "diffs": [],
+  "seconds": 1.6,
+  "leds": 85,
+  "ram_used": 4,
+  "chips": 65
+ },
+ "komut_testi": {
+  "cycles": 796,
+  "emu_cycles": 796,
+  "halted": true,
+  "emu_halted": true,
+  "diffs": [],
+  "seconds": 1.1,
+  "leds": 165,
+  "ram_used": 54,
+  "chips": 65
+ },
+ "fibonacci": {
+  "cycles": 33170,
+  "emu_cycles": 33170,
+  "halted": true,
+  "emu_halted": true,
+  "diffs": [],
+  "seconds": 1.8,
+  "leds": 0,
+  "ram_used": 21,
+  "chips": 65
+ }
+}
