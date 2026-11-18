@@ -14,8 +14,6 @@ Proteus'taki M1 dosyam silindi. Sen de Digital kullandığın için Proteus yeri
 - Her test için *verilen / beklenen / görülen* tablolu raporlar, dalga şekli görselleri ve Digital ekran görüntüleri.
 - 4. hafta: bütün işlemciyi (`td8.dig` ile aynı) senin `digital_trace` / `compare_run` aracınla `merhaba`, `komut_testi`, `fibonacci` için yeniden koşturdum. Bunu sen zaten yapmıştın (`sim/README.md`); yeni bir şey değil, yalnız benim klasörümde belgeli.
 
-Bundan sonra en azından M1'i ve A/IR/F registerlarını bağlantı tablosundan **Digital'de elle çizmeyi** ve aynı testleri onlarda koşturmayı düşünüyorum. Sence gerekli mi, yoksa bu haliyle yeterli mi?
-
 **Dosyaların yeri:** sen hepsini `Abdurrahman/hafta4/` içinde istemiştin; ben her modülü planda ait olduğu haftaya koydum (aşağıdaki tablo). `hafta4`'te yalnız bütün işlemci var.
 
 | Hafta | Ne | Test | Sonuç |
@@ -27,7 +25,6 @@ Bundan sonra en azından M1'i ve A/IR/F registerlarını bağlantı tablosundan 
 
 Notlar:
 - Testler Digital'in kendi test aracıyla (`CLI test`) çalıştırıldı.
-- Senin istediğin "Proteus'ta çalışırken ekran görüntüsü" yerine Digital ekran görüntüleri var. Bu senin için uygun mu?
 - **Henüz yapılmayan:** prototip a (saat modülü breadboard'da, osiloskopla WAIT zamanlaması), parçalar gelince.
 - 4. hafta raporunda "Saat modülü Proteus'ta kuruldu" ve "Devre modüllerini Proteus'ta kuruyor" yazıyor; Proteus dosyası silindiği için bunları düzeltebilir misin?
 
