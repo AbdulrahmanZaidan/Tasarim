@@ -1,0 +1,330 @@
+{
+ "digital_testleri": {
+  "gecti": true,
+  "ozet": "1_nokta_karakter: passed\n2_iki_satir: passed"
+ },
+ "digital_kare": {
+  "olcum": {
+   "kare_karakter": 26250,
+   "satir_sayisi": 525,
+   "satir_uzunlugu": [
+    50
+   ],
+   "H_araligi": [
+    0,
+    49
+   ],
+   "HSYNC_0_H": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ],
+   "HSYNC_her_satirda_6": true,
+   "VSYNC_0_V": [
+    490,
+    492,
+    3
+   ],
+   "VSYNC_0_karakter": 100,
+   "gorunur_satir": [
+    0,
+    479,
+    480
+   ],
+   "gorunur_karakter_satirda": [
+    40
+   ],
+   "VMUX_V": [
+    481,
+    524,
+    44
+   ],
+   "VWR_V": [
+    482,
+    523,
+    42
+   ],
+   "BUFEN_0_karakter": 2131,
+   "VSYNC_n=0": {
+    "ilk": [
+     490,
+     1
+    ],
+    "son": [
+     492,
+     0
+    ],
+    "karakter": 100
+   },
+   "VMUX=1": {
+    "ilk": [
+     481,
+     1
+    ],
+    "son": [
+     524,
+     0
+    ],
+    "karakter": 2150
+   },
+   "VWR=1": {
+    "ilk": [
+     482,
+     1
+    ],
+    "son": [
+     523,
+     0
+    ],
+    "karakter": 2050
+   },
+   "BUFEN_n=0": {
+    "ilk": [
+     481,
+     11
+    ],
+    "son": [
+     523,
+     41
+    ],
+    "karakter": 2131
+   }
+  },
+  "sure_s": 1.6
+ },
+ "sim_max_25MHz": {
+  "karakter_periyodu_ns": [
+   1280
+  ],
+  "beklenen_ns": 640,
+  "ihlal": []
+ },
+ "sim_typ": {
+  "olcum": {
+   "kare_karakter": 26250,
+   "satir_sayisi": 525,
+   "satir_uzunlugu": [
+    50
+   ],
+   "H_araligi": [
+    0,
+    49
+   ],
+   "HSYNC_0_H": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ],
+   "HSYNC_her_satirda_6": true,
+   "VSYNC_0_V": [
+    490,
+    492,
+    3
+   ],
+   "VSYNC_0_karakter": 100,
+   "gorunur_satir": [
+    0,
+    479,
+    480
+   ],
+   "gorunur_karakter_satirda": [
+    40
+   ],
+   "VMUX_V": [
+    481,
+    524,
+    44
+   ],
+   "VWR_V": [
+    482,
+    523,
+    42
+   ],
+   "BUFEN_0_karakter": 2131,
+   "VSYNC_n=0": {
+    "ilk": [
+     490,
+     1
+    ],
+    "son": [
+     492,
+     0
+    ],
+    "karakter": 100
+   },
+   "VMUX=1": {
+    "ilk": [
+     481,
+     1
+    ],
+    "son": [
+     524,
+     0
+    ],
+    "karakter": 2150
+   },
+   "VWR=1": {
+    "ilk": [
+     482,
+     1
+    ],
+    "son": [
+     523,
+     0
+    ],
+    "karakter": 2050
+   },
+   "BUFEN_n=0": {
+    "ilk": [
+     481,
+     11
+    ],
+    "son": [
+     523,
+     41
+    ],
+    "karakter": 2131
+   }
+  },
+  "olcum_digital_ile_ayni": true,
+  "ihlal": 0,
+  "acilis_ihlal_ilk_1us": [
+   "Violation(time=20, kind='setup', ref='U701', desc='1D (/DCLK) kenardan 4 ns önce değişti (gereken 6 ns)')"
+  ],
+  "ilk_ihlaller": [],
+  "digital_ile_ayni": true,
+  "karsilastirilan_karakter": 31500,
+  "sure_s": 10.4
+ },
+ "sim_max_dclk_dis": {
+  "olcum": {
+   "kare_karakter": 26250,
+   "satir_sayisi": 525,
+   "satir_uzunlugu": [
+    50
+   ],
+   "H_araligi": [
+    0,
+    49
+   ],
+   "HSYNC_0_H": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ],
+   "HSYNC_her_satirda_6": true,
+   "VSYNC_0_V": [
+    490,
+    492,
+    3
+   ],
+   "VSYNC_0_karakter": 100,
+   "gorunur_satir": [
+    0,
+    479,
+    480
+   ],
+   "gorunur_karakter_satirda": [
+    40
+   ],
+   "VMUX_V": [
+    481,
+    524,
+    44
+   ],
+   "VWR_V": [
+    482,
+    523,
+    42
+   ],
+   "BUFEN_0_karakter": 2131,
+   "VSYNC_n=0": {
+    "ilk": [
+     490,
+     1
+    ],
+    "son": [
+     492,
+     0
+    ],
+    "karakter": 100
+   },
+   "VMUX=1": {
+    "ilk": [
+     481,
+     1
+    ],
+    "son": [
+     524,
+     0
+    ],
+    "karakter": 2150
+   },
+   "VWR=1": {
+    "ilk": [
+     482,
+     1
+    ],
+    "son": [
+     523,
+     0
+    ],
+    "karakter": 2050
+   },
+   "BUFEN_n=0": {
+    "ilk": [
+     481,
+     11
+    ],
+    "son": [
+     523,
+     41
+    ],
+    "karakter": 2131
+   }
+  },
+  "olcum_digital_ile_ayni": true,
+  "ihlal": 0,
+  "acilis_ihlal_ilk_1us": [
+   "Violation(time=44, kind='hold', ref='U711', desc='/E (CCLK) kenardan 4 ns sonra değişti (tutma 5 ns)')",
+   "Violation(time=84, kind='setup', ref='U704', desc='/MR (/HEND) kenardan 14 ns önce değişti (gereken 30 ns)')",
+   "Violation(time=84, kind='setup', ref='U705', desc='/MR (/HEND) kenardan 14 ns önce değişti (gereken 30 ns)')",
+   "Violation(time=84, kind='setup', ref='U707', desc='/MR (/VEND) kenardan 14 ns önce değişti (gereken 30 ns)')",
+   "Violation(time=84, kind='setup', ref='U708', desc='/MR (/VEND) kenardan 14 ns önce değişti (gereken 30 ns)')",
+   "Violation(time=84, kind='setup', ref='U709', desc='/MR (/VEND) kenardan 14 ns önce değişti (gereken 30 ns)')"
+  ],
+  "ilk_ihlaller": [],
+  "digital_ile_ayni": true,
+  "karsilastirilan_karakter": 31505,
+  "sure_s": 6.3
+ },
+ "rastgele_acilis": {
+  "1": {
+   "ilk_0_0_karakter": 10188,
+   "kare": 0.388,
+   "sonraki_kare_dogru": true,
+   "ihlal_1us_sonra": 0
+  },
+  "2": {
+   "ilk_0_0_karakter": 12587,
+   "kare": 0.48,
+   "sonraki_kare_dogru": true,
+   "ihlal_1us_sonra": 0
+  },
+  "3": {
+   "ilk_0_0_karakter": 26232,
+   "kare": 0.999,
+   "sonraki_kare_dogru": true,
+   "ihlal_1us_sonra": 0
+  }
+ }
+}
