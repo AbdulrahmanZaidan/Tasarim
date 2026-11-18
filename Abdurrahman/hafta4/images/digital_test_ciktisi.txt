@@ -1,0 +1,4 @@
+1_normal: passed
+2_stop: passed
+3_wait: passed
+4_go_reset: passed
