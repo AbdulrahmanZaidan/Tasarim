@@ -1,0 +1,3 @@
+1_alu_10_vektor: passed
+2_alu_islemler: passed
+3_alu_10000_vektor: passed

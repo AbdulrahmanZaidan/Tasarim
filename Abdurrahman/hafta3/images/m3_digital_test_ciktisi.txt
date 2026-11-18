@@ -1,0 +1,4 @@
+1_PC: passed
+2_AR_X: passed
+3_SP: passed
+4_adres_yolu: passed
