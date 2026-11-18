@@ -1,0 +1,4 @@
+1_A_register: passed
+2_IR_register: passed
+3_A_veri_yolu_IR: passed
+4_F_bayraklar: passed
