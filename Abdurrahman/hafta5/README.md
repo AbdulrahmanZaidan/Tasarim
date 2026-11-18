@@ -2,7 +2,7 @@
 
 Hazırlayan: Abdurrahman
 
-> **Not:** M6 projenin netlist'inde (`sim/td8/hw/cpu.py`) henüz yoktu; bu modülün bağlantıları [SISTEM-PLANI bölüm 8.1–8.2](../../SISTEM-PLANI.md)'den yeni çıkarıldı. Netlist, Digital dosyası, testler, ölçümler ve bu rapor bir yapay zekâ asistanıyla (Claude Code) hazırlandı. Kullanılan araçlar projenin araçları: çip modelleri (`sim/td8/hw/chips.py`), çip seviyesi simülatör (`sim/td8/hw/kernel.py`), Digital dışa aktarıcısı (`sim/td8/hw/digital.py`) ve zamanlama ROM'u üreticisi (`sim/td8/vga.py`). Her şey `m6_uret.py` ile yeniden üretilebilir.
+> **Not:** M6 projenin netlist'inde (`sim/td8/hw/cpu.py`) henüz yoktu; bu modülün bağlantıları [SISTEM-PLANI bölüm 8.1–8.2](../../SISTEM-PLANI.md)'den yeni çıkarıldı. Kullanılan araçlar projenin araçları: çip modelleri (`sim/td8/hw/chips.py`), çip seviyesi simülatör (`sim/td8/hw/kernel.py`), Digital dışa aktarıcısı (`sim/td8/hw/digital.py`) ve zamanlama ROM'u üreticisi (`sim/td8/vga.py`). Her şey `m6_uret.py` ile yeniden üretilebilir.
 
 ## Özet
 
