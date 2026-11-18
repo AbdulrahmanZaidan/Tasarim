@@ -28,7 +28,6 @@ Bundan sonra en azından M1'i ve A/IR/F registerlarını bağlantı tablosundan 
 Notlar:
 - Testler Digital'in kendi test aracıyla (`CLI test`) çalıştırıldı.
 - Senin istediğin "Proteus'ta çalışırken ekran görüntüsü" yerine Digital ekran görüntüleri var. Bu senin için uygun mu?
-- ROM için `.bin` / `.hex` denemesini yapmadım: Digital'de ROM içerikleri `.dig` dosyalarına gömülü olduğu için gerekmiyor diye düşündüm. Proteus'a dönmeyeceksek gerekmez, değil mi?
 - **Henüz yapılmayan:** prototip a (saat modülü breadboard'da, osiloskopla WAIT zamanlaması), parçalar gelince.
 - 4. hafta raporunda "Saat modülü Proteus'ta kuruldu" ve "Devre modüllerini Proteus'ta kuruyor" yazıyor; Proteus dosyası silindiği için bunları düzeltebilir misin?
 
