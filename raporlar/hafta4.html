@@ -225,15 +225,15 @@ figcaption { font-size: .8rem; color: var(--muted); }
         <div class="track">
           <div class="track-head">
             <h3>Donanım<small>Abdurrahman · M2 ve M5: Deniz</small></h3>
-            <div class="pct">%6<small>M2 ve M5 bitti (Deniz, Digital'de) · M1 ve M4 sürüyor (Abdurrahman)</small></div>
+            <div class="pct">%19<small>M1–M5 ve işlemcinin birleştirilmesi bitti (Digital'de) · sırada M6 VGA</small></div>
           </div>
-          <div class="segs" role="img" aria-label="Donanım: 2 iş bitti, 2 iş sürüyor, 6 iş sırada">
+          <div class="segs" role="img" aria-label="Donanım: 6 iş bitti, 4 iş sırada">
             <span class="done" style="flex: 1" title="M2 kontrol ünitesi: bitti (Deniz, Digital'de)"></span>
             <span class="done" style="flex: 1" title="M5 bellek: bitti (Deniz, Digital'de)"></span>
-            <span class="doing" style="flex: 1" title="M1 saat modülü: sürüyor (Abdurrahman)"></span>
-            <span class="doing" style="flex: 1" title="M4 ALU ve A, F, IR registerları: sürüyor (Abdurrahman)"></span>
-            <span style="flex: 1" title="M3 adres registerları: sırada"></span>
-            <span style="flex: 1" title="İşlemcinin birleştirilmesi: sırada"></span>
+            <span class="done" style="flex: 1" title="M1 saat modülü: bitti (Abdurrahman, Digital'de)"></span>
+            <span class="done" style="flex: 1" title="M4 ALU ve A, F, IR registerları: bitti (Abdurrahman, Digital'de)"></span>
+            <span class="done" style="flex: 1" title="M3 adres registerları: bitti (Abdurrahman, Digital'de)"></span>
+            <span class="done" style="flex: 1" title="İşlemcinin birleştirilmesi: bitti, emülatörle sıfır fark"></span>
             <span style="flex: 2" title="M6 VGA: sırada"></span>
             <span style="flex: 1" title="M7 PS/2 klavye: sırada"></span>
             <span style="flex: 2" title="KiCad şemaları ve breadboard yerleşimi: sırada"></span>
@@ -242,10 +242,10 @@ figcaption { font-size: .8rem; color: var(--muted); }
           <ul class="parts" style="grid-template-rows: repeat(5, auto)">
             <li class="done">M2 kontrol ünitesi (Deniz, Digital'de) <em>bitti</em></li>
             <li class="done">M5 bellek (Deniz, Digital'de) <em>bitti</em></li>
-            <li class="doing">M1 saat modülü <em>sürüyor</em></li>
-            <li class="doing">M4 registerlar (A, IR) ve ALU <em>sürüyor</em></li>
-            <li>M3 adres registerları <em>Kasım</em></li>
-            <li>İşlemcinin birleştirilmesi <em>Kasım</em></li>
+            <li class="done">M1 saat modülü (Abdurrahman) <em>bitti</em></li>
+            <li class="done">M4 registerlar (A, IR, F) ve ALU (Abdurrahman) <em>bitti</em></li>
+            <li class="done">M3 adres registerları (Abdurrahman) <em>bitti</em></li>
+            <li class="done">İşlemcinin birleştirilmesi <em>bitti</em></li>
             <li>M6 VGA <em>Aralık</em></li>
             <li>M7 PS/2 klavye <em>Aralık</em></li>
             <li>KiCad şemaları, yerleşim planı <em>Aralık</em></li>
@@ -253,7 +253,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
           </ul>
         </div>
         <div class="legend"><span class="l-done">bitti</span><span class="l-doing">sürüyor</span><span>sırada</span></div>
-        <p class="cap">Çubuklar işlerin plandaki sürelerine göre bölündü (SISTEM-PLANI bölüm 13–14). Yüzde yalnızca biten işleri sayar: bir modül, testleri geçince biter. Kontrol ünitesi (M2) ve bellek (M5) planda Deniz'in; ikisi de Digital'de, devre seviyesinde test edildi.</p>
+        <p class="cap">Çubuklar işlerin plandaki sürelerine göre bölündü (SISTEM-PLANI bölüm 13–14). Yüzde yalnızca biten işleri sayar: bir modül, testleri geçince biter. Kontrol ünitesi (M2) ve bellek (M5) planda Deniz'in; saat (M1), adres registerları (M3) ve veri yolu ile ALU (M4) Abdurrahman'ın. Hepsi Digital'de, devre seviyesinde test edildi; birleştirilmiş işlemci 3 programda emülatörle sıfır fark verdi.</p>
       </div>
     </section>
 
@@ -264,7 +264,8 @@ figcaption { font-size: .8rem; color: var(--muted); }
           <ul>
             <li><span>Sistem planı ve TD-8 komut seti<small>bütçe 17.503 TL · 53 komut</small></span></li>
             <li><span>Simülasyon yazılımı ve kütüphane<small>assembler, 2 emülatör, çarpma ve bölme</small></span></li>
-            <li><span>Saat modülü Proteus'ta kuruldu<small>Abdurrahman</small></span></li>
+            <li><span>Saat, registerlar, ALU ve adres registerları Digital'de test edildi<small>Abdurrahman · 15 modül testi</small></span></li>
+            <li><span>Bütün işlemci Digital'de, emülatörle sıfır fark<small>3 program · 33.170 çevrime kadar</small></span></li>
             <li><span>Digital, test vektörleri, Proteus ROM dosyaları<small>3. hafta · 54 test</small></span></li>
             <li><span>Çip seviyesi simülatör<small>25 entegre modeli, gecikmeli</small></span></li>
             <li><span>Digital'e dışa aktarım<small>her entegre Digital'in kendi 74xx çipi</small></span></li>
@@ -276,15 +277,13 @@ figcaption { font-size: .8rem; color: var(--muted); }
           <h3>Yapıyoruz</h3>
           <ul>
             <li><span>C derleyicisi<small>Deniz</small></span></li>
-            <li><span>Saat modülü testleri<small>Abdurrahman · ilk kilometre taşı (K1)</small></span></li>
-            <li><span>Register ve ALU şemalarını TD-8'e uyarlama<small>Abdurrahman</small></span></li>
+            <li><span>Prototip a: saat modülü breadboard'da<small>Abdurrahman · WAIT zamanlaması osiloskopla · parçalar gelince</small></span></li>
             <li><span>Parça siparişi ve giriş testleri<small>test listesi hazır · parçalar gelince</small></span></li>
           </ul>
         </div>
         <div class="col todo">
           <h3>Yapacağız</h3>
           <ul>
-            <li><span>Bütün işlemcinin simülasyonda birleştirilmesi<small>gelecek hafta</small></span></li>
             <li><span>VGA ekran ve klavye simülasyonda<small>Aralık</small></span></li>
             <li><span>Breadboard'da kurulum<small>Ocak – Haziran 2027</small></span></li>
             <li><span>C ile yazılmış Snake demosu<small>Mayıs 2027</small></span></li>
@@ -296,8 +295,8 @@ figcaption { font-size: .8rem; color: var(--muted); }
     <section>
       <h2>Kilometre taşları</h2>
       <ol class="miles">
-        <li><b>9 Kas · gecikti</b>Saat modülünün testleri geçiyor<br><span class="cap">Proteus testleri sürüyor</span></li>
-        <li class="now"><b>23 Kas · şimdi</b>İşlemci simülasyonda emülatörle sıfır farkla çalışıyor<br><span class="cap">M2 ve M5 hazır; birleştirme gelecek hafta</span></li>
+        <li><b>9 Kas · 18 Kas'ta geçti</b>Saat modülünün testleri geçiyor<br><span class="cap">Digital'de 4 test: normal, STOP, WAIT, GO/RESET</span></li>
+        <li class="now"><b>23 Kas · geçti</b>İşlemci simülasyonda emülatörle sıfır farkla çalışıyor<br><span class="cap">merhaba, komut_testi, fibonacci</span></li>
         <li><b>14 Ara</b>Simülasyonda ekrana yazı</li>
         <li><b>3 Oca</b>Tasarım donduruldu, yapıma hazır</li>
         <li><b>Nisan 2027</b>Breadboard'da işlemci program çalıştırıyor</li>
@@ -438,56 +437,110 @@ m5_cozme: passed         M5 adres çözme, 1.096 vektör</pre>
     <section class="person">
       <span class="eyebrow">Donanım ve testler</span>
       <h2>Abdurrahman</h2>
-      <p>Devre modüllerini Proteus'ta kuruyor ve test ediyor. Kendi notları: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/Abdurrahman">Abdurrahman klasörü</a>.</p>
-      <p><b>Yeni not: 13 Kasım</b> (<a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta3/README.md">Abdurrahman/hafta3</a>), 3. hafta raporu yayımlandıktan sonra geldi. 4. haftanın notu henüz gelmedi.</p>
+      <p>Devre modüllerini Digital'de kuruyor ve test ediyor. Kendi notları: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/Abdurrahman">Abdurrahman klasörü</a> (her hafta için ayrı klasör: <code>hafta1</code> … <code>hafta4</code>).</p>
+      <p><b>Yeni not: 18 Kasım.</b> Proteus'taki ilk saat modülü dosyası silindiği için ekibin geri kalanıyla aynı araca, <b>Digital'e geçildi</b>. İlk haftalardaki SAP-1 şemaları (74LS173, B registerı, 74LS283 ALU, 16 baytlık RAM, MAR) TD-8 planına göre yenilendi; her modül planın istediği testlerle Digital'de denendi.</p>
     </section>
 
     <section>
-      <h2>Gelen not: ALU, RAM ve MAR şemaları</h2>
-      <p>Notta ALU, RAM ve bellek adres registerı (MAR) şemaları incelendi ve her biri için beklenen sonuç tabloları hazırlandı. Şemalar Ben Eater'ın SAP-1 yapısında.</p>
+      <h2>Özet</h2>
       <div class="tbl">
         <table>
-          <thead><tr><th>Modül</th><th>Notta anlatılan devre</th></tr></thead>
+          <thead><tr><th>Modül</th><th>Entegre</th><th>Testler</th><th>Sonuç</th></tr></thead>
           <tbody>
-            <tr><td>ALU</td><td>İki 74LS283 (4-bit toplayıcı) ile 8-bit toplama ve çıkarma. Çıkarmada B'nin bitleri 74LS86 ile terslenir ve elde girişi 1 yapılır (A − B = A + NOT B + 1). Sonuç veri yoluna 74LS245 ile çıkar; Carry ve Zero bayrakları bir 74LS173'te saklanır.</td></tr>
-            <tr><td>RAM</td><td>İki 74189 ile 16 × 8 bit (16 bayt). Yazılacak veri veri yolundan ya da DIP anahtarından gelir (74LS157); okunan veri veri yoluna 74LS245 ile çıkar.</td></tr>
-            <tr><td>MAR</td><td>4-bit adres registerı (74LS173); adres registerdan ya da elle DIP anahtarından seçilir (74LS157).</td></tr>
-            <tr><td>Test tabloları</td><td>ALU için 7 durum (taşma, sıfır, negatif sonuç dahil), RAM ve MAR için 10 test (bütün adresler, bit sırası, yazma engelleme, veri yolunu bırakma).</td></tr>
+            <tr><td>M1 saat / reset / durdurma</td><td>12</td><td style="white-space: normal">Normal çalışma (C → D → A → B), STOP, WAIT, GO ve /RESET_s</td><td>4/4 geçti</td></tr>
+            <tr><td>M4 A, IR, F registerları</td><td>4</td><td style="white-space: normal">A'ya ALU sonucundan yükleme, IR'ye veri yolundan yükleme, A → veri yolu → IR, F bayrakları ve asenkron reset</td><td>4/4 geçti</td></tr>
+            <tr><td>M4 ALU (2 flash)</td><td>3</td><td style="white-space: normal"><code>vectors alu -n 10</code>, seçilmiş 16 işlem, 10.000 rastgele vektör</td><td>3/3 geçti</td></tr>
+            <tr><td>M3 adres registerları</td><td>26</td><td style="white-space: normal">PC sayma ve AR'dan yükleme, AR ve X'e iki bayt yükleme, SP push/pop, adres yolunu tek register sürüyor</td><td>4/4 geçti</td></tr>
+            <tr><td>Bütün işlemci</td><td>63</td><td style="white-space: normal"><code>merhaba</code>, <code>komut_testi</code>, <code>fibonacci</code> Digital'de, emülatörle çevrim çevrim</td><td>3/3 sıfır fark</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="cap">Notun kendisinde belirtildiği gibi tablolar beklenen sonuçlardır; simülasyon dosyası ve ölçüm kaydı nota eklenmedi.</p>
-      <div class="note">
-        <h3>TD-8'deki karşılıkları farklı</h3>
-        <ul>
-          <li><b>ALU:</b> TD-8'de toplayıcı entegresi yok. ALU iki flash'ta tablo: 25 işlem (toplama, çıkarma, mantık, kaydırma) ve dört bayrak (Z, C, N, V). Tabloların testi hazır: <code>py cli.py vectors alu</code> (10.000 satır, Digital'de geçti).</li>
-          <li><b>RAM:</b> TD-8'de 32 KB'lık CY62256 ve 16-bit adres yolu var. RAM ve adres çözme M5'in parçası; Digital'de test edildi (Deniz sekmesi).</li>
-          <li><b>MAR:</b> TD-8'de ayrı bir MAR yok; adres yolunu PC, AR, X ve SP sürüyor (M3, 74HC161 sayaçları).</li>
-          <li>Entegre ailesi 74HC. Bütün TD-8 bağlantıları: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md">bağlantı tablosu</a>.</li>
-        </ul>
-      </div>
+      <p class="cap">Entegre sayıları test dosyasındaki çipler: M1'de STOP OR'u (U503), M3'te CLK tamponu, adres yolu seçicisi (74HC139), invertör ve SP'nin NAND'ı da var. Bağlantılar <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md">bağlantı tablosuyla</a> birebir aynı (projenin netlist'i <code>sim/td8/hw/cpu.py</code>). Testler Digital'in kendi test aracıyla (<code>CLI test</code>) çalıştırıldı.</p>
     </section>
 
     <section>
-      <h2>Önceki haftalar</h2>
-      <p><b>1. hafta, saat modülü (M1):</b> Proteus'ta simüle edildi: 4 MHz osilatör, iki flip-flop ile 4 faz, işlemci saati 1 MHz.</p>
-      <p><b>2. hafta, register şemaları:</b> A, B ve komut registerı (IR) için Proteus şemaları çizildi. Her birinde iki 74LS173 (4-bit register), veri yoluna çıkış için bir 74LS245, kontrol hatları ve içeriği göstermek için 8 LED var.</p>
+      <h2>Saat modülü (M1): ilk kilometre taşı</h2>
+      <p>İki 74HC74 Johnson sayacı her CPU çevrimini dört faza böler: C → D → A → B. CLK yalnız C ve D'de, LCLK yalnız D ve A'da, yazma darbesi WSTB yalnız A'da yüksek. STOP = 1 iken sayaç C'de durur, WAIT iken D'de bekler; GO butonu tam bir çevrim çalıştırır, reset sayacı C'ye alır. WAIT kapısında 12 Kasım düzeltmesi (74HC138'in G1 ucu CLK'ye) kullanıldı.</p>
       <figure>
-        <div class="img"><img src="img/hafta2-b-register.png" alt="B registerı şeması: iki 74LS173, bir 74LS245, veri yolu BUS_0–BUS_7, kontrol hatları CLK, CLR, BI, BO ve 8 LED." width="2670" height="1716"></div>
-        <figcaption>B registerı şeması (Abdurrahman, 2. hafta).</figcaption>
+        <div class="img"><img src="img/hafta4-m1-normal.png" alt="M1 normal çalışma dalga şekli: reset bırakılınca faz dizisi C D A B; CLK C ve D'de, LCLK D ve A'da, WSTB yalnız A'da yüksek." width="796" height="490" loading="lazy"></div>
+        <figcaption>Test 1, normal çalışma: her sütun bir MCLK periyodu (250 ns), üstte faz.</figcaption>
+      </figure>
+      <figure>
+        <div class="img"><img src="img/hafta4-m1-go-reset.png" alt="M1 GO ve reset testi: adımlama modunda makine C fazında duruyor, GO ile tek bir çevrim (D A B) çalışıyor, reset ile C fazına dönüyor." width="1986" height="614" loading="lazy"></div>
+        <figcaption>Test 4: adımlamada C'de bekliyor; GO ile tam bir çevrim; serbest koşu; reset ile yeniden C.</figcaption>
       </figure>
     </section>
 
     <section>
-      <h2>Abdurrahman için hazırlananlar</h2>
-      <h3>Digital'de modül devreleri</h3>
-      <p>Kontrol ünitesi ve bellek Digital dosyası olarak hazır: <code>sim/digital/m2_kontrol.dig</code>, <code>m5_bellek.dig</code>. Her entegre Digital'in 74xx kütüphanesindeki bacaklı çip, her bacakta sinyal adı var; Proteus şemaları için referans olarak açılabilir. Digital ücretsiz, Java ile çalışıyor; kurulum notu <code>sim/README.md</code>'de.</p>
-      <h3>Modül testleri için hazır tablolar</h3>
+      <h2>Registerlar ve ALU (M4)</h2>
       <ul>
-        <li><code>py cli.py vectors alu</code>, <code>urom</code>, <code>cs</code> (kod çözücüler), <code>decode</code> (adres çözme). Her satır "bu girişleri ver, şu çıkışları görmelisin" diyor; <code>--format csv</code> ile Excel'de açılır.</li>
+        <li><b>B registerı yok:</b> ALU'nun sağ girişi doğrudan veri yolu.</li>
+        <li><b>A</b> (74HC377) girişini ALU sonucundan (R) alır; veri yoluna 74HC245 ile çıkar. <b>IR</b> (74HC377) veri yolundan yüklenir, 8 bitin hepsi mikrokod ROM'larına gider. <b>F</b> (74HC161) Z, C, N, V bayraklarını tutar.</li>
+        <li><b>ALU</b> iki flash'ta tablo: ALU-L alt 4 biti, ALU-H üst 4 biti ve bayrakları hesaplar; C = Clo OR Chi (74HC32). 25 işlem.</li>
       </ul>
-      <h3>Gelen parçaların giriş testleri</h3>
-      <p>Test listesi Deniz sekmesinde. Parçalar gelince birlikte yapılacak.</p>
+      <div class="duo">
+        <figure>
+          <div class="img"><img src="img/hafta4-reg-veri-yolu.png" alt="A, veri yolu ve IR testi: A'ya 96 yüklendi, /OE_A = 0 iken DB = 96, IR = 96 oldu, /OE_A = 1 iken DB bırakıldı." width="895" height="442" loading="lazy" style="min-width: 0"></div>
+          <figcaption>A → veri yolu → IR: /OE_A = 0 iken A veri yolunda, IR saat kenarında yükleniyor.</figcaption>
+        </figure>
+        <figure>
+          <div class="img"><img src="img/hafta4-alu-islemler.png" alt="ALU seçilmiş işlemler tablosu: toplama, taşma, işaretli taşma, çıkarma, mantık işlemleri, kaydırmalar; her satırda R, Z, C, N, V." width="854" height="554" loading="lazy" style="min-width: 0"></div>
+          <figcaption>ALU: bayrakların sınır durumları (taşma, sıfır, işaretli taşma, kaydırmada çıkan bit).</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Adres registerları (M3)</h2>
+      <p>TD-8'de ayrı bir MAR yok: adres yolunu dört register sürüyor. PC, AR ve X 16 bit (4× 74HC161), SP 8 bit yukarı/aşağı sayıcı (2× 74HC191) ve EF sayfasında. 74HC139 (#AS) aynı anda yalnız birinin tamponunu açar.</p>
+      <ul>
+        <li>PC 0001, 0002, 0003 sayıyor; AR'dan 12FE yükleniyor ve 12FF → 1300 geçişinde dört 161 zincirleme taşıyor.</li>
+        <li>AR ve X veri yolundan iki bayt halinde yükleniyor (34 sonra 12 → 1234).</li>
+        <li>SP reset'te FF; push ile F0 → EF (üst 191 de sayıyor), pop ile geri FF ve 00.</li>
+      </ul>
+      <figure>
+        <div class="img"><img src="img/hafta4-m3-adres-yolu.png" alt="M3 adres yolu testi: ASRC 0, 1, 2, 3 iken AB sırasıyla PC (1111), AR (2222), X (3333), EF:SP (EFFD); BUSACK = 1 iken FFFF." width="992" height="464" loading="lazy"></div>
+        <figcaption>Adres yolu seçimi: ASRC ile PC, AR, X ve EF:SP sırayla; BUSACK = 1 iken hiçbiri sürmüyor (pull-up, FFFF).</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Bütün işlemci: emülatörle sıfır fark</h2>
+      <p>M1–M5 ve yardımcı kapılar tek devrede (63 entegre; VGA ve klavye henüz taklit). Her programda Digital'de her commit kenarında adres yolu, veri yolu ve 24 bitlik kontrol kelimesi kaydedildi ve mikroadım emülatörüyle karşılaştırıldı; program bitince LED, RAM ve ekran belleği de karşılaştırıldı.</p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Program</th><th>Ne yapıyor</th><th class="num">Çevrim</th><th>Sonuç</th></tr></thead>
+          <tbody>
+            <tr><td>merhaba</td><td style="white-space: normal">Ekrana yazı, LED = 55</td><td class="num">573</td><td>sıfır fark</td></tr>
+            <tr><td>komut_testi</td><td style="white-space: normal">88 opcode'un hepsi; kendini denetler, hatasızsa LED = A5</td><td class="num">796</td><td>sıfır fark, LED = A5</td></tr>
+            <tr><td>fibonacci</td><td style="white-space: normal">16-bit Fibonacci, çarpma/bölme kütüphanesiyle ekrana</td><td class="num">33.170</td><td>sıfır fark</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="duo">
+        <figure>
+          <div class="img"><img src="img/hafta4-merhaba.png" alt="merhaba.asm bittiğinde Digital'deki ekran belleği: MERHABA, TD-8! yazısı ve LED = 55." width="512" height="242" loading="lazy" style="min-width: 0"></div>
+          <figcaption><code>merhaba.asm</code>: Digital'deki ekran belleği ve LED'ler.</figcaption>
+        </figure>
+        <figure>
+          <div class="img"><img src="img/hafta4-fibonacci.png" alt="fibonacci.asm bittiğinde Digital'deki ekran belleği: F0'dan F24'e kadar Fibonacci sayıları." width="512" height="682" loading="lazy" style="min-width: 0"></div>
+          <figcaption><code>fibonacci.asm</code>: F0–F24, 33.170 çevrim.</figcaption>
+        </figure>
+      </div>
+      <p class="cap">Digital gecikmeleri modellemez: burada işlev doğrulandı. Zamanlama (ör. WAIT payı ~3 ns) çip seviyesi simülatörde ve prototip a'da.</p>
+    </section>
+
+    <section>
+      <h2>Önceki haftalar</h2>
+      <p><b>1. hafta:</b> saat modülü Proteus'ta kurulmuştu; dosya silindi, 18 Kasım'da Digital'de yeniden yapıldı ve testleri eklendi. <b>2. hafta:</b> A, B ve IR şemaları SAP-1 yapısındaydı (74LS173); TD-8'e göre A, IR, F olarak yenilendi. <b>3. hafta:</b> ALU, RAM ve MAR notu SAP-1 yapısındaydı; TD-8'deki karşılıkları (flash'ta ALU, M3 adres registerları) kuruldu. RAM M5'in parçası (Deniz).</p>
+    </section>
+
+    <section>
+      <h2>Gelecek hafta</h2>
+      <ol class="next">
+        <li><span>VGA zamanlaması (M6): saatler, sayaçlar ve zamanlama ROM'u.</span></li>
+        <li><span>Prototip a: saat modülü breadboard'da, WAIT zamanlaması osiloskopla (parçalar gelince).</span></li>
+      </ol>
     </section>
   </div>
 

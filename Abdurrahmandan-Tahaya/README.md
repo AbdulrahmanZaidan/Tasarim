@@ -4,7 +4,17 @@ Selam Taha, donanım ve Proteus simülasyonu tarafında ilerlerken senden (yazı
 
 ---
 
-## YENİ (18 Kasım): Bütün simülasyonlar Digital'de yeniden yapıldı
+## YENİ (18 Kasım): 4. hafta raporu güncellendi
+
+Yukarıdaki değişikliklere göre [raporlar/hafta4.html](../raporlar/hafta4.html)'yi güncelledim (Deniz sekmesine dokunmadım):
+
+- **Genel bakış:** donanım ilerlemesi %6 → **%19** (M1, M4, M3 ve işlemcinin birleştirilmesi "bitti"); "Saat modülü Proteus'ta kuruldu" yerine Digital'deki testler ve bütün işlemcinin sıfır farkı; "Yapıyoruz"a prototip a; kilometre taşları K1 (18 Kasım'da geçti) ve K2 (geçti).
+- **Abdurrahman sekmesi** baştan yazıldı: 18 Kasım notu (Proteus → Digital), modül özet tablosu (15 test + 3 program), M1, registerlar ve ALU, M3 ve bütün işlemci bölümleri; görseller `raporlar/img/hafta4-*.png`. Eski SAP-1 notunun ayrıntısı ve B registerı görseli kaldırıldı, "Önceki haftalar"da kısaca anlatılıyor.
+- Deniz sekmesindeki "Gelecek hafta: bütün işlemcinin birleştirilmesi" maddesi artık yapıldı; istersen sen güncelle.
+
+---
+
+## 18 Kasım: Bütün simülasyonlar Digital'de yeniden yapıldı
 
 Proteus'taki M1 dosyam silindi. Sen de Digital kullandığın için Proteus yerine **Digital'e geçtim**. SAP-1 şemaları (74LS173, B registerı, 74LS283 ALU, 16 baytlık RAM, MAR) ve eski görseller kaldırıldı; her hafta klasöründe artık `.dig` dosyaları, Digital'de geçen testler, dalga şekilleri ve ekran görüntüleri var.
 
