@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TA-8 5. Hafta Raporu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Tek sütun rapor: özet, araştırma (soru-cevap, kitler), assembly simülasyonu (ekran, ölçümler), gelecek hafta */
+:root {
+  --paper: #f3f5f2; --card: #ffffff; --ink: #172019; --muted: #5a665d; --line: #d4dbd5;
+  --accent: #1d6a46; --copper: #ad6224; --term: #1a221c; --term-fg: #d9e6dc; --term-dim: #7f9486;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #101512; --card: #171e19; --ink: #e5ebe6; --muted: #97a59b; --line: #2b352e;
+  --accent: #52b386; --copper: #de9551; --term: #0b0f0c; --term-fg: #cfe0d4; --term-dim: #6f8377; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #101512; --card: #171e19; --ink: #e5ebe6; --muted: #97a59b; --line: #2b352e;
+  --accent: #52b386; --copper: #de9551; --term: #0b0f0c; --term-fg: #cfe0d4; --term-dim: #6f8377; color-scheme: dark }
+
+body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--f-body); }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 40px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 40px; }
+h1, h2 { font-family: var(--f-display); font-weight: 600; text-wrap: balance; margin: 0; }
+h1 { font-size: 2.1rem; line-height: 1.15; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: .95rem; font-weight: 600; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+ul { margin: 0; padding-left: 1.15em; display: grid; gap: 4px; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code { font-family: var(--f-mono); font-size: .85em; background: var(--card); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; }
+.eyebrow { font: 500 .75rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--f-mono); }
+.cap { font-size: .8rem; color: var(--muted); }
+section { display: grid; gap: 16px; }
+section > p, section > ul { max-width: 66ch; }
+
+header { display: grid; gap: 10px; }
+.meta { color: var(--muted); }
+
+.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.summary div { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 12px 14px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.summary .eyebrow { color: var(--copper); }
+.summary p { font-size: .9rem; line-height: 1.45; }
+
+.qa { display: grid; gap: 0; }
+.q { display: grid; grid-template-columns: 210px 1fr; gap: 18px; padding-block: 14px; border-top: 1px solid var(--line); }
+.q > div { min-width: 0; display: grid; gap: 6px; font-size: .92rem; }
+.q h3 { font-size: .95rem; }
+
+.tbl { overflow-x: auto; }
+.tbl table { border-collapse: collapse; width: 100%; font-size: .86rem; }
+.tbl th, .tbl td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
+.tbl th { font: 500 .72rem var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.tbl td:first-child { font-weight: 600; white-space: nowrap; }
+.tbl td.num, .tbl th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl td.plan { color: var(--copper); }
+
+.screen { background: var(--term); color: var(--term-fg); border-radius: 6px; padding: 14px 16px; overflow-x: auto; display: grid; gap: 10px; }
+.screen pre { margin: 0; font: .8rem/1.35 var(--f-mono); }
+.screen .cmd { color: var(--term-dim); }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.duo > div { min-width: 0; display: grid; gap: 8px; align-content: start; }
+
+.finding { border-left: 3px solid var(--copper); padding: 4px 0 4px 14px; display: grid; gap: 6px; max-width: 66ch; }
+
+.next { counter-reset: n; list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.next li { display: grid; grid-template-columns: 26px 1fr; gap: 8px; }
+.next li::before { counter-increment: n; content: counter(n); font: 500 .8rem/1.6 var(--f-mono); color: var(--accent); }
+footer { font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+
+@media (max-width: 620px) {
+  h1 { font-size: 1.7rem; }
+  .summary, .duo { grid-template-columns: 1fr; }
+  .q { grid-template-columns: 1fr; gap: 6px; }
+}
+
+/* Sekmeler: genel bakış (ilerleme çubukları), Deniz (yazılım), Abdurrahman (donanım) */
+:root { --todo: #dde3de; --on-accent: #ffffff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --todo: #2a332d; --on-accent: #0c140f; } }
+:root[data-theme="dark"] { --todo: #2a332d; --on-accent: #0c140f; }
+[hidden] { display: none !important; }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); }
+.tabs a { padding: 10px 14px; font-weight: 600; font-size: .95rem; color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tabs a small { font-weight: 500; color: var(--muted); }
+.panel { display: grid; gap: 40px; }
+
+.goal-text { font: 600 1.55rem/1.25 var(--f-display); max-width: 32ch; text-wrap: balance; }
+.cal { display: grid; gap: 8px; }
+.cal-bar { display: grid; grid-template-columns: 10fr 23fr; gap: 3px; }
+.cal-bar div { height: 10px; border-radius: 3px; background: var(--todo); overflow: hidden; }
+.cal-bar i { display: block; height: 100%; background: var(--ink); }
+.cal-lbl { display: grid; grid-template-columns: 10fr 23fr; gap: 3px; font-size: .78rem; color: var(--muted); }
+.cal-lbl b { color: var(--ink); font-weight: 600; }
+
+.tracks { display: grid; gap: 14px; }
+.track { display: grid; gap: 14px; padding: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; }
+.track-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; }
+.track-head h3 { font: 600 1.4rem/1.1 var(--f-display); }
+.track-head h3 small { display: block; font: 500 .8rem var(--f-body); color: var(--muted); margin-top: 4px; }
+.pct { font: 600 2.8rem/1 var(--f-display); font-variant-numeric: tabular-nums; text-align: right; }
+.pct small { display: block; font: 500 .8rem var(--f-body); color: var(--muted); margin-top: 4px; }
+.segs { display: flex; gap: 3px; height: 30px; }
+.segs span { min-width: 0; border-radius: 3px; background: var(--todo); color: var(--muted); font-size: .72rem; line-height: 30px; padding: 0; white-space: nowrap; overflow: hidden; }
+.segs span:not(:empty) { padding-left: 8px; }
+.wrap > *, .panel > *, .tracks > * { min-width: 0; }
+.segs .done { background: var(--accent); color: var(--on-accent); }
+.segs .doing { background: var(--copper); color: var(--on-accent); }
+.parts { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, auto); grid-auto-flow: column; gap: 5px 20px; font-size: .84rem; }
+.parts li { display: grid; grid-template-columns: 10px 1fr auto; gap: 8px; align-items: center; min-width: 0; }
+.parts li::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--todo); border: 1px solid var(--line); box-sizing: border-box; }
+.parts li.done::before { background: var(--accent); border-color: var(--accent); }
+.parts li.doing::before { background: var(--copper); border-color: var(--copper); }
+.parts li em { font-style: normal; font-family: var(--f-mono); font-size: .72rem; color: var(--muted); white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .78rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend span::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--todo); border: 1px solid var(--line); box-sizing: border-box; }
+.legend .l-done::before { background: var(--accent); border-color: var(--accent); }
+.legend .l-doing::before { background: var(--copper); border-color: var(--copper); }
+
+.cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.col { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.col h3 { font: 600 1.5rem/1 var(--f-display); display: flex; align-items: baseline; gap: 8px; }
+.col h3 small { font: 500 .8rem var(--f-mono); color: var(--muted); }
+.col.done h3 { color: var(--accent); } .col.doing h3 { color: var(--copper); }
+.col ul { list-style: none; padding: 0; gap: 10px; }
+.col li { display: grid; grid-template-columns: 16px 1fr; gap: 6px; line-height: 1.35; font-size: .92rem; }
+.col li::before { font-family: var(--f-mono); font-weight: 600; }
+.col.done li::before { content: "✓"; color: var(--accent); }
+.col.doing li::before { content: "→"; color: var(--copper); }
+.col.todo li::before { content: "○"; color: var(--muted); }
+.col li small { display: block; color: var(--muted); font-size: .8rem; }
+
+.miles { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(6, 1fr); }
+.miles li { position: relative; padding: 18px 10px 0 0; border-top: 2px solid var(--line); font-size: .82rem; line-height: 1.3; min-width: 0; }
+.miles li::before { content: ""; position: absolute; top: -8px; left: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--paper); border: 2px solid var(--line); box-sizing: border-box; }
+.miles li b { display: block; font: 500 .72rem var(--f-mono); color: var(--muted); margin-bottom: 2px; }
+.miles li.now::before { background: var(--copper); border-color: var(--copper); }
+.miles li.now b { color: var(--copper); }
+
+.person { display: grid; gap: 6px; }
+.person p { max-width: 66ch; }
+figure { margin: 0; display: grid; gap: 8px; }
+figure .img { background: #ffffff; border: 1px solid var(--line); border-radius: 6px; padding: 8px; overflow-x: auto; }
+figure img { display: block; width: 100%; min-width: 520px; height: auto; }
+figcaption { font-size: .8rem; color: var(--muted); }
+.note { border: 1px solid var(--line); border-left: 3px solid var(--copper); border-radius: 0 6px 6px 0; padding: 12px 14px; display: grid; gap: 8px; max-width: 70ch; background: var(--card); }
+.note ul { font-size: .9rem; }
+
+@media (max-width: 620px) {
+  .cols, .parts { grid-template-columns: 1fr; }
+  .parts { grid-template-rows: none; grid-auto-flow: row; }
+  .miles { grid-template-columns: 1fr; }
+  .miles li { border-top: 0; border-left: 2px solid var(--line); padding: 0 0 14px 18px; }
+  .miles li::before { top: 0; left: -8px; }
+  .pct { font-size: 2.2rem; text-align: left; }
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <span class="eyebrow">Bitirme projesi · Haftalık durum</span>
+    <h1>TA-8: 5. hafta raporu</h1>
+    <p class="meta mono">24–30 Kasım 2026 · Simülasyon dönemi, hafta 5 / 10 · <a href="hafta4.html">4. hafta raporu</a></p>
+    <p class="cap">Ad: <b>TA-8</b>. TA, Taha ve Abdurrahman'ın baş harfleri; 8, işlemcinin 8 bitlik olması. Terimlerin sade açıklaması <a href="#sozluk">Sözlük</a> sekmesinde.</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Rapor bölümleri">
+    <a href="#genel" id="t-genel" role="tab" aria-controls="genel" aria-selected="true">Genel bakış</a>
+    <a href="#deniz" id="t-deniz" role="tab" aria-controls="deniz" aria-selected="false">Deniz <small>· yazılım</small></a>
+    <a href="#abdurrahman" id="t-abdurrahman" role="tab" aria-controls="abdurrahman" aria-selected="false">Abdurrahman <small>· donanım</small></a>
+    <a href="#sozluk" id="t-sozluk" role="tab" aria-controls="sozluk" aria-selected="false">Sözlük <small>· terimler</small></a>
+  </nav>
+
+  <div class="panel" id="genel" role="tabpanel" aria-labelledby="t-genel">
+    <section>
+      <span class="eyebrow">Hedef · Haziran 2027</span>
+      <p class="goal-text">74HC entegrelerle breadboard üzerinde kendi 8-bit bilgisayarımız. Sonunda C ile yazılmış Snake oyunu onda çalışacak.</p>
+      <div class="cal" aria-label="Takvim: simülasyon döneminin 5. haftası">
+        <div class="cal-bar"><div><i style="width: 50%"></i></div><div></div></div>
+        <div class="cal-lbl"><span><b>Simülasyon</b> · hafta 5 / 10</span><span><b>Breadboard yapımı</b> · Ocak – Haziran 2027</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Bu hafta, kısaca</h2>
+      <ul>
+        <li><b>C derleyicisi tamamlandı.</b> C ile yazılan programları işlemcinin anladığı komutlara çeviriyor. Planın istediği C'nin tamamını kapsıyor; son parça (<code>switch</code> için atlama tablosu) bu hafta eklendi.</li>
+        <li><b>İşlemciye hata ayıklama donanımı eklendi:</b> programı istenen adreste durdurmak (breakpoint) ve Arduino'nun işlemciyi durdurup belleğe program yüklemesi (BUSREQ). İkisi de simülasyonda ve Digital'de denendi.</li>
+        <li><b>Planda bulunan bir zamanlama hatası:</b> ekran belleğine yazarken verilen bekleme kararı en kötü durumda yetişmiyordu. Tek kablo değişikliğiyle düzeldi; payı az olduğu için osiloskopla ölçülecek.</li>
+        <li>İşlemci şimdi 63 entegre; hiçbir modülde plandaki sayı aşılmıyor.</li>
+      </ul>
+      <p class="cap">Abdurrahman'ın bu haftaki çalışması kendi sekmesinde. Terimlerin açıklaması: <a href="#sozluk">Sözlük</a>.</p>
+    </section>
+
+    <section>
+      <h2>İlerleme</h2>
+      <div class="tracks">
+        <div class="track">
+          <div class="track-head">
+            <h3>Yazılım<small>Deniz</small></h3>
+            <div class="pct">%68<small>15 / 22 hafta iş bitti · C derleyicisi tamamlandı</small></div>
+          </div>
+          <div class="segs" role="img" aria-label="Yazılım: 6 iş bitti, 2 iş sırada">
+            <span class="done" style="flex: 1" title="Komut seti ve ROM üreticileri: bitti"></span>
+            <span class="done" style="flex: 1" title="Assembler: bitti"></span>
+            <span class="done" style="flex: 1" title="Emülatörler ve testler: bitti"></span>
+            <span class="done" style="flex: 1" title="Runtime kütüphanesi: bitti"></span>
+            <span class="done" style="flex: 1" title="Devre test vektörü üretici: bitti"></span>
+            <span class="done" style="flex: 10" title="C derleyicisi: bitti">C derleyicisi</span>
+            <span style="flex: 1" title="Arduino iz ve yükleme yazılımı: sırada"></span>
+            <span style="flex: 6" title="Snake oyunu ve açılış test ROM'u: sırada">Snake</span>
+          </div>
+          <ul class="parts">
+            <li class="done">Komut seti ve ROM üreticileri <em>bitti</em></li>
+            <li class="done">Assembler <em>bitti</em></li>
+            <li class="done">Emülatörler ve testler <em>bitti</em></li>
+            <li class="done">Çarpma, bölme, yazdırma kütüphanesi <em>bitti</em></li>
+            <li class="done">Devre test vektörü üretici <em>bitti</em></li>
+            <li class="done">C derleyicisi <em>bitti</em></li>
+            <li>Arduino iz ve yükleme yazılımı <em>Aralık</em></li>
+            <li>Snake oyunu (C) <em>Aralık</em></li>
+          </ul>
+        </div>
+
+        <div class="track">
+          <div class="track-head">
+            <h3>Donanım<small>Abdurrahman · M2, M5 ve hata ayıklama: Deniz</small></h3>
+            <div class="pct">%22<small>M1–M5, birleştirme ve hata ayıklama mantığı bitti (Digital'de) · sırada M6 VGA</small></div>
+          </div>
+          <div class="segs" role="img" aria-label="Donanım: 7 iş bitti, 4 iş sırada">
+            <span class="done" style="flex: 1" title="M2 kontrol ünitesi: bitti (Deniz, Digital'de)"></span>
+            <span class="done" style="flex: 1" title="M5 bellek: bitti (Deniz, Digital'de)"></span>
+            <span class="done" style="flex: 1" title="M1 saat modülü: bitti (Abdurrahman, Digital'de)"></span>
+            <span class="done" style="flex: 1" title="M4 ALU ve A, F, IR registerları: bitti (Abdurrahman, Digital'de)"></span>
+            <span class="done" style="flex: 1" title="M3 adres registerları: bitti (Abdurrahman, Digital'de)"></span>
+            <span class="done" style="flex: 1" title="İşlemcinin birleştirilmesi: bitti, emülatörle sıfır fark"></span>
+            <span class="done" style="flex: 1" title="Hata ayıklama mantığı (breakpoint, BUSREQ): bitti (Deniz, Digital'de)"></span>
+            <span style="flex: 2" title="M6 VGA: sırada">M6 VGA</span>
+            <span style="flex: 1" title="M7 PS/2 klavye: sırada">M7</span>
+            <span style="flex: 2" title="KiCad şemaları ve breadboard yerleşimi: sırada">KiCad</span>
+            <span style="flex: 20" title="Breadboard yapımı ve testleri: sırada">Breadboard yapımı</span>
+          </div>
+          <ul class="parts" style="grid-template-rows: repeat(6, auto)">
+            <li class="done">M2 kontrol ünitesi (Deniz, Digital'de) <em>bitti</em></li>
+            <li class="done">M5 bellek (Deniz, Digital'de) <em>bitti</em></li>
+            <li class="done">M1 saat modülü (Abdurrahman) <em>bitti</em></li>
+            <li class="done">M4 registerlar (A, IR, F) ve ALU (Abdurrahman) <em>bitti</em></li>
+            <li class="done">M3 adres registerları (Abdurrahman) <em>bitti</em></li>
+            <li class="done">İşlemcinin birleştirilmesi <em>bitti</em></li>
+            <li class="done">Hata ayıklama mantığı (Deniz) <em>bitti</em></li>
+            <li>M6 VGA <em>Aralık</em></li>
+            <li>M7 PS/2 klavye <em>Aralık</em></li>
+            <li>KiCad şemaları, yerleşim planı <em>Aralık</em></li>
+            <li>Breadboard yapımı ve testleri <em>Ocak – Mayıs</em></li>
+          </ul>
+        </div>
+        <div class="legend"><span class="l-done">bitti</span><span class="l-doing">sürüyor</span><span>sırada</span></div>
+        <p class="cap">Çubuklar işlerin plandaki sürelerine göre bölündü (SISTEM-PLANI bölüm 13–14). Yüzde yalnızca biten işleri sayar. Donanıma bu hafta planın 5. hafta işi olan "hata ayıklama mantığı" (breakpoint, BUSREQ) eklendi; toplam 31 yerine 32 birim.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="cols">
+        <div class="col done">
+          <h3>Yaptık</h3>
+          <ul>
+            <li><span>Sistem planı ve TA-8 komut seti<small>bütçe 17.503 TL · 53 komut</small></span></li>
+            <li><span>Simülasyon yazılımı ve kütüphane<small>assembler, 2 emülatör, çarpma ve bölme</small></span></li>
+            <li><span>Saat, registerlar, ALU ve adres registerları Digital'de test edildi<small>Abdurrahman · 15 modül testi</small></span></li>
+            <li><span>Bütün işlemci Digital'de, emülatörle sıfır fark<small>3 program · 33.170 çevrime kadar</small></span></li>
+            <li><span>Kontrol ünitesi ve bellek Digital'de test edildi<small>planın kabul ölçütleri geçti</small></span></li>
+            <li><span>C derleyicisi tamamlandı<small>Deniz · planın C alt kümesi, switch tablosu dahil</small></span></li>
+            <li><span>Hata ayıklama donanımı: breakpoint ve BUSREQ<small>Deniz · 63 entegre · Digital'de de</small></span></li>
+          </ul>
+        </div>
+        <div class="col doing">
+          <h3>Yapıyoruz</h3>
+          <ul>
+            <li><span>Prototip a: saat modülü breadboard'da<small>Abdurrahman · WAIT zamanlaması osiloskopla · parçalar gelince</small></span></li>
+            <li><span>Parça siparişi ve giriş testleri<small>yurt içi parçalar · flash çipleri muafiyet yazısıyla</small></span></li>
+          </ul>
+        </div>
+        <div class="col todo">
+          <h3>Yapacağız</h3>
+          <ul>
+            <li><span>Snake oyunu C ile<small>Deniz · gelecek hafta</small></span></li>
+            <li><span>VGA ekran ve klavye simülasyonda<small>Aralık</small></span></li>
+            <li><span>Breadboard'da kurulum<small>Ocak – Haziran 2027</small></span></li>
+            <li><span>C ile yazılmış Snake demosu<small>Mayıs 2027</small></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Kilometre taşları</h2>
+      <ol class="miles">
+        <li><b>9 Kas · 18 Kas'ta geçti</b>Saat modülünün testleri geçiyor</li>
+        <li><b>23 Kas · geçti</b>İşlemci simülasyonda emülatörle sıfır farkla çalışıyor</li>
+        <li class="now"><b>14 Ara · sıradaki</b>Simülasyonda ekrana yazı</li>
+        <li><b>3 Oca</b>Tasarım donduruldu, yapıma hazır</li>
+        <li><b>Nisan 2027</b>Breadboard'da işlemci program çalıştırıyor</li>
+        <li><b>Mayıs 2027</b>Snake demosu çalışıyor</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Gelecek hafta (1–7 Aralık)</h2>
+      <ol class="next">
+        <li><span><b>Deniz:</b> Snake oyununu C ile yazmak; derleyicinin gerçek sınavı.</span></li>
+        <li><span><b>Malzeme:</b> kalan malzemenin siparişi (1–7 Aralık); gelen parçaların giriş testleri.</span></li>
+        <li><span><b>Abdurrahman:</b> kendi sekmesinde.</span></li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="panel" id="deniz" role="tabpanel" aria-labelledby="t-deniz">
+    <section class="person">
+      <span class="eyebrow">Yazılım ve kontrol</span>
+      <h2>Deniz</h2>
+      <p>Bu haftanın konuları: C derleyicisi (tamamlandı) ve planın 5. hafta işi olan hata ayıklama donanımı; ayrıca planda bulunan bir zamanlama hatası. Notlar: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Taha/hafta5/README.md">Taha/hafta5</a>.</p>
+    </section>
+
+    <section>
+      <h2>Özet</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>İş</th><th>Sonuç</th></tr></thead>
+          <tbody>
+            <tr><td>C derleyicisi <code>tacc</code></td><td style="white-space: normal">Planın C alt kümesinin tamamını derliyor; son parça <code>switch</code> atlama tablosu bu hafta eklendi</td></tr>
+            <tr><td>Kod hızı</td><td style="white-space: normal">Plandaki hedeflerle aynı; ekrana metinde karakter başına 4 çevrim fazla</td></tr>
+            <tr><td>Doğrulama</td><td style="white-space: normal">200 rastgele C programı (~4.400 ifade), ayrı bir Python hesaplayıcıyla aynı sonuç</td></tr>
+            <tr><td>Breakpoint</td><td style="white-space: normal">2× 74HC688 + BRK flip-flop'u; adrese her okuma ya da yazmadan sonra duruyor</td></tr>
+            <tr><td>BUSREQ / BUSACK</td><td style="white-space: normal">Arduino işlemciyi en çok 7 saat darbesinde durduruyor, yolları alıyor, belleğe yazıp okuyor</td></tr>
+            <tr><td>Entegre sayısı</td><td style="white-space: normal">59 → 63; hiçbir modülde plandaki adet aşılmıyor</td></tr>
+            <tr><td>Bulgu</td><td style="white-space: normal">Ekran belleği bekleme (WAIT) kararı en kötü gecikmede yetişmiyordu; tek kablo değişikliğiyle düzeltildi</td></tr>
+            <tr><td>Testler</td><td style="white-space: normal">Derleyici 52, bütün işlemci 29, Digital 37 test; hepsi geçiyor</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>C derleyicisi: <code>tacc</code></h2>
+      <p>Derleyici, C ile yazılan programı TA-8'in komutlarına çeviren program. Zincir: <b>C kaynağı</b> → <code>tacc</code> → <b>assembly</b> → assembler → <b>ROM imajı</b> → flash'a yazılır. İlk hedef C ile yazılmış "MERHABA"ydı; derleyici bunu ve plandaki C alt kümesinin tamamını geçiyor.</p>
+      <div class="screen" role="img" aria-label="merhaba.c kaynağı ve derleyici çıktısı: 89 satır assembly, ROM 253 bayt, 6943 çevrim, ekranda MERHABA, TA-8!">
+<pre>#include "hw.h"
+
+void yaz(char satir, char sutun, const char *s)
+{
+    volatile char *v = VRAM + satir * STRIDE + sutun;
+    while (*s)
+        *v++ = *s++;
+}
+
+int main(void)
+{
+    yaz(1, 2, "MERHABA, TA-8!");
+    LEDS = 0x55;
+    return 0;
+}</pre>
+        <pre class="cmd">&gt; py -m tacc examples/merhaba.c -o build/merhaba_c.asm --run</pre>
+<pre>build\merhaba_c.asm: 89 satır assembly, ROM 253 byte, RAM 8020-8029 (10 byte)
+RefEmu: durdu (HALT) · 6943 çevrim (6.94 ms @ 1 MHz) · LED=01010101 ($55)
+|  MERHABA, TA-8!                        |</pre>
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Elle yazılmış ile</th><th><code>merhaba.asm</code></th><th><code>merhaba.c</code></th></tr></thead>
+          <tbody>
+            <tr><td>ROM</td><td>66 bayt</td><td style="white-space: normal">253 bayt (açılış kodu 127 + program 111 + metin 15)</td></tr>
+            <tr><td>Çevrim</td><td>573</td><td style="white-space: normal">6.943 (6.228'i açılışta ekranı temizlemek)</td></tr>
+            <tr><td>Karakter başına</td><td>37 çevrim</td><td>41 çevrim</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Ne destekliyor, ne desteklemiyor</h3>
+      <ul>
+        <li><b>Var:</b> <code>char</code>, <code>signed char</code>, <code>int</code> (16 bit), <code>unsigned</code>, işaretçiler, 1 ve 2 boyutlu diziler, <code>enum</code>, <code>const</code> tablolar (ROM'da), <code>volatile</code>; if/else, while, do/while, for, switch, break, continue, return; bütün operatörler; <code>#include</code> ve <code>#define</code>.</li>
+        <li><b>Yok (satır numaralı Türkçe hata veriyor):</b> özyineleme, struct, long, float, fonksiyon işaretçisi, typedef, goto. İlk dördü planın ilk sürümünde de yok: 8 bitlik, 1 MHz'lik bir işlemcide yavaş ya da gereksiz.</li>
+      </ul>
+      <h3>Ürettiği kodun hızı</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>C kodu</th><th class="num">Plan</th><th class="num">tacc</th></tr></thead>
+          <tbody>
+            <tr><td><code>a = b + c</code> (int)</td><td class="num">24 çevrim</td><td class="num">24</td></tr>
+            <tr><td><code>*p = x</code></td><td class="num">11</td><td class="num">11</td></tr>
+            <tr><td><code>if (x &lt; y)</code></td><td class="num">19–20</td><td class="num">19–20</td></tr>
+            <tr><td>2 parametreli çağrı + dönüş</td><td class="num">82</td><td class="num">82</td></tr>
+            <tr><td>Ekrana metin</td><td class="num">37 / karakter</td><td class="num">41 / karakter</td></tr>
+            <tr><td><code>x = y * 10</code></td><td class="num">–</td><td class="num">116</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="cap">Sabitle çarpma, çarpma rutini (~500–1.070 çevrim) yerine kaydırıp toplamaya çevriliyor.</p>
+      <h3>Bu haftanın son parçası: <code>switch</code> için atlama tablosu</h3>
+      <p><code>switch</code>, bir değere göre birçok seçenekten birine gider. İki yolu var: değeri seçeneklerle <b>tek tek karşılaştırmak</b> ya da her seçeneğin adresini tutan bir <b>tablodan doğrudan atlamak</b> (JMPI komutuyla). Az seçenekte karşılaştırma, çok seçenekte tablo hızlı. Derleyici ikisinin ortalama süresini hesaplayıp hızlı olanı seçiyor:</p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Değer</th><th class="num">Karşılaştırma, case başına</th><th class="num">Tablo, sabit</th><th>Tablo ne zaman seçilir</th></tr></thead>
+          <tbody>
+            <tr><td>8 bit (<code>char</code>)</td><td class="num">~5 çevrim</td><td class="num">~38 çevrim</td><td style="white-space: normal">~14 case'ten itibaren</td></tr>
+            <tr><td>16 bit (<code>int</code>)</td><td class="num">~15 çevrim</td><td class="num">~52 çevrim</td><td style="white-space: normal">~6 case'ten itibaren</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="cap">Tablo yalnız case'ler sıksa kullanılır (en çok 128 giriş, case başına en çok 3). Test: boşluklu case'ler, aralık dışı, eksi ve üst baytı dolu değerler, case'ten case'e düşme, break ve continue; iki emülatörde de doğru. Tablo kodu bilerek iki yerden bozulunca test kalıyor.</p>
+      <h3>Nasıl test edildi</h3>
+      <p>200 rastgele C programı (yaklaşık 4.400 ifade) hem derlenip emülatörde, hem de C kurallarını uygulayan ayrı bir Python hesaplayıcıda çalıştırılıyor; sonuçlar aynı olmalı. Bu yöntem geliştirme sırasında iki derleyici hatası yakaladı, ikisi de düzeltildi. Desteklenmeyen her yapının hata mesajı ayrıca deneniyor.</p>
+    </section>
+
+    <section>
+      <h2>Hata ayıklama donanımı (plan 5. hafta)</h2>
+      <p>Breadboard'da bir şey çalışmadığında makineyi durdurup içine bakabilmek için. Adımlama (her mikroadımda ya da her komutta durmak) zaten vardı; bu hafta iki parça eklendi.</p>
+      <h3>Breakpoint: istenen adreste durmak</h3>
+      <ul>
+        <li><b>Nasıl:</b> iki 74HC688 (8 bitlik eşitlik karşılaştırıcı, art arda) adres yolunu 16 anahtarla karşılaştırıyor. O çevrimde bellek okunuyor ya da yazılıyorsa bir flip-flop (BRK) çevrimin sonunda 1 oluyor ve makine duruyor. GO butonu bir çevrim ilerletiyor; reset BRK'yi temizliyor.</li>
+        <li><b>Ne zaman durur:</b> o adrese erişen çevrimin sonunda. Komut adresine konursa komut okunmuş ama yürütülmemiştir; RAM adresine konursa (watchpoint) yazılan değer belleğe geçmiştir.</li>
+        <li><b>Plana bir ek:</b> breakpoint'i açıp kapatan bir anahtar (<code>/BP_EN</code>). Yoksa anahtarlar 0000'dayken makine her açılışta ilk komutta dururdu.</li>
+      </ul>
+      <h3>BUSREQ: Arduino'nun belleğe program yüklemesi</h3>
+      <ul>
+        <li><b>Nasıl:</b> Arduino <code>/BUSREQ</code> hattını indiriyor. İstek iki flip-flop'la saate eşitleniyor; makine o anki çevrimi bitirip duruyor. BUSACK = 1 olunca işlemcinin adres ve veri yolu sürücüleri kapanıyor; Arduino yolları sürüp RAM'e yazıyor, geri okuyup doğruluyor, sonra bırakıyor.</li>
+        <li><b>Yüklemenin sonu:</b> SW0 anahtarı 1 iken reset; açılış ROM'u 8000'e atlıyor ve yüklenen program çalışıyor.</li>
+      </ul>
+      <h3>Sonuçlar</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Deneme</th><th>Sonuç</th></tr></thead>
+          <tbody>
+            <tr><td>Komut adresinde breakpoint</td><td style="white-space: normal"><code>merhaba</code>'da döngüdeki bir adres (001D): 15 erişimin her birinde durdu; GO ile devam edince emülatörle sıfır fark</td></tr>
+            <tr><td>RAM'de (watchpoint)</td><td style="white-space: normal">8100'e 3 yazma ve 1 okumanın dördünde de durdu; durduğunda yazılan değer bellekteydi</td></tr>
+            <tr><td>Kapalıyken, reset</td><td style="white-space: normal">Breakpoint kapalıyken aynı adres durdurmuyor; reset BRK'yi temizliyor</td></tr>
+            <tr><td>BUSREQ, çalışırken</td><td style="white-space: normal">Dört farklı fazda istek: BUSACK en çok 7 saat darbesinde (çoğunlukla 3). Bu sırada yolları hiçbir CPU entegresi sürmüyor; ROM okundu, RAM'e yazılıp geri okundu; bırakınca program kaldığı yerden devam etti, sıfır fark</td></tr>
+            <tr><td>Yükleme baştan sona</td><td style="white-space: normal">Makine dururken 8000'e küçük bir program yazıldı (10 + 9 + … + 1), doğrulandı; SW0 = 1 ile reset sonrası çalıştı, LED'lerde 37h = 55; sıfır fark</td></tr>
+            <tr><td>Digital'de</td><td style="white-space: normal">Saat modülünde breakpoint ve BUSREQ senaryosu; bütün işlemcide breakpoint'te durma ve BUSREQ ile durup devam etme: geçti</td></tr>
+            <tr><td>Testler hata yakalıyor mu</td><td style="white-space: normal">4 bilinçli bozma (BUSACK girişi, adres tamponlarının BUSACK'ı, /ACCESS, 688'de iki adres bacağı): 4'ü de yakalandı</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Entegre sayımı</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Modül</th><th class="num">Plan</th><th class="num">Kuruldu</th><th>Kalan</th></tr></thead>
+          <tbody>
+            <tr><td>M1 Saat</td><td class="num">14</td><td class="num">11</td><td style="white-space: normal">3: yavaş saat (NE555), saat kaynağı seçici, buton ve reset temizleme</td></tr>
+            <tr><td>M2 Kontrol</td><td class="num">13</td><td class="num">13</td><td>–</td></tr>
+            <tr><td>M3 Adres</td><td class="num">22</td><td class="num">22</td><td>–</td></tr>
+            <tr><td>M4 Veri/ALU</td><td class="num">8</td><td class="num">8</td><td>–</td></tr>
+            <tr><td>Yardımcı kapılar</td><td class="num">4</td><td class="num">3</td><td style="white-space: normal">1: ikinci 74HC00 gereksiz çıktı</td></tr>
+            <tr><td>M5 Bellek</td><td class="num">6</td><td class="num">6</td><td>–</td></tr>
+            <tr><td><b>Toplam</b></td><td class="num"><b>67</b></td><td class="num"><b>63</b></td><td>4</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="cap">Arduino tarafının yazılımı bu protokolle yazılmıştı; eksik olan makinenin içindeki donanımdı. Arduino Mega sipariş edilecek; sketch donanımda henüz denenmedi.</p>
+    </section>
+
+    <section>
+      <h2>Bulgu: ekran belleği bekleme (WAIT) kararı</h2>
+      <p>Ekran belleğine (VRAM) yalnızca ekranın boş çizildiği anlarda yazılabiliyor; o an değilse işlemci beklemeli. Bekleme kararı saat çevriminin bir fazı içinde, 250 ns'de verilmek zorunda.</p>
+      <ul>
+        <li><b>Plandaki hesap:</b> ~236 ns, yetişiyor.</li>
+        <li><b>Simülasyon:</b> en kötü gecikmelerle, flip-flop'un kurulum süresi dahil 272 ns: <b>yetişmiyor</b>. Beklenmesi gereken yazmalar beklemeden geçer, ekranda bozulma olurdu. Tipik gecikmelerle sorun yok.</li>
+        <li><b>Hesaptaki eksik:</b> süre yanlış yerden sayılmış (bir flip-flop gecikmesi, en kötü ~44 ns, sonradan başlatılmış) ve kurulum süresi eklenmemiş.</li>
+        <li><b>Düzeltme:</b> kararı üreten 74HC138'in G1 bacağı VCC yerine CLK'ye. Mantık aynı, yoldan bir kapı kalkıyor: en kötü 247 ns.</li>
+        <li><b>Kalan risk:</b> pay yalnız ~3 ns; prototip a'da osiloskopla ölçülecek.</li>
+      </ul>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Yol</th><th>Simülasyon (tipik / en kötü)</th><th>Elle hesap</th><th>Pencere</th></tr></thead>
+          <tbody>
+            <tr><td>Bellekten oku, ALU'dan geçir, A'ya yaz</td><td>254 / 393 ns</td><td>254 / 403 ns</td><td>750 ns</td></tr>
+            <tr><td>Mikrokod ROM'unda arama</td><td>94 / 152 ns</td><td>94 / 152 ns</td><td>250 ns</td></tr>
+            <tr><td>WAIT kararı, ilk tasarım</td><td>111 / 272 ns</td><td>~236 ns</td><td>250 ns</td></tr>
+            <tr><td>WAIT kararı, düzeltilmiş</td><td>102 / 247 ns</td><td>–</td><td>250 ns</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="cap">İlk iki yolda simülasyon elle hesabı doğruladı. Gecikme tablosunun bir kısmı tahmin; değerler yaklaşık. Hız denemesi: 1,5 MHz'de de sıfır fark (yalnız WAIT en kötü gecikmede yetişmiyor), 2 MHz yalnız tipik gecikmelerle çalışıyor; planın öngörüsüyle aynı.</p>
+    </section>
+
+    <section>
+      <h2>Testler</h2>
+      <ul>
+        <li><b>Derleyici</b> (<code>test_tacc.py</code>): 52 test; rastgele programlar, kontrol akışı, fonksiyonlar, işaretçiler, switch tablosu, hata mesajları.</li>
+        <li><b>Bütün işlemci</b> (<code>test_hw_cpu.py</code>): 29 test; sıfır fark, reset, adımlama, WAIT, zamanlama, breakpoint, BUSREQ ve yükleme.</li>
+        <li><b>Digital</b> (<code>test_hw_digital.py</code>): 37 test; modüller, kabul ölçütleri, bütün işlemci, breakpoint ve BUSREQ.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Gelecek hafta</h2>
+      <ol class="next">
+        <li><span>Snake oyununu C ile yazmak: derleyicinin gerçek sınavı.</span></li>
+        <li><span>Gelen parçaların giriş testleri (liste: 4. hafta raporu).</span></li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="panel" id="abdurrahman" role="tabpanel" aria-labelledby="t-abdurrahman">
+    <section class="person">
+      <span class="eyebrow">Donanım ve testler</span>
+      <h2>Abdurrahman</h2>
+      <p>Kendi notları: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/Abdurrahman">Abdurrahman klasörü</a>.</p>
+      <!-- ABDURRAHMAN: bu sekme Abdurrahman tarafından doldurulur -->
+    </section>
+  </div>
+
+  <div class="panel" id="sozluk" role="tabpanel" aria-labelledby="t-sozluk">
+    <section class="person">
+      <span class="eyebrow">Terimler</span>
+      <h2>Sözlük</h2>
+      <p>Raporda geçen terimlerin sade açıklaması: önce bu haftanın yeni terimleri, sonra 4. haftadan gelenler. Bir komutun işlemcide adım adım nasıl yürüdüğü: <a href="hafta4.html#sozluk">4. hafta sözlüğü</a>.</p>
+    </section>
+
+    <section>
+      <h2>C'den makineye: tek satırın yolculuğu</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Basamak</th><th>Örnek</th><th>Kim yapar</th></tr></thead>
+          <tbody>
+            <tr><td>1. C</td><td><code>LEDS = 0x55;</code></td><td style="white-space: normal">İnsan yazar</td></tr>
+            <tr><td>2. Assembly</td><td><code>LDA #$55</code> · <code>STA $F800</code></td><td style="white-space: normal">Derleyici (<code>tacc</code>)</td></tr>
+            <tr><td>3. Makine kodu</td><td><code>40 55</code> · <code>45 00 F8</code></td><td style="white-space: normal">Assembler</td></tr>
+            <tr><td>4. Çalışma</td><td style="white-space: normal">2 + 4 = 6 çevrim, 1 MHz'de 6 µs; LED'ler 01010101 yanar</td><td style="white-space: normal">İşlemci (mikrokod adım adım)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Bu haftanın terimleri</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Terim</th><th>Ne demek</th><th>Bizde</th></tr></thead>
+          <tbody>
+            <tr><td>Derleyici</td><td style="white-space: normal">İnsanın yazdığı programı işlemcinin anladığı komutlara çeviren program.</td><td style="white-space: normal">Kendi derleyicimiz: <code>tacc</code> (Python ile)</td></tr>
+            <tr><td>C</td><td style="white-space: normal">Yaygın bir programlama dili. Küçük işlemciler için en çok kullanılan dil.</td><td style="white-space: normal">Snake oyunu C ile yazılacak</td></tr>
+            <tr><td>C alt kümesi</td><td style="white-space: normal">C'nin bir bölümü. Küçük bir işlemcide yavaş ya da gereksiz olan özellikler dışarıda bırakılır.</td><td style="white-space: normal">Var: sayılar, diziler, işaretçiler, if/while/for/switch. Yok: struct, long, float, özyineleme</td></tr>
+            <tr><td>Assembly</td><td style="white-space: normal">İşlemcinin komutlarının insanın okuyabileceği yazımı (<code>LDA #$55</code> gibi).</td><td style="white-space: normal">Derleyici C'yi assembly'ye, assembler da assembly'yi sayılara çevirir</td></tr>
+            <tr><td>Switch, atlama tablosu</td><td style="white-space: normal">Bir değere göre birçok seçenekten birine gitme. Atlama tablosu: her seçeneğin adresini tutan liste; tek tek karşılaştırmak yerine doğrudan atlanır.</td><td style="white-space: normal">Derleyici hızlı olanı kendisi seçer</td></tr>
+            <tr><td>Breakpoint</td><td style="white-space: normal">Program belirli bir adrese gelince makineyi durduran düzenek. Hata ararken "buraya kadar doğru mu" diye bakmak için.</td><td style="white-space: normal">2× 74HC688 + 1 flip-flop; adres 16 anahtarla girilir</td></tr>
+            <tr><td>Watchpoint</td><td style="white-space: normal">Bellekte belirli bir adres okunduğunda ya da yazıldığında durma.</td><td style="white-space: normal">Aynı devre; adres RAM'den seçilirse</td></tr>
+            <tr><td>BUSREQ, BUSACK</td><td style="white-space: normal">Dışarıdan bir cihazın "yolu bana ver" isteği (BUSREQ) ve işlemcinin "aldın" cevabı (BUSACK). Bu sırada işlemci durur, yolları bırakır.</td><td style="white-space: normal">Arduino bununla belleğe program yükler</td></tr>
+            <tr><td>Arduino Mega</td><td style="white-space: normal">Küçük, programlanabilir bir kart. Bizim hata ayıklama kartımız olacak.</td><td style="white-space: normal">İz kaydı ve program yükleme; sipariş edilecek</td></tr>
+            <tr><td>Osiloskop</td><td style="white-space: normal">Sinyalin zamana göre nasıl değiştiğini ekranda gösteren ölçüm aleti.</td><td style="white-space: normal">Nanosaniyelik zamanlama payları onunla ölçülecek</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. haftadan</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Terim</th><th>Ne demek</th><th>Bizde</th></tr></thead>
+          <tbody>
+            <tr><td>TA-8</td><td style="white-space: normal">Projenin adı: Taha ve Abdurrahman'ın baş harfleri, 8 bitlik işlemci.</td><td style="white-space: normal">19 Kasım'a kadar TD-8</td></tr>
+            <tr><td>8 bit</td><td style="white-space: normal">İşlemcinin bir seferde işlediği sayı 8 ikilik basamak: 0–255.</td><td style="white-space: normal">Adresler 16 bit: 64 KB'lık adres alanı</td></tr>
+            <tr><td>Entegre (74HC…)</td><td style="white-space: normal">İçinde mantık kapıları ya da bellek olan küçük çip. 74HC, standart mantık çiplerinin bir ailesi.</td><td style="white-space: normal">İşlemcide 63 entegre (ekran ve klavye hariç)</td></tr>
+            <tr><td>Breadboard</td><td style="white-space: normal">Lehim gerektirmeyen, çiplerin ve kabloların takılıp söküldüğü delikli tahta.</td><td style="white-space: normal">Ocak'tan sonra, 24 tahta</td></tr>
+            <tr><td>Komut, opcode</td><td style="white-space: normal">İşlemcinin anladığı tek tek emirler (topla, yükle, atla…) ve her birinin sayı kodu.</td><td style="white-space: normal">53 komut, 88 opcode</td></tr>
+            <tr><td>Register</td><td style="white-space: normal">İşlemcinin içindeki küçük, hızlı hafıza hücreleri.</td><td style="white-space: normal">A (sonuç), X (işaretçi), PC (sıradaki komutun yeri), SP (yığın), IR (o anki komut), F (bayraklar)</td></tr>
+            <tr><td>Adres yolu, veri yolu</td><td style="white-space: normal">Bütün parçaları bağlayan ortak kablo demetleri. Adres yolu "nereye", veri yolu "ne" taşır. Aynı anda yalnız bir parça konuşabilir.</td><td style="white-space: normal">16 + 8 kablo</td></tr>
+            <tr><td>ALU</td><td style="white-space: normal">Hesap birimi: toplama, çıkarma, mantık işlemleri, kaydırma.</td><td style="white-space: normal">İki flash'ta tablo: hesaplamıyor, cevabı tablodan okuyor. 25 işlem</td></tr>
+            <tr><td>Bayraklar (Z, C, N, V)</td><td style="white-space: normal">Son işlemin özeti: sonuç sıfır mı, elde var mı, negatif mi, taşma var mı.</td><td style="white-space: normal">Karşılaştırma ve dallanmalar bunlara bakar</td></tr>
+            <tr><td>Flash</td><td style="white-space: normal">Elektrik gidince silinmeyen, yeniden yazılabilen bellek çipi.</td><td style="white-space: normal">SST39SF010: mikrokod, ALU tablosu, program</td></tr>
+            <tr><td>RAM (SRAM)</td><td style="white-space: normal">Çalışırken okunup yazılan, elektrik gidince silinen bellek.</td><td style="white-space: normal">CY62256, 32 KB</td></tr>
+            <tr><td>Mikrokod</td><td style="white-space: normal">İşlemcinin tarif defteri: her komutun her adımında hangi kontrol hatlarının açık olacağını yazan tablo. Kablolarla değil tabloyla yapıldığı için bir komutu düzeltmek, flash'ı yeniden yazmak kadar kolay.</td><td style="white-space: normal">3 flash çipinde</td></tr>
+            <tr><td>Kontrol kelimesi</td><td style="white-space: normal">Bir adımda 24 kontrol hattının açık/kapalı durumu.</td><td style="white-space: normal">Kontrol latch'inde tutulur, 24 LED'de görünür</td></tr>
+            <tr><td>Mikroadım, çevrim</td><td style="white-space: normal">Bir komutun tek adımı.</td><td style="white-space: normal">1 MHz'de her adım 1 µs; komutlar 2–7 adım</td></tr>
+            <tr><td>Saat, 4 faz</td><td style="white-space: normal">Her adımı dört parçaya bölen zamanlama: önce yollar kurulur, sonra gerekiyorsa belleğe yazılır, en son sonuçlar registerlara kaydedilir.</td><td style="white-space: normal">4 MHz saat, 1 MHz işlemci</td></tr>
+            <tr><td>WAIT</td><td style="white-space: normal">Ekran belleği o anda meşgulse işlemciyi kısa süre bekletme.</td><td style="white-space: normal">12 Kasım'da bir zamanlama hatası bulunup düzeltildi</td></tr>
+            <tr><td>Kontrol ünitesi (M2)</td><td style="white-space: normal">İşlemcinin "beyni": komutu adımlara böler, her adımda doğru hatları açar.</td><td style="white-space: normal">13 entegre</td></tr>
+            <tr><td>Adres çözme (M5)</td><td style="white-space: normal">Bir adresin hangi çipe gittiğine karar veren devre.</td><td style="white-space: normal">0000–7FFF ROM, 8000–EFFF RAM, F000–F7FF ekran belleği, F800–FFFF giriş/çıkış</td></tr>
+            <tr><td>Modüller (M1–M8)</td><td style="white-space: normal">İşlemcinin parçaları: M1 saat, M2 kontrol, M3 adres registerları, M4 veri ve ALU, M5 bellek, M6 ekran (VGA), M7 klavye, M8 hata ayıklama.</td><td style="white-space: normal">M1, M3, M4, M6, M7 Abdurrahman; M2, M5, M8 Deniz</td></tr>
+            <tr><td>Emülatör</td><td style="white-space: normal">İşlemcinin bilgisayardaki taklidi. "Doğru cevabı" o verir; devre ona göre denetlenir.</td><td style="white-space: normal">İki emülatör: komut ve mikroadım seviyesinde</td></tr>
+            <tr><td>Çip seviyesi simülatör</td><td style="white-space: normal">Her entegreyi ve her kabloyu gerçek gecikmeleriyle taklit eden program. "Kablolar doğru mu, sinyaller zamanında yetişiyor mu" sorusunu cevaplar.</td><td style="white-space: normal">25 entegre modeli</td></tr>
+            <tr><td>Digital</td><td style="white-space: normal">Ücretsiz devre simülatörü (Java ile çalışır). Devreyi entegre entegre kurup test tablosuyla otomatik dener.</td><td style="white-space: normal">İkimiz de bunu kullanıyoruz</td></tr>
+            <tr><td>Proteus</td><td style="white-space: normal">Ücretli devre simülatörü.</td><td style="white-space: normal">Bırakıldı; Abdurrahman da Digital'e geçti</td></tr>
+            <tr><td>Netlist (bağlantı listesi)</td><td style="white-space: normal">Hangi entegrenin hangi bacağının hangi kabloya bağlı olduğunun listesi.</td><td style="white-space: normal">Digital dosyaları ve breadboard tablosu buradan üretiliyor</td></tr>
+            <tr><td>Test vektörü</td><td style="white-space: normal">"Bu girişleri verirsen şu çıkışları görmelisin" satırlarından oluşan tablo.</td><td style="white-space: normal">Emülatörden üretiliyor</td></tr>
+            <tr><td>Kabul testi</td><td style="white-space: normal">Planın bir modül için koyduğu "bitti sayılmak için geçmeli" ölçütü.</td><td style="white-space: normal">Bu hafta M2, M4 ve M5'inkiler geçti</td></tr>
+            <tr><td>Sıfır fark</td><td style="white-space: normal">Devrenin, emülatörle her adımda adres, veri ve 24 kontrol hattında aynı olması.</td><td style="white-space: normal">3 programda, 33.170 adıma kadar</td></tr>
+            <tr><td>Kilometre taşı (K1, K2)</td><td style="white-space: normal">Takvimdeki ara hedefler.</td><td style="white-space: normal">K1 saat modülü testleri, K2 işlemcinin emülatörle sıfır farkı: ikisi de geçti</td></tr>
+            <tr><td>Prototip (a–e)</td><td style="white-space: normal">Simülasyonda görülemeyen şeylerin (sinyal çınlaması, gerilim, gerçek monitör ve klavye) masada küçük denemesi.</td><td style="white-space: normal">Parçalar gelince</td></tr>
+            <tr><td>Breakpoint, BUSREQ</td><td style="white-space: normal">İşlemciyi istenen adreste durdurma; Arduino'nun işlemciyi durdurup belleğe program yüklemesi.</td><td style="white-space: normal">Bu haftanın konusu (Deniz sekmesi)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <span>Ayrıntılar:</span>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Taha/hafta5/README.md">5. hafta notları</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/sim/tacc">C derleyicisi</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/sim/ta8/hw">Çip seviyesi simülatör</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim">GitHub deposu</a>
+  </footer>
+</main>
+<script>
+(function () {
+  var ids = ['genel', 'deniz', 'abdurrahman', 'sozluk'];
+  function show(scroll) {
+    var h = location.hash.slice(1);
+    var cur = ids.indexOf(h) >= 0 ? h : 'genel';
+    ids.forEach(function (id) {
+      document.getElementById(id).hidden = id !== cur;
+      document.getElementById('t-' + id).setAttribute('aria-selected', id === cur ? 'true' : 'false');
+    });
+    if (scroll) document.querySelector('.tabs').scrollIntoView({ block: 'start' });
+  }
+  window.addEventListener('hashchange', function () { show(true); });
+  show(false);
+})();
+</script>
+</body>
+</html>
