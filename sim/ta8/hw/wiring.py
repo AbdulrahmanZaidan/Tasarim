@@ -27,12 +27,7 @@ PLAN_COUNTS = {
 # M6 (SISTEM-PLANI 15.1, 19 entegre): yalnız build(vga='netlist') kartında sayılır.
 M6_PLAN = {'74HC74': 1, '74HC163': 6, 'SST39SF010': 2, '74HC377': 1, '74HC157': 3, 'CY62256': 1,
            '74HC245': 1, '74HC166': 1, '74HC08': 1, '74HC20': 1, '74HC04': 1}
-M6_NOT_BUILT = [('SST39SF010', 1, 'sırada: font ROM\'u (8.3)'),
-                ('74HC157', 3, 'sırada: VRAM adres seçimi (8.3, 8.5)'),
-                ('CY62256', 1, 'sırada: VRAM (şimdilik TB X1 taklidi)'),
-                ('74HC245', 1, 'sırada: DB → VRAM tamponu, /OE = /BUFEN (8.5)'),
-                ('74HC166', 1, 'sırada: glyph kaydırma registerı (8.3)'),
-                ('74HC08', 1, 'sırada: çıkış katı AND(QH, BLANK_n) (8.4)')]
+M6_NOT_BUILT = []          # 19 Kasım: 19 entegrenin hepsi netlist'te (U701–U719)
 
 # Plan sayısından netlist'e girmeyenler ve nedeni.
 NOT_BUILT = {

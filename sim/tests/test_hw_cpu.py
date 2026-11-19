@@ -669,7 +669,7 @@ class TestNetlist(HwCase):
         # modül kurucuları tek tek çağrılabilir; birleşimleri build() ile aynı
         refs = []
         for m, fn in cpu.MODULES.items():
-            part = fn()
+            part = fn(vga=True) if m in ('M1', 'TB') else fn()     # netlist kipi: X1 yok
             self.assertTrue(all(c.module == m for c in part.chips), m)
             refs += [c.ref for c in part.chips]
             self.assertTrue(board.ports(m), m)

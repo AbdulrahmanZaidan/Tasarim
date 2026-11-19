@@ -32,7 +32,7 @@ FRAME_OSC = FRAME_CHARS * 8 * 2                      # 420.000 osilatör periyod
 def chips(dclk_ext=False):
     """M6'nın zamanlama kısmı: 11 entegre (U701–U711). Artık projenin netlist'inde:
     sim/ta8/hw/cpu.py m6_vga() (tek kaynak). dclk_ext: ÷2 FF'si boşta, DCLK dışarıdan."""
-    return cpu.m6_vga(dclk_ext).chips
+    return cpu.m6_vga(dclk_ext, timing_only=True).chips
 
 
 P = lambda l, n, d=0: dg.Port(l, n, d)

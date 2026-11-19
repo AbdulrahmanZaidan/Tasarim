@@ -17,9 +17,9 @@ dışa aktarıcı her modülü ayrı bir .dig yapabilsin diye):
     board = build(sim, vga='netlist')        # + M6 zamanlaması, VWR_s M1'de senkronlanır
 
 vga='taklit' (varsayılan): M6 yok, VWR_s test tezgâhından (hızlı; sıfır fark testleri).
-vga='netlist': M6'nın zamanlama kısmı (U701–U711, 25 MHz OSC25) devrede; VWR (T1 Q7)
-U111'in FF2/FF3'ünde iki MCLK ile VWR_s'e senkronlanır (3.6). Karakter hattı (VRAM
-adres seçimi, VRAM, font ROM'u, 74HC166, çıkış katı) henüz yok: VRAM yine X1 taklidi.
+vga='netlist': M6'nın tamamı (U701–U719, 25 MHz OSC25) devrede: zamanlama, VRAM adres
+seçimi, VRAM, font ROM'u, 74HC166, çıkış katı; X1 taklidi kalkar. VWR (T1 Q7) U111'in
+FF2/FF3'ünde iki MCLK ile VWR_s'e senkronlanır (3.6). Görüntü çıkışı: VIDEO, /HSYNC, /VSYNC.
 25 MHz saat olay sayısını ~25 kat artırır; bu kip yalnız M6 testlerinde kullanılır.
 
 Net adları SISTEM-PLANI bölüm 2'deki sinyal sözlüğüyle aynıdır: AB0..15, DB0..7,
@@ -51,7 +51,8 @@ from functools import lru_cache
 
 from .. import alu, isa, microcode, vga as vga_tables
 from .chips import (CY62256, HC00, HC02, HC04, HC08, HC20, HC32, HC74, HC138, HC139, HC161,
-                    HC163, HC175, HC191, HC245, HC273, HC377, HC540, HC688, SST39SF010)
+                    HC157, HC163, HC166, HC175, HC191, HC245, HC273, HC377, HC540, HC688,
+                    SST39SF010)
 
 # ----------------------------------------------------------------------------
 # Net adları
@@ -72,7 +73,7 @@ MODULE_TITLES = {
     'M4': 'M4 Veri ve ALU',
     'AUX': 'CPU yardımcı kapıları',
     'M5': 'M5 Bellek + I/O',
-    'M6': 'M6 VGA zamanlaması',
+    'M6': 'M6 VGA',
     'TB': 'Test tezgâhı taklitleri (M6/M7 yerine; entegre sayımına girmez)',
 }
 
@@ -611,7 +612,7 @@ def m5_memory(program=b'', rom_speed=90, ram_data=None):
 # ----------------------------------------------------------------------------
 def stubs(vram_data=None, vga=False):
     M = 'TB'
-    chips = [
+    chips = [] if vga else [
         _chip(CY62256, 'X1', {
             **pins('A', nets('AB', 11)), **pins('A', ['GND'] * 4, 11),
             '/CE': 'GND', '/OE': 'VCC', '/WE': '/VRAM_WE', **pins('IO', nets('DB', 8)),
@@ -619,6 +620,8 @@ def stubs(vram_data=None, vga=False):
               'OR(/WR, /VRAMSEL) (U503), /OE = VCC. Gerçekte veri DB → 74HC245 '
               '(/OE = /BUFEN) üzerinden, adres 3× 74HC157 üzerinden gelir; burada '
               'doğrudan DB/AB.', data=vram_data),
+    ]
+    chips += [
         _chip(HC540, 'X2', {
             '/OE1': '/KBD_RD', '/OE2': 'GND', **pins('A', nets('KSR', 8)),
             **pins('/Y', nets('DB', 8)),
@@ -630,7 +633,7 @@ def stubs(vram_data=None, vga=False):
     return Board(chips=chips,
                  inputs={**({} if vga else {'VWR_s': 1}), 'KRDY': 0,
                          **{f'KSR{i}': 0 for i in range(8)}},
-                 memories={'VRAM': chips[0]},
+                 memories={} if vga else {'VRAM': chips[0]},
                  notes=['VWR_s M1\'deki U111\'de VWR\'den (M6) senkronlanıyor (vga=\'netlist\').'
                         if vga else
                         'VWR_s gerçekte M1\'deki 2. 74HC175\'te VWR\'den (M6) senkronlanır; '
@@ -640,11 +643,13 @@ def stubs(vram_data=None, vga=False):
 # ----------------------------------------------------------------------------
 # M6: VGA zamanlaması (SISTEM-PLANI 8.1–8.2). Abdurrahman/hafta5/m6_uret.py'den taşındı.
 # ----------------------------------------------------------------------------
-def m6_vga(dclk_ext=False, osc_half=20):
-    """M6'nın zamanlama kısmı: 11 entegre (U701–U711). dclk_ext: ÷2 FF'si boşta, DCLK dışarıdan
-    (yalnız en kötü gecikme analizinde, ÷2'den sonraki devreyi ayrı denemek için).
-    Çıkışlar: /HSYNC, /VSYNC, BLANK_n, /BUFEN, VMUX, VWR (T1), DCLK, CCLK, LD, H0–H5, V0–V9.
-    Karakter hattı ve çıkış katı (8.3–8.4) sırada."""
+def m6_vga(dclk_ext=False, osc_half=20, vram_data=None, font=None, timing_only=False):
+    """M6 VGA (SISTEM-PLANI 8): 19 entegre.
+    U701–U711 zamanlama (8.1–8.2), U712–U719 karakter hattı ve çıkış katı (8.3–8.5).
+    timing_only: yalnız U701–U711 (hafta5/m6_uret.py ve gecikme analizi için).
+    dclk_ext: ÷2 FF'si boşta, DCLK dışarıdan (en kötü gecikme analizinde).
+    font: font ROM'u imajı (varsayılan vga.test_font()). vram_data: VRAM başlangıç içeriği.
+    Çıkışlar: VIDEO (= AND(QH, BLANK_n); R, G, B buna bağlı), /HSYNC, /VSYNC; CPU'ya VWR."""
     M = 'M6'
     gnd4 = {f'D{i}': 'GND' for i in range(4)}
     ff1 = ({'1CP': 'GND', '1D': 'FF1_QN', '1Q': 'FF1_Q', '/1Q': 'FF1_QN'} if dclk_ext else
@@ -699,9 +704,62 @@ def m6_vga(dclk_ext=False, osc_half=20):
     b = Board(chips=chips, inputs={'SLOW': 0}, memories={'VGA_ROM': rom})
     if not dclk_ext:
         b.clocks['OSC25'] = osc_half
-    b.notes.append('M6 kapsam dışı (sırada, 8.3–8.4): VRAM adres seçimi (3× 74HC157), VRAM '
-                   '(CY62256; şimdilik TB X1), font ROM\'u, 74HC166, DB tamponu 74HC245 (/BUFEN), '
-                   'çıkış katı (74HC08, dirençler). SLOW test tezgâhından (gerçekte saat seçici).')
+    if timing_only:
+        b.notes.append('M6 yalnız zamanlama (U701–U711).')
+        return b
+    # --- karakter hattı (8.3) ve CPU ile paylaşım (8.5)
+    video = [f'H{i}' for i in range(6)] + [f'V{i}' for i in range(4, 9)]      # {V8..V4, H5..H0}
+    cpu_a = nets('AB', 11)
+    for k, ref in enumerate(('U712', 'U713', 'U714')):
+        pm = {'S': 'VMUX', '/E': 'GND'}
+        for u in range(4):
+            bit = 4 * k + u
+            if bit < 11:
+                pm.update({f'{u + 1}I0': video[bit], f'{u + 1}I1': cpu_a[bit], f'{u + 1}Y': f'VA{bit}'})
+            else:
+                pm.update({f'{u + 1}I0': 'GND', f'{u + 1}I1': 'GND'})
+        lo, hi = 4 * k, min(4 * k + 3, 10)
+        b.chips.append(_chip(HC157, ref, pm, M,
+                             f'VRAM adres seçimi (8.3, 8.5), bit {lo}–{hi}: S = VMUX; 0 → görüntü '
+                             f'{{V8..V4, H5..H0}}, 1 → CPU AB0–10 (pencere). /E = GND.'
+                             + (' 4. birim boş, girişleri GND.' if k == 2 else '')))
+    vram = _chip(CY62256, 'U715', {
+        **pins('A', nets('VA', 11)), **pins('A', ['GND'] * 4, 11),
+        '/CE': 'GND', '/OE': 'VMUX', '/WE': '/VRAM_WE', **pins('IO', nets('VD', 8)),
+    }, M, 'VRAM (8.3, 8.5): 2 KB kullanılır (A11–14 = GND). /OE = VMUX: görüntü sırasında okunur, '
+          'pencerede çıkışı kapalı. /WE = /VRAM_WE = OR(/WR, /VRAMSEL) (U503); CPU yalnız VWR '
+          'penceresinde yazabilir (WAIT). IO = VD0–7 → font ROM\'u A3–10 ve U716 B tarafı.',
+        data=vram_data)
+    font_rom = _chip(SST39SF010, 'U717', {
+        'A0': 'V1', 'A1': 'V2', 'A2': 'V3', **pins('A', nets('VD', 8), 3),
+        **pins('A', ['GND'] * 6, 11), '/CE': 'GND', '/OE': 'GND', '/WE': 'VCC',
+        **pins('DQ', nets('FD', 8)),
+    }, M, 'Font ROM\'u (8.3): A0–2 = V3..V1 (font satırı, her satır iki kez), A3–10 = karakter '
+          'kodu (VD), A11–16 = font bankası jumper\'ları (burada GND, bank 0). Bit 7 en soldaki nokta.',
+        data=bytes(font if font is not None else vga_tables.test_font()))
+    b.chips += [
+        vram,
+        _chip(HC245, 'U716', {'DIR': 'VCC', '/OE': '/BUFEN', **pins('A', nets('DB', 8)),
+                              **pins('B', nets('VD', 8))},
+              M, 'DB → VRAM tamponu (8.5): DIR = VCC (A → B), /OE = /BUFEN (T1 Q3); yalnız '
+                 'VMUX penceresinin içinde açık, VRAM çıkışıyla en az 6 µs arayla.'),
+        font_rom,
+        _chip(HC166, 'U718', {'DS': 'GND', **pins('D', nets('FD', 8)), '/CE': 'GND', 'CP': 'DCLK',
+                              '/MR': 'VCC', '/PE': 'CCLK', 'Q7': 'QH'},
+              M, 'Glyph kaydırma registerı (8.3): /PE = CCLK (= /LD), T1 ile aynı DCLK kenarında '
+                 'glyph\'i yükler; sonra 8 nokta D7 (sol) önce olmak üzere QH\'den çıkar. DS = GND.'),
+        _chip(HC08, 'U719', {'1A': 'QH', '1B': 'BLANK_n', '1Y': 'VIDEO', **_unused_gates((2, 3, 4))},
+              M, 'Çıkış katı (8.4): VIDEO = AND(QH, BLANK_n) → renk jumper\'ı → 470 Ω → R, G, B '
+                 '(~0.69 V). /HSYNC, /VSYNC 100 Ω ile DE-15\'e. 2–4. kapı boş.'),
+    ]
+    b.memories.update({'VRAM': vram, 'FONT': font_rom})
+    # VD yüzmesin: VMUX penceresinde /BUFEN kapalıyken ne VRAM (/OE = VMUX = 1) ne U716 sürer;
+    # font ROM'unun A3–10 girişleri boşta kalırdı (çip seviyesi simülasyon bulgusu, 19 Kasım).
+    b.pulls.update({f'VD{i}': 0 for i in range(8)})
+    b.notes.append('M6 BULGU (19 Kasım): VD0–7 pencerede /BUFEN kapalıyken yüzüyordu (font ROM\'u '
+                   'girişleri boşta); 10k pull-down SIP dizisi eklendi (planda yok).')
+    b.notes.append('M6: SLOW test tezgâhından (gerçekte saat seçici). R/G/B dirençleri, renk '
+                   'jumper\'ı ve DE-15 netlist dışında (pasif).')
     return b
 
 
@@ -724,7 +782,7 @@ def build(sim=None, program=b'', urom=None, alu_tables=None, rom_speed=90, bank=
         m4_data(alu_tables),
         aux_gates(),
         m5_memory(program, rom_speed, ram_data),
-        *([m6_vga()] if net else []),
+        *([m6_vga(vram_data=vram_data)] if net else []),
         stubs(vram_data, vga=net),
     ])
     if wait_fix:

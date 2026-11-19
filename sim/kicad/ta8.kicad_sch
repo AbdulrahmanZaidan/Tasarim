@@ -50,7 +50,7 @@
 (property "Sheetfile" "m5.kicad_sch" (at 25.4 85.09 0) (effects (font (size 1.27 1.27)) (justify left top)))
 (instances (project "ta8" (path "/eaeb4ec9-7aba-57f2-802b-5a7062af6ec9" (page "7")))))
 (sheet (at 88.9 68.58) (size 50.8 15.24) (fields_autoplaced yes) (stroke (width 0.1524) (type solid)) (fill (color 0 0 0 0.0000)) (uuid "3f2fbfa8-3779-5347-9d17-6aadd0273979")
-(property "Sheetname" "M6 VGA zamanlaması" (at 88.9 67.31 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
+(property "Sheetname" "M6 VGA" (at 88.9 67.31 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
 (property "Sheetfile" "m6.kicad_sch" (at 88.9 85.09 0) (effects (font (size 1.27 1.27)) (justify left top)))
 (instances (project "ta8" (path "/eaeb4ec9-7aba-57f2-802b-5a7062af6ec9" (page "8")))))
 (wire (pts (xy 25.4 160.02) (xy 25.4 167.64)) (stroke (width 0) (type default)) (uuid "80d5cb1b-53d7-567f-9bfd-3446c7f37a36"))

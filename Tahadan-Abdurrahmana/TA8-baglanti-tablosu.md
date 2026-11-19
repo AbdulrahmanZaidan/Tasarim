@@ -16,20 +16,14 @@ Kaynak: `sim/ta8/hw/cpu.py` (üretilmiştir, elle düzenlemeyin). Bacak numarala
 | M4 Veri ve ALU | 8 | 8 | 0 | 0 |
 | CPU yardımcı kapıları | 4 | 3 | 1 | 0 |
 | M5 Bellek + I/O | 6 | 6 | 0 | 0 |
-| M6 VGA zamanlaması | 19 | 11 | 8 | 0 |
-| **Toplam (CPU + M6, M7 hariç)** | **86** | **74** | **12** | **0** |
+| M6 VGA | 19 | 19 | 0 | 0 |
+| **Toplam (CPU + M6, M7 hariç)** | **86** | **82** | **4** | **0** |
 
 Kurulmayanlar:
 - M1 NE555 ×1: kapsam dışı: yavaş saat kaynağı; MCLK test tezgâhından
 - M1 74HC153 ×1: kapsam dışı: saat kaynağı seçici
 - M1 74HC14 ×1: kapsam dışı: RC reset / buton debounce / 555 kare dalgası
 - AUX 74HC00 ×1: kapsam dışı değil: 138'li WAIT (DOGRULAMA 2.5) ve G1 = CLK düzeltmesiyle NAND(MEMW_L, /VWR_s) ve OR kalktı; 12 NAND'ın 7'si yetiyor, 2. yardımcı 74HC00 gereksiz
-- M6 SST39SF010 ×1: sırada: font ROM'u (8.3)
-- M6 74HC157 ×3: sırada: VRAM adres seçimi (8.3, 8.5)
-- M6 CY62256 ×1: sırada: VRAM (şimdilik TB X1 taklidi)
-- M6 74HC245 ×1: sırada: DB → VRAM tamponu, /OE = /BUFEN (8.5)
-- M6 74HC166 ×1: sırada: glyph kaydırma registerı (8.3)
-- M6 74HC08 ×1: sırada: çıkış katı AND(QH, BLANK_n) (8.4)
 
 ## M1 Saat / reset / durdurma
 
@@ -1646,7 +1640,7 @@ KSTAT (7.3): b7 = KRDY, b6 = VWR_s, b5..b0 = DIP SW5..SW0 → DB, /OE = /STAT_RD
 | 19 | `/OE` | `/STAT_RD` |
 | 20 | `VCC` | *VCC* (güç) |
 
-## M6 VGA zamanlaması
+## M6 VGA
 
 ### U701 · 74HC74
 
@@ -1911,42 +1905,219 @@ T1 registerı (8.2): /E = /LD = CCLK, CP = DCLK; ROM çıkışlarını karakter 
 | 19 | `Q7` | `VWR` |
 | 20 | `VCC` | *VCC* (güç) |
 
-## Test tezgâhı taklitleri (M6/M7 yerine; entegre sayımına girmez)
+### U712 · 74HC157
 
-### X1 · CY62256
+VRAM adres seçimi (8.3, 8.5), bit 0–3: S = VMUX; 0 → görüntü {V8..V4, H5..H0}, 1 → CPU AB0–10 (pencere). /E = GND.
 
-VRAM taklidi (M6 yok): yalnız yazılır. A0–10 = AB0–10, /WE = OR(/WR, /VRAMSEL) (U503), /OE = VCC. Gerçekte veri DB → 74HC245 (/OE = /BUFEN) üzerinden, adres 3× 74HC157 üzerinden gelir; burada doğrudan DB/AB.
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `S` | `VMUX` |
+| 2 | `1I0` | `H0` |
+| 3 | `1I1` | `AB0` |
+| 4 | `1Y` | `VA0` |
+| 5 | `2I0` | `H1` |
+| 6 | `2I1` | `AB1` |
+| 7 | `2Y` | `VA1` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `3Y` | `VA2` |
+| 10 | `3I1` | `AB2` |
+| 11 | `3I0` | `H2` |
+| 12 | `4Y` | `VA3` |
+| 13 | `4I1` | `AB3` |
+| 14 | `4I0` | `H3` |
+| 15 | `/E` | `GND` |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U713 · 74HC157
+
+VRAM adres seçimi (8.3, 8.5), bit 4–7: S = VMUX; 0 → görüntü {V8..V4, H5..H0}, 1 → CPU AB0–10 (pencere). /E = GND.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `S` | `VMUX` |
+| 2 | `1I0` | `H4` |
+| 3 | `1I1` | `AB4` |
+| 4 | `1Y` | `VA4` |
+| 5 | `2I0` | `H5` |
+| 6 | `2I1` | `AB5` |
+| 7 | `2Y` | `VA5` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `3Y` | `VA6` |
+| 10 | `3I1` | `AB6` |
+| 11 | `3I0` | `V4` |
+| 12 | `4Y` | `VA7` |
+| 13 | `4I1` | `AB7` |
+| 14 | `4I0` | `V5` |
+| 15 | `/E` | `GND` |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U714 · 74HC157
+
+VRAM adres seçimi (8.3, 8.5), bit 8–10: S = VMUX; 0 → görüntü {V8..V4, H5..H0}, 1 → CPU AB0–10 (pencere). /E = GND. 4. birim boş, girişleri GND.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `S` | `VMUX` |
+| 2 | `1I0` | `V6` |
+| 3 | `1I1` | `AB8` |
+| 4 | `1Y` | `VA8` |
+| 5 | `2I0` | `V7` |
+| 6 | `2I1` | `AB9` |
+| 7 | `2Y` | `VA9` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `3Y` | `VA10` |
+| 10 | `3I1` | `AB10` |
+| 11 | `3I0` | `V8` |
+| 12 | `4Y` | — (boş) |
+| 13 | `4I1` | `GND` |
+| 14 | `4I0` | `GND` |
+| 15 | `/E` | `GND` |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U715 · CY62256
+
+VRAM (8.3, 8.5): 2 KB kullanılır (A11–14 = GND). /OE = VMUX: görüntü sırasında okunur, pencerede çıkışı kapalı. /WE = /VRAM_WE = OR(/WR, /VRAMSEL) (U503); CPU yalnız VWR penceresinde yazabilir (WAIT). IO = VD0–7 → font ROM'u A3–10 ve U716 B tarafı.
 
 | Bacak | Pin | Net |
 |---:|---|---|
 | 1 | `A14` | `GND` |
 | 2 | `A12` | `GND` |
-| 3 | `A7` | `AB7` |
-| 4 | `A6` | `AB6` |
-| 5 | `A5` | `AB5` |
-| 6 | `A4` | `AB4` |
-| 7 | `A3` | `AB3` |
-| 8 | `A2` | `AB2` |
-| 9 | `A1` | `AB1` |
-| 10 | `A0` | `AB0` |
-| 11 | `IO0` | `DB0` |
-| 12 | `IO1` | `DB1` |
-| 13 | `IO2` | `DB2` |
+| 3 | `A7` | `VA7` |
+| 4 | `A6` | `VA6` |
+| 5 | `A5` | `VA5` |
+| 6 | `A4` | `VA4` |
+| 7 | `A3` | `VA3` |
+| 8 | `A2` | `VA2` |
+| 9 | `A1` | `VA1` |
+| 10 | `A0` | `VA0` |
+| 11 | `IO0` | `VD0` |
+| 12 | `IO1` | `VD1` |
+| 13 | `IO2` | `VD2` |
 | 14 | `GND` | *GND* (güç) |
-| 15 | `IO3` | `DB3` |
-| 16 | `IO4` | `DB4` |
-| 17 | `IO5` | `DB5` |
-| 18 | `IO6` | `DB6` |
-| 19 | `IO7` | `DB7` |
+| 15 | `IO3` | `VD3` |
+| 16 | `IO4` | `VD4` |
+| 17 | `IO5` | `VD5` |
+| 18 | `IO6` | `VD6` |
+| 19 | `IO7` | `VD7` |
 | 20 | `/CE` | `GND` |
-| 21 | `A10` | `AB10` |
-| 22 | `/OE` | `VCC` |
+| 21 | `A10` | `VA10` |
+| 22 | `/OE` | `VMUX` |
 | 23 | `A11` | `GND` |
-| 24 | `A9` | `AB9` |
-| 25 | `A8` | `AB8` |
+| 24 | `A9` | `VA9` |
+| 25 | `A8` | `VA8` |
 | 26 | `A13` | `GND` |
 | 27 | `/WE` | `/VRAM_WE` |
 | 28 | `VCC` | *VCC* (güç) |
+
+### U716 · 74HC245
+
+DB → VRAM tamponu (8.5): DIR = VCC (A → B), /OE = /BUFEN (T1 Q3); yalnız VMUX penceresinin içinde açık, VRAM çıkışıyla en az 6 µs arayla.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `DIR` | `VCC` |
+| 2 | `A0` | `DB0` |
+| 3 | `A1` | `DB1` |
+| 4 | `A2` | `DB2` |
+| 5 | `A3` | `DB3` |
+| 6 | `A4` | `DB4` |
+| 7 | `A5` | `DB5` |
+| 8 | `A6` | `DB6` |
+| 9 | `A7` | `DB7` |
+| 10 | `GND` | *GND* (güç) |
+| 11 | `B7` | `VD7` |
+| 12 | `B6` | `VD6` |
+| 13 | `B5` | `VD5` |
+| 14 | `B4` | `VD4` |
+| 15 | `B3` | `VD3` |
+| 16 | `B2` | `VD2` |
+| 17 | `B1` | `VD1` |
+| 18 | `B0` | `VD0` |
+| 19 | `/OE` | `/BUFEN` |
+| 20 | `VCC` | *VCC* (güç) |
+
+### U717 · SST39SF010
+
+Font ROM'u (8.3): A0–2 = V3..V1 (font satırı, her satır iki kez), A3–10 = karakter kodu (VD), A11–16 = font bankası jumper'ları (burada GND, bank 0). Bit 7 en soldaki nokta.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 2 | `A16` | `GND` |
+| 3 | `A15` | `GND` |
+| 4 | `A12` | `GND` |
+| 5 | `A7` | `VD4` |
+| 6 | `A6` | `VD3` |
+| 7 | `A5` | `VD2` |
+| 8 | `A4` | `VD1` |
+| 9 | `A3` | `VD0` |
+| 10 | `A2` | `V3` |
+| 11 | `A1` | `V2` |
+| 12 | `A0` | `V1` |
+| 13 | `DQ0` | `FD0` |
+| 14 | `DQ1` | `FD1` |
+| 15 | `DQ2` | `FD2` |
+| 16 | `GND` | *GND* (güç) |
+| 17 | `DQ3` | `FD3` |
+| 18 | `DQ4` | `FD4` |
+| 19 | `DQ5` | `FD5` |
+| 20 | `DQ6` | `FD6` |
+| 21 | `DQ7` | `FD7` |
+| 22 | `/CE` | `GND` |
+| 23 | `A10` | `VD7` |
+| 24 | `/OE` | `GND` |
+| 25 | `A11` | `GND` |
+| 26 | `A9` | `VD6` |
+| 27 | `A8` | `VD5` |
+| 28 | `A13` | `GND` |
+| 29 | `A14` | `GND` |
+| 31 | `/WE` | `VCC` |
+| 32 | `VCC` | *VCC* (güç) |
+
+### U718 · 74HC166
+
+Glyph kaydırma registerı (8.3): /PE = CCLK (= /LD), T1 ile aynı DCLK kenarında glyph'i yükler; sonra 8 nokta D7 (sol) önce olmak üzere QH'den çıkar. DS = GND.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `DS` | `GND` |
+| 2 | `D0` | `FD0` |
+| 3 | `D1` | `FD1` |
+| 4 | `D2` | `FD2` |
+| 5 | `D3` | `FD3` |
+| 6 | `/CE` | `GND` |
+| 7 | `CP` | `DCLK` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `/MR` | `VCC` |
+| 10 | `D4` | `FD4` |
+| 11 | `D5` | `FD5` |
+| 12 | `D6` | `FD6` |
+| 13 | `Q7` | `QH` |
+| 14 | `D7` | `FD7` |
+| 15 | `/PE` | `CCLK` |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U719 · 74HC08
+
+Çıkış katı (8.4): VIDEO = AND(QH, BLANK_n) → renk jumper'ı → 470 Ω → R, G, B (~0.69 V). /HSYNC, /VSYNC 100 Ω ile DE-15'e. 2–4. kapı boş.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `1A` | `QH` |
+| 2 | `1B` | `BLANK_n` |
+| 3 | `1Y` | `VIDEO` |
+| 4 | `2A` | `GND` |
+| 5 | `2B` | `GND` |
+| 6 | `2Y` | — (boş) |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `3Y` | — (boş) |
+| 9 | `3A` | `GND` |
+| 10 | `3B` | `GND` |
+| 11 | `4Y` | — (boş) |
+| 12 | `4A` | `GND` |
+| 13 | `4B` | `GND` |
+| 14 | `VCC` | *VCC* (güç) |
+
+## Test tezgâhı taklitleri (M6/M7 yerine; entegre sayımına girmez)
 
 ### X2 · 74HC540
 
@@ -2006,6 +2177,14 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 | `/ARD_RD` | pull (10k yukarı) | 1 |
 | `/ARD_WR` | pull (10k yukarı) | 1 |
 | `/BUSREQ` | pull (10k yukarı) | 1 |
+| `VD0` | pull (10k aşağı) | 0 |
+| `VD1` | pull (10k aşağı) | 0 |
+| `VD2` | pull (10k aşağı) | 0 |
+| `VD3` | pull (10k aşağı) | 0 |
+| `VD4` | pull (10k aşağı) | 0 |
+| `VD5` | pull (10k aşağı) | 0 |
+| `VD6` | pull (10k aşağı) | 0 |
+| `VD7` | pull (10k aşağı) | 0 |
 | `MANUAL` | sabit (5. hafta, pasif değer) | 0 |
 | `/RESET` | test tezgâhı girişi | varsayılan 1 |
 | `GO_BTN` | test tezgâhı girişi | varsayılan 0 |
@@ -2055,5 +2234,6 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 - DB: 8× 10k pull-down (boşta 00).
 - Planda yardımcı 74HC00 ×2. 138'li WAIT çözümüyle (DOGRULAMA 2.5) NAND(MEMW_L, /VWR_s) kapısı kalktı ve Johnson 3 NAND + 1 OR oldu; 12 NAND'ın 7'si kullanılıyor (M1 U103: 4, U501: 3). 2. yardımcı 74HC00 gereksiz, netlist'te yok.
 - /ARD_RD, /ARD_WR, /BUSREQ: Arduino takılı değilken 10k pull-up. /BUSREQ açık-drain (Arduino yalnız 0 sürer ya da bırakır).
-- M6 kapsam dışı (sırada, 8.3–8.4): VRAM adres seçimi (3× 74HC157), VRAM (CY62256; şimdilik TB X1), font ROM'u, 74HC166, DB tamponu 74HC245 (/BUFEN), çıkış katı (74HC08, dirençler). SLOW test tezgâhından (gerçekte saat seçici).
+- M6 BULGU (19 Kasım): VD0–7 pencerede /BUFEN kapalıyken yüzüyordu (font ROM'u girişleri boşta); 10k pull-down SIP dizisi eklendi (planda yok).
+- M6: SLOW test tezgâhından (gerçekte saat seçici). R/G/B dirençleri, renk jumper'ı ve DE-15 netlist dışında (pasif).
 - VWR_s M1'deki U111'de VWR'den (M6) senkronlanıyor (vga='netlist').

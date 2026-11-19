@@ -32,7 +32,7 @@ TITLES = {
     'M4': 'M4 Veri ve ALU',
     'AUX': 'CPU yardımcı kapıları',
     'M5': 'M5 Bellek + I/O',
-    'M6': 'M6 VGA zamanlaması',
+    'M6': 'M6 VGA',
     'M7': 'M7 PS/2 klavye',
 }
 ORDER = ('M1', 'M2', 'M3', 'M4', 'AUX', 'M5', 'M6', 'M7')
