@@ -33,7 +33,7 @@ Planın tamamı: [SISTEM-PLANI.md](../SISTEM-PLANI.md) (teknik), [PROJE-PLANI.md
 | M5 bellek | ROM, RAM, adres çözme, LED ve durum portu | Taha | **Digital'de testli** (kabul testleri) |
 | Bütün işlemci | M1–M5 bir arada | ikimiz | **Sıfır fark** (3 program, 33.170 çevrime kadar). K2 geçti |
 | M6 VGA | Ekran zamanlaması, karakter hattı, çıkış | Abdurrahman | **Zamanlama kısmı Digital'de** (hafta5, 11 entegre). Karakter hattı ve çıkış katı sırada. Henüz `cpu.py` netlist'inde değil |
-| M7 PS/2 klavye | Seri alıcı, susturma, temizleme | Abdurrahman (planın takviminde 6. hafta Taha) | Sırada; şimdilik test tezgâhında taklit |
+| M7 PS/2 klavye | Seri alıcı, susturma, temizleme | Abdurrahman (19 Kasım kararı) | Sırada; şimdilik test tezgâhında taklit |
 | M8 hata ayıklama | Breakpoint, BUSREQ, MANUAL paneli, Arduino kartı | Taha | **Breakpoint ve BUSREQ netlist'te, testli** (17 Kasım). MANUAL paneli sırada. Arduino yazılımı hazır, donanımda denenmedi |
 
 Bütün bağlantılar tek kaynaktan: `sim/ta8/hw/cpu.py` (netlist). Digital dosyaları, bağlantı tablosu ([TA8-baglanti-tablosu.md](TA8-baglanti-tablosu.md)) ve testler buradan üretiliyor. `.dig` dosyalarını elle düzenleme; netlist'i değiştirip yeniden üret.
@@ -71,10 +71,10 @@ Bütün bağlantılar tek kaynaktan: `sim/ta8/hw/cpu.py` (netlist). Digital dosy
 | Hafta | Taha | Abdurrahman | Birlikte |
 |---|---|---|---|
 | **Bu hafta (19–23 Kas)** | ~~C derleyicisinin son parçası~~ (bitti); 5. hafta raporu taslağı | M6'yı `cpu.py` netlist'ine taşımak (birlikte, aşağıda) | Siparişlerin ilk kısmı (bölüm 6) |
-| **5. hafta (24–30 Kas)** | MANUAL paneli; M7 PS/2'ye başlangıç | M6 karakter hattı: ekran belleği adres seçimi (3× 74HC157), VRAM, font ROM'u, 74HC166, çıkış katı | Parçalar gelince giriş testleri, **prototip a** (saat modülü breadboard'da, osiloskopla) |
-| **6. hafta (1–7 Ara)** | M7 PS/2 Digital'de; prototip d (gerçek klavye) | M6 VRAM penceresi (CPU ile paylaşım), prototip c (gerçek monitör) | Kalan malzeme siparişi (1–7 Aralık) |
+| **5. hafta (24–30 Kas)** | MANUAL paneli + saat kaynağı seçici; KiCad aktarım aracı | M6 karakter hattı: ekran belleği adres seçimi (3× 74HC157), VRAM, font ROM'u, 74HC166, çıkış katı | Parçalar gelince giriş testleri, **prototip a** (saat modülü breadboard'da, osiloskopla) |
+| **6. hafta (1–7 Ara)** | KiCad şemaları (M2, M5, Arduino kartı); giriş testleri | M6 VRAM penceresi (CPU ile paylaşım), prototip c (gerçek monitör) | Siparişler (Arabistan, bölüm 6) |
 
-Sonrası: 7. hafta bütün sistem Digital'de ekrana yazı (K3), 8. hafta KiCad şemaları (Abdurrahman: M1, M3, M4, M6; Taha: M2, M5, M7, Arduino kartı), 9. hafta breadboard yerleşim planı, 10. hafta tasarımı dondurma.
+Sonrası: 7. hafta bütün sistem Digital'de ekrana yazı (K3), 8. hafta KiCad şemaları (Abdurrahman: M1, M3, M4, M6, M7; Taha: M2, M5, Arduino kartı; şemalar netlist'ten otomatik üretilir), 9. hafta breadboard yerleşim planı, 10. hafta tasarımı dondurma.
 
 **M6'yı netlist'e taşımak:** senin `Abdurrahman/hafta5/m6_uret.py` içindeki `chips()` listesi `sim/ta8/hw/cpu.py`'de `m6_vga()` diye bir modül olur; test tezgâhındaki VRAM taklidi (X1) ve `VWR_s` girişi kalkar, yerine senin sinyallerin gelir. Böylece bütün işlemci + ekran zamanlaması tek devrede, emülatörle karşılaştırılabilir.
 
@@ -95,6 +95,8 @@ Her rapor sade bir "bu hafta, kısaca" bölümü ve Sözlük sekmesiyle hazırla
 ---
 
 ## 6. Siparişler (sırayla, acele etmeden)
+
+> **Güncel (19 Kasım toplantısı):** siparişler **Arabistan üzerinden**: Abdurrahman'ın [malzeme listesi](../Abdurrahman/hafta6/BOM.md) (LCSC + AliExpress), Türkiye'den yalnız breadboard, kablo, klavye. Aşağıdaki n11/direnc listesi ve MODEL muafiyet yazısı **iptal**; yalnız LCSC'de 25 MHz DIP osilatör yoksa n11'deki son lot alınır. Kararlar: [Toplanti/2026-11-19-gundem.md](../Toplanti/2026-11-19-gundem.md).
 
 **Önce yurt içi, stokta az kalanlar** (19 Kasım'da kontrol edildi):
 

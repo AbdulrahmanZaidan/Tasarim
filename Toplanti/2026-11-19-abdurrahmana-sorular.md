@@ -75,3 +75,39 @@ Cevap: Değişken: vakit buldukça akşamları online (hafta içi ve hafta sonu 
 **14.** Takıldığın, anlamadığın ya da benden (Taha) beklediğin bir şey var mı?
 
 Cevap: Sorular asistan tarafından cevaplardan çıkarıldı: [2026-11-19-tahaya-sorular.md](2026-11-19-tahaya-sorular.md).
+
+## E. Malzeme listesi (BOM) için ek sorular (Taha, 19 Kasım)
+
+Senin [BOM.md](../Abdurrahman/hafta6/BOM.md)'n plandaki 92 entegreyle birebir tutuyor. Paket tek seferde Arabistan'a gideceği için sonradan eksik getirmek zor; aşağıdakiler listede yok ya da netleşmeli. Eklemeye karar verirsen BOM'u sen güncelle.
+
+**15.** Saat hattının seri dirençleri: CLK tamponunun her çıkışına 47 Ω (7 adet), LCLK'nın üç 273'üne 33 Ω (3 adet) (SISTEM-PLANI 3.5). Eklensin mi? Öneri: 47 Ω ×10, 33 Ω ×5.
+
+Cevap:
+
+**16.** 555 yavaş saati (~0,25 Hz – 1 kHz, SISTEM-PLANI 3.2) için hızı ayarlayan bir potansiyometre (ör. 1 MΩ) ve 1 µF kondansatör. Eklensin mi?
+
+Cevap:
+
+**17.** 74HCT yedekleri: flash ve SRAM çıkışı 74HC'nin "1" eşiğine (3,5 V) yetmezse değiştirilecek çipler 273 ×3, 377 ×4, 161 ve 166 (DOGRULAMA madde 7, prototip b'de ölçülecek). Tek paket olduğu için şimdi eklensin mi? Öneri: 74HCT273 ×3, 74HCT377 ×4, 74HCT161 ×2, 74HCT166 ×1 (bulunanlar).
+
+Cevap:
+
+**18.** Evde 5 V güç kaynağı: listede "okulda var" yazıyor ama çalışma senin evinde. Tahmini çekiş 1–1,5 A (LED'ler ve flash'lar). 5 V 3 A regüleli bir kaynak + sigorta eklensin mi, nereden?
+
+Cevap:
+
+**19.** PLCC32 → DIP32 adaptörleri **soketli** mi? Flash'lar onlarca kez yeniden yazılacak; lehimli olursa çip çıkarılamaz.
+
+Cevap:
+
+**20.** DIP anahtar sayısı: MANUAL paneli 24 + veri yolu 8 + breakpoint 16 + KSTAT 6 (SW0–SW5, plan 7.3) = 54 anahtar = 7 adet 8'li DIP switch. Listede 8 sipariş var, 1 yedek kalıyor. Uygun mu?
+
+Cevap:
+
+**21.** LCSC'de 25 MHz ve 4 MHz DIP (tam ya da yarım kılıf) osilatör stokta mı? Yoksa n11'deki son lot (25 MHz, 5'li, 464 TL) Türkiye'den alınsın mı?
+
+Cevap:
+
+**22.** Breadboard'ları taşımak için her sırayı sert bir plakaya (MDF ya da alüminyum) yapıştıralım mı? Üç sıra + VGA paneli için 4 plaka. Kim, nereden alır?
+
+Cevap:
