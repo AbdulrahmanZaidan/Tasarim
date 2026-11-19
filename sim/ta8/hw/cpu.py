@@ -10,9 +10,17 @@ dışa aktarıcı her modülü ayrı bir .dig yapabilsin diye):
     m4_data()       M4  A, IR, F, ALU flash'ları, DB tamponları  U4xx
     aux_gates()     AUX CPU yardımcı kapıları                    U5xx
     m5_memory()     M5  ROM, RAM, adres çözme, LED, KSTAT        U6xx
-    stubs()         TB  henüz olmayan M6/M7 için taklitler       X…
+    m6_vga()        M6  VGA zamanlaması (sayaçlar, ROM, T1)      U7xx
+    stubs()         TB  henüz olmayan M6/M7 parçaları için taklitler  X…
 
     board = build(sim, program=prog.image)   # hepsini birleştirir, sim'e ekler
+    board = build(sim, vga='netlist')        # + M6 zamanlaması, VWR_s M1'de senkronlanır
+
+vga='taklit' (varsayılan): M6 yok, VWR_s test tezgâhından (hızlı; sıfır fark testleri).
+vga='netlist': M6'nın zamanlama kısmı (U701–U711, 25 MHz OSC25) devrede; VWR (T1 Q7)
+U111'in FF2/FF3'ünde iki MCLK ile VWR_s'e senkronlanır (3.6). Karakter hattı (VRAM
+adres seçimi, VRAM, font ROM'u, 74HC166, çıkış katı) henüz yok: VRAM yine X1 taklidi.
+25 MHz saat olay sayısını ~25 kat artırır; bu kip yalnız M6 testlerinde kullanılır.
 
 Net adları SISTEM-PLANI bölüm 2'deki sinyal sözlüğüyle aynıdır: AB0..15, DB0..7,
 R0..7, CLK, LCLK, WSTB, STOP, /WAIT, /RESET_s, /MRD, /OE_A, /DD_IR, ...
@@ -29,7 +37,7 @@ DB sürücüleri kapalıdır, Arduino /ARD_RD ve /ARD_WR ile belleğe erişir).
 
 Kapsam dışı (kodda `# kapsam dışı` ile işaretli): NE555, kaynak seçici 74HC153,
 RC/74HC14 kısımları (MCLK ve butonlar test tezgâhından temiz sayısal giriş), VWR
-senkronlayıcısı (VWR_s test tezgâhından; M6 ile), MANUAL paneli (uROM /OE = 0).
+senkronlayıcısı yalnız vga='taklit' kipinde (VWR_s test tezgâhından), MANUAL paneli (uROM /OE = 0).
 Bunların netleri `Board.ties` (pasif değer) ya da `Board.pulls` (gerçekte de var
 olan pull-up'lar) ile sabitlenir.
 
@@ -41,9 +49,9 @@ planın yazıldığı gibi çalışmadığı yerler "PLAN DÜZELTMESİ" diye iş
 from dataclasses import dataclass, field
 from functools import lru_cache
 
-from .. import alu, isa, microcode
+from .. import alu, isa, microcode, vga as vga_tables
 from .chips import (CY62256, HC00, HC02, HC04, HC08, HC20, HC32, HC74, HC138, HC139, HC161,
-                    HC175, HC191, HC245, HC273, HC377, HC540, HC688, SST39SF010)
+                    HC163, HC175, HC191, HC245, HC273, HC377, HC540, HC688, SST39SF010)
 
 # ----------------------------------------------------------------------------
 # Net adları
@@ -56,7 +64,7 @@ for _name, _bit in isa.BITS.items():          # isa.py ile tutarlılık
     assert CW_NAMES[_bit.bit_length() - 1] == _name, _name
 assert (isa.ASRC_SHIFT, isa.DSRC_SHIFT, isa.DDST_SHIFT, isa.ALUOP_SHIFT) == (0, 2, 5, 8)
 
-MODULE_ORDER = ('M1', 'M2', 'M3', 'M4', 'AUX', 'M5', 'TB')
+MODULE_ORDER = ('M1', 'M2', 'M3', 'M4', 'AUX', 'M5', 'M6', 'TB')
 MODULE_TITLES = {
     'M1': 'M1 Saat / reset / durdurma',
     'M2': 'M2 Kontrol ünitesi',
@@ -64,6 +72,7 @@ MODULE_TITLES = {
     'M4': 'M4 Veri ve ALU',
     'AUX': 'CPU yardımcı kapıları',
     'M5': 'M5 Bellek + I/O',
+    'M6': 'M6 VGA zamanlaması',
     'TB': 'Test tezgâhı taklitleri (M6/M7 yerine; entegre sayımına girmez)',
 }
 
@@ -217,7 +226,7 @@ def _unused_gates(units, kind='2'):
 # ----------------------------------------------------------------------------
 # M1: saat, reset, durdurma, WAIT (SISTEM-PLANI 3)
 # ----------------------------------------------------------------------------
-def m1_clock(mclk_half=125, wait_fix=True):
+def m1_clock(mclk_half=125, wait_fix=True, vga=False):
     """wait_fix=False: planın yazıldığı hâli (138 G1 = VCC, Q2' = NAND(/Q1, OR(/WAIT, /Q2)));
     max köşede 1 MHz'de WAIT kaçırır (PLAN_FIXES[0]). Varsayılan: düzeltilmiş hâl."""
     M = 'M1'
@@ -311,18 +320,22 @@ def m1_clock(mclk_half=125, wait_fix=True):
             '/MR': 'VCC', 'CP': 'MCLK',
             'D0': '/BUSREQ', 'Q0': 'BRQ_S1n',
             'D1': 'BRQ_S1n', '/Q1': 'BRQ_s',
-            'D2': 'GND', 'D3': 'GND',      # kapsam dışı: VWR ×2 senkronlayıcısı (M6 ile)
+            **({'D2': 'VWR', 'Q2': 'VWR_S1', 'D3': 'VWR_S1', 'Q3': 'VWR_s'} if vga else
+               {'D2': 'GND', 'D3': 'GND'}),      # vga=False: VWR_s test tezgâhından
         }, M, '/BUSREQ senkronlayıcısı (10): 2 FF, BRQ_s = NOT /BUSREQ iki MCLK gecikmeyle '
-              '(/Q1). BRQ_s → STOP (U503) ve BUSACK D (U105). /MR = VCC (U107 gibi). FF2, FF3 '
-              'planda VWR ×2 senkronlayıcısı; VWR_s şimdilik test tezgâhından (M6 ile), '
-              'girişleri GND.'),
+              '(/Q1). BRQ_s → STOP (U503) ve BUSACK D (U105). /MR = VCC (U107 gibi). '
+              + ('FF2, FF3 VWR ×2 senkronlayıcısı (3.6): VWR (M6, T1 Q7) → VWR_S1 → VWR_s, '
+                 'iki MCLK kenarı. VWR 12.5 MHz DCLK ile değişir, MCLK ile ilgisiz: '
+                 'iki FF metastabiliteye karşı.' if vga else
+                 'FF2, FF3 planda VWR ×2 senkronlayıcısı; vga=\'taklit\' kipinde VWR_s test '
+                 'tezgâhından, girişleri GND.')),
     ]
     b = Board(chips=chips,
               inputs={'/RESET': 1, 'GO_BTN': 0, 'STEPMODE': 0, 'MICRO': 0},
               clocks={'MCLK': mclk_half})
     b.notes.append('M1 kapsam dışı: NE555, 74HC153 (kaynak seçici; MCLK doğrudan test '
-                   'tezgâhından), 74HC14 (RC/debounce), U111\'in VWR ×2 senkronlayıcısı '
-                   '(VWR_s test tezgâhından).')
+                   'tezgâhından), 74HC14 (RC/debounce)'
+                   + ('.' if vga else ', U111\'in VWR ×2 senkronlayıcısı (VWR_s test tezgâhından).'))
     return b
 
 
@@ -596,7 +609,7 @@ def m5_memory(program=b'', rom_speed=90, ram_data=None):
 # ----------------------------------------------------------------------------
 # Test tezgâhı taklitleri: M6 (VRAM) ve M7 (klavye okuma tamponu)
 # ----------------------------------------------------------------------------
-def stubs(vram_data=None):
+def stubs(vram_data=None, vga=False):
     M = 'TB'
     chips = [
         _chip(CY62256, 'X1', {
@@ -615,29 +628,104 @@ def stubs(vram_data=None):
               'okuma sonrası temizleme (KCLR) test tezgâhında modellenir.'),
     ]
     return Board(chips=chips,
-                 inputs={'VWR_s': 1, 'KRDY': 0, **{f'KSR{i}': 0 for i in range(8)}},
+                 inputs={**({} if vga else {'VWR_s': 1}), 'KRDY': 0,
+                         **{f'KSR{i}': 0 for i in range(8)}},
                  memories={'VRAM': chips[0]},
-                 notes=['VWR_s gerçekte M1\'deki 2. 74HC175\'te VWR\'den (M6) senkronlanır; '
+                 notes=['VWR_s M1\'deki U111\'de VWR\'den (M6) senkronlanıyor (vga=\'netlist\').'
+                        if vga else
+                        'VWR_s gerçekte M1\'deki 2. 74HC175\'te VWR\'den (M6) senkronlanır; '
                         'burada test tezgâhı doğrudan VWR_s\'i sürer (varsayılan 1 = pencere '
                         'açık, NO-VGA jumper\'ı gibi).'])
 
+# ----------------------------------------------------------------------------
+# M6: VGA zamanlaması (SISTEM-PLANI 8.1–8.2). Abdurrahman/hafta5/m6_uret.py'den taşındı.
+# ----------------------------------------------------------------------------
+def m6_vga(dclk_ext=False, osc_half=20):
+    """M6'nın zamanlama kısmı: 11 entegre (U701–U711). dclk_ext: ÷2 FF'si boşta, DCLK dışarıdan
+    (yalnız en kötü gecikme analizinde, ÷2'den sonraki devreyi ayrı denemek için).
+    Çıkışlar: /HSYNC, /VSYNC, BLANK_n, /BUFEN, VMUX, VWR (T1), DCLK, CCLK, LD, H0–H5, V0–V9.
+    Karakter hattı ve çıkış katı (8.3–8.4) sırada."""
+    M = 'M6'
+    gnd4 = {f'D{i}': 'GND' for i in range(4)}
+    ff1 = ({'1CP': 'GND', '1D': 'FF1_QN', '1Q': 'FF1_Q', '/1Q': 'FF1_QN'} if dclk_ext else
+           {'1CP': 'OSC25', '1D': '/DCLK', '1Q': 'DCLK', '/1Q': '/DCLK'})
+    rom = _chip(SST39SF010, 'U710', {
+        **{f'A{i}': f'H{i}' for i in range(6)}, **{f'A{6 + i}': f'V{i}' for i in range(10)},
+        'A16': 'SLOW', '/CE': 'GND', '/OE': 'GND', '/WE': 'VCC',
+        'DQ0': 'R_HSYNC_n', 'DQ1': 'R_VSYNC_n', 'DQ2': 'R_BLANK_n', 'DQ3': 'R_BUFEN_n',
+        'DQ4': '/HEND', 'DQ5': '/VEND', 'DQ6': 'R_VMUX', 'DQ7': 'R_VWR',
+    }, M, "Zamanlama ROM'u (8.2): A0–5 = H, A6–15 = V, A16 = SLOW. İçerik ta8.vga.timing_rom().",
+        data=bytes(vga_tables.timing_rom()))
+    chips = [
+        _chip(HC74, 'U701', {
+            '/1RD': 'VCC', '/1SD': 'VCC', **ff1,
+            '/2RD': 'VCC', '/2SD': 'VCC', '2CP': 'DCLK', '2D': 'LD_D', '2Q': 'CCLK', '/2Q': 'LD',
+        }, M, "FF1: 25 MHz ÷ 2 → DCLK 12.5 MHz (8.1). FF2: LD flip-flop'u, D = NAND4(Q2, Q1, Q0, 1); "
+              'LD = /Q yalnız noktanın 0. periyodunda 1, CCLK = Q = /LD.'),
+        _chip(HC163, 'U702', {'/MR': 'VCC', 'CP': 'DCLK', **gnd4, 'CEP': 'VCC', 'CET': 'VCC',
+                              '/PE': 'VCC', 'Q0': 'DOT0', 'Q1': 'DOT1', 'Q2': 'DOT2', 'Q3': 'DOT3'},
+              M, 'Nokta sayacı (8.1): DCLK ile sayar; karakter = 8 nokta (Q0–Q2, mod 8). Q3 kullanılmaz.'),
+        _chip(HC20, 'U703', {'1A': 'DOT2', '1B': 'DOT1', '1C': 'DOT0', '1D': 'VCC', '1Y': 'LD_D',
+                             '2A': 'GND', '2B': 'GND', '2C': 'GND', '2D': 'GND'},
+              M, "LD_D = NAND4(DOT2, DOT1, DOT0, 1): nokta 7'de 0. 2. kapı boş."),
+        _chip(HC163, 'U704', {'/MR': '/HEND', 'CP': 'CCLK', **gnd4, 'CEP': 'VCC', 'CET': 'VCC',
+                              '/PE': 'VCC', 'Q0': 'H0', 'Q1': 'H1', 'Q2': 'H2', 'Q3': 'H3', 'TC': 'H_TC'},
+              M, "HCHAR alt 4 bit (8.2). /MR senkron temizleme = /HEND (ROM D4): H = 49'dan sonra 0."),
+        _chip(HC163, 'U705', {'/MR': '/HEND', 'CP': 'CCLK', **gnd4, 'CEP': 'VCC', 'CET': 'H_TC',
+                              '/PE': 'VCC', 'Q0': 'H4', 'Q1': 'H5', 'Q2': 'H6', 'Q3': 'H7'},
+              M, 'HCHAR üst 2 bit (H4, H5); Q2, Q3 kullanılmaz.'),
+        _chip(HC04, 'U706', {'1A': '/HEND', '1Y': 'HEND', **{f'{u}A': 'GND' for u in range(2, 7)}},
+              M, 'HEND = NOT /HEND: VLINE satır sonunda bir artar. 2–6. kapı boş.'),
+        _chip(HC163, 'U707', {'/MR': '/VEND', 'CP': 'CCLK', **gnd4, 'CEP': 'HEND', 'CET': 'HEND',
+                              '/PE': 'VCC', 'Q0': 'V0', 'Q1': 'V1', 'Q2': 'V2', 'Q3': 'V3', 'TC': 'V_TC1'},
+              M, 'VLINE bit 0–3 (8.2): yalnız HEND = 1 iken (satır sonu) sayar. /MR = /VEND (ROM D5).'),
+        _chip(HC163, 'U708', {'/MR': '/VEND', 'CP': 'CCLK', **gnd4, 'CEP': 'HEND', 'CET': 'V_TC1',
+                              '/PE': 'VCC', 'Q0': 'V4', 'Q1': 'V5', 'Q2': 'V6', 'Q3': 'V7', 'TC': 'V_TC2'},
+              M, 'VLINE bit 4–7.'),
+        _chip(HC163, 'U709', {'/MR': '/VEND', 'CP': 'CCLK', **gnd4, 'CEP': 'HEND', 'CET': 'V_TC2',
+                              '/PE': 'VCC', 'Q0': 'V8', 'Q1': 'V9', 'Q2': 'V10', 'Q3': 'V11'},
+              M, 'VLINE bit 8–9; Q2, Q3 kullanılmaz.'),
+        rom,
+        _chip(HC377, 'U711', {'/E': 'CCLK', 'CP': 'DCLK',
+                              **{f'D{i}': n for i, n in enumerate(['R_HSYNC_n', 'R_VSYNC_n', 'R_BLANK_n',
+                                                                   'R_BUFEN_n', '/HEND', '/VEND', 'R_VMUX',
+                                                                   'R_VWR'])},
+                              'Q0': '/HSYNC', 'Q1': '/VSYNC', 'Q2': 'BLANK_n', 'Q3': '/BUFEN',
+                              'Q4': 'T1_HEND_n', 'Q5': 'T1_VEND_n', 'Q6': 'VMUX', 'Q7': 'VWR'},
+              M, 'T1 registerı (8.2): /E = /LD = CCLK, CP = DCLK; ROM çıkışlarını karakter sınırında '
+                 'yakalar, böylece sync/blank kayan glyph ile aynı hizada çıkar (8.3). '
+                 'Q7 = VWR → M1 U111 senkronlayıcısı → VWR_s.'),
+    ]
+    b = Board(chips=chips, inputs={'SLOW': 0}, memories={'VGA_ROM': rom})
+    if not dclk_ext:
+        b.clocks['OSC25'] = osc_half
+    b.notes.append('M6 kapsam dışı (sırada, 8.3–8.4): VRAM adres seçimi (3× 74HC157), VRAM '
+                   '(CY62256; şimdilik TB X1), font ROM\'u, 74HC166, DB tamponu 74HC245 (/BUFEN), '
+                   'çıkış katı (74HC08, dirençler). SLOW test tezgâhından (gerçekte saat seçici).')
+    return b
+
 
 MODULES = {'M1': m1_clock, 'M2': m2_control, 'M3': m3_address, 'M4': m4_data,
-           'AUX': aux_gates, 'M5': m5_memory, 'TB': stubs}
+           'AUX': aux_gates, 'M5': m5_memory, 'M6': m6_vga, 'TB': stubs}
 
 
 def build(sim=None, program=b'', urom=None, alu_tables=None, rom_speed=90, bank=0,
-          mclk_half=125, ram_data=None, vram_data=None, wait_fix=True):
+          mclk_half=125, ram_data=None, vram_data=None, wait_fix=True, vga='taklit'):
     """Bütün CPU kartını kurar. `sim` verilirse çipler, pull'lar, tie'lar ve girişlerin
-    varsayılan değerleri ona eklenir (saat eklenmez). Board döndürür."""
+    varsayılan değerleri ona eklenir (saat eklenmez). Board döndürür.
+    vga: 'taklit' (VWR_s test tezgâhından) ya da 'netlist' (M6 zamanlaması + VWR senkronu)."""
+    if vga not in ('taklit', 'netlist'):
+        raise ValueError(f"vga = 'taklit' | 'netlist', verilen: {vga!r}")
+    net = vga == 'netlist'
     board = Board.merge([
-        m1_clock(mclk_half, wait_fix),
+        m1_clock(mclk_half, wait_fix, vga=net),
         m2_control(urom, bank),
         m3_address(),
         m4_data(alu_tables),
         aux_gates(),
         m5_memory(program, rom_speed, ram_data),
-        stubs(vram_data),
+        *([m6_vga()] if net else []),
+        stubs(vram_data, vga=net),
     ])
     if wait_fix:
         board.notes.extend(f'PLAN DÜZELTMESİ: {f}' for f in PLAN_FIXES)

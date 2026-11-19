@@ -24,6 +24,16 @@ PLAN_COUNTS = {
            '74HC245': 1},
 }
 
+# M6 (SISTEM-PLANI 15.1, 19 entegre): yalnız build(vga='netlist') kartında sayılır.
+M6_PLAN = {'74HC74': 1, '74HC163': 6, 'SST39SF010': 2, '74HC377': 1, '74HC157': 3, 'CY62256': 1,
+           '74HC245': 1, '74HC166': 1, '74HC08': 1, '74HC20': 1, '74HC04': 1}
+M6_NOT_BUILT = [('SST39SF010', 1, 'sırada: font ROM\'u (8.3)'),
+                ('74HC157', 3, 'sırada: VRAM adres seçimi (8.3, 8.5)'),
+                ('CY62256', 1, 'sırada: VRAM (şimdilik TB X1 taklidi)'),
+                ('74HC245', 1, 'sırada: DB → VRAM tamponu, /OE = /BUFEN (8.5)'),
+                ('74HC166', 1, 'sırada: glyph kaydırma registerı (8.3)'),
+                ('74HC08', 1, 'sırada: çıkış katı AND(QH, BLANK_n) (8.4)')]
+
 # Plan sayısından netlist'e girmeyenler ve nedeni.
 NOT_BUILT = {
     'M1': [('NE555', 1, 'kapsam dışı: yavaş saat kaynağı; MCLK test tezgâhından'),
@@ -51,13 +61,21 @@ def chip_counts(board, include_tb=False):
     return out
 
 
+def _plans(board):
+    """(plan, kurulmayanlar): CPU modülleri + kartta M6 varsa M6."""
+    if any(c.module == 'M6' for c in board.chips):
+        return {**PLAN_COUNTS, 'M6': M6_PLAN}, {**NOT_BUILT, 'M6': M6_NOT_BUILT}
+    return PLAN_COUNTS, NOT_BUILT
+
+
 def count_rows(board):
     """[(modül, parça, plan, netlist, kapsam dışı/kurulmayan, açıklanmamış fark), ...]"""
     have = chip_counts(board)
+    plans, not_built = _plans(board)
     rows = []
-    for m, plan in PLAN_COUNTS.items():
+    for m, plan in plans.items():
         nb = Counter()
-        for part, n, _ in NOT_BUILT.get(m, []):
+        for part, n, _ in not_built.get(m, []):
             nb[part] += n
         parts = list(plan) + [p for p in have.get(m, {}) if p not in plan]
         for p in parts:
@@ -69,17 +87,19 @@ def count_rows(board):
 def count_table(board):
     """Markdown: modül başına plan / netlist / kurulmayan / fark."""
     rows = count_rows(board)
+    plans, not_built = _plans(board)
     lines = ['| Modül | Plan (15.1) | Netlist | Kurulmayan | Açıklanmamış fark |',
              '|---|---:|---:|---:|---:|']
-    for m in PLAN_COUNTS:
+    for m in plans:
         mr = [r for r in rows if r[0] == m]
         pl, nl, x, d = (sum(r[k] for r in mr) for k in (2, 3, 4, 5))
         lines.append(f'| {MODULE_TITLES[m]} | {pl} | {nl} | {x} | {d} |')
     pl, nl, x, d = (sum(r[k] for r in rows) for k in (2, 3, 4, 5))
-    lines.append(f'| **Toplam (CPU, M6/M7 hariç)** | **{pl}** | **{nl}** | **{x}** | **{d}** |')
+    lines.append(f'| **Toplam (CPU{" + M6" if "M6" in plans else ""}, '
+                 f'{"M7" if "M6" in plans else "M6/M7"} hariç)** | **{pl}** | **{nl}** | **{x}** | **{d}** |')
     lines.append('')
     lines.append('Kurulmayanlar:')
-    for m, items in NOT_BUILT.items():
+    for m, items in not_built.items():
         for part, n, why in items:
             lines.append(f'- {m} {part} ×{n}: {why}')
     return '\n'.join(lines)
@@ -128,5 +148,5 @@ def wiring_table(board, title='TA-8 CPU kablolama tablosu'):
     return '\n'.join(out)
 
 
-__all__ = ['PLAN_COUNTS', 'NOT_BUILT', 'PLAN_FIXES', 'chip_counts', 'count_rows', 'count_table',
+__all__ = ['PLAN_COUNTS', 'NOT_BUILT', 'M6_PLAN', 'M6_NOT_BUILT', 'PLAN_FIXES', 'chip_counts', 'count_rows', 'count_table',
            'wiring_table']

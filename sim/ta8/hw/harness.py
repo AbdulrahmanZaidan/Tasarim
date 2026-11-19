@@ -50,23 +50,28 @@ class HwCpu:
     power_up  'zero' | 'random' (seed ile): FF, register ve SRAM içerikleri
     stepmode, micro, vwr, dip   anahtarların başlangıç değerleri
     keys      klavyeden gönderilecek scan code'lar (bus.py zamanlamasıyla)
+    vga       'taklit' (VWR_s = vwr anahtarı) ya da 'netlist' (M6 zamanlaması devrede, 25 MHz
+              OSC25; VWR_s M1'de VWR'den senkronlanır, vwr yok sayılır). netlist kipi ~25 kat yavaş.
     """
 
     def __init__(self, program=b'', *, corner='typ', mclk_mhz=4, mclk_half=None,
                  power_up='zero', seed=1, checks=True, stepmode=0, micro=0, vwr=1, dip=0,
-                 keys=(), urom=None, alu_tables=None, rom_speed=90, bank=0, wait_fix=True):
+                 keys=(), urom=None, alu_tables=None, rom_speed=90, bank=0, wait_fix=True,
+                 vga='taklit'):
         self.half = mclk_half or MCLK_HALF[mclk_mhz]
         self.cycle_ns = 8 * self.half
         self.sim = sim = Sim(corner=corner, checks=checks, power_up=power_up, seed=seed)
         self.board = cpu.build(sim, program=program, urom=urom, alu_tables=alu_tables,
                                rom_speed=rom_speed, bank=bank, mclk_half=self.half,
-                               wait_fix=wait_fix)
+                               wait_fix=wait_fix, vga=vga)
+        self.vga = vga
         self.ram_initial = self.vram_initial = None   # reset ilk bırakıldığında alınır
         self.release_time = None
         self.dip = dip
         sim.set('STEPMODE', stepmode)
         sim.set('MICRO', micro)
-        sim.set('VWR_s', vwr)
+        if vga == 'taklit':
+            sim.set('VWR_s', vwr)
         sim.set_bus('DIP', 6, dip)
         sim.set('/RESET', 0)                  # açılış: reset basılı
         self.kbd = Bus()                      # yalnız klavye durum makinesi olarak
@@ -107,6 +112,9 @@ class HwCpu:
         sim.watch('Q2_D', self._on_q2d)
         sim.watch('/WAIT', self._on_wait)
         sim.add_clock('MCLK', self.half)
+        for net, half in self.board.clocks.items():
+            if net != 'MCLK':
+                sim.add_clock(net, half)            # OSC25 (vga='netlist')
 
     # ------------------------------------------------------------------ olaylar
     def _rising(self, key, v):
@@ -264,9 +272,12 @@ class HwCpu:
         self.sim.run_for(hold_mclk * 2 * self.half)
         self.release_reset()
 
-    def run(self, max_cycles=1_000_000, idle_limit=5000):
+    def run(self, max_cycles=1_000_000, idle_limit=None):
         """HALT'a ya da toplam max_cycles commit'e kadar çalıştırır; commit sayısını döndürür.
-        idle_limit çevrim süresi boyunca hiç commit olmazsa (takılma) durur."""
+        idle_limit çevrim süresi boyunca hiç commit olmazsa (takılma) durur. Varsayılan 5000
+        (5 ms); vga='netlist' kipinde 20000: WAIT bir kareye (16.8 ms) kadar sürebilir."""
+        if idle_limit is None:
+            idle_limit = 20000 if self.vga == 'netlist' else 5000
         self.power_on()
         idle = 0
         while not self.halted and self.n < max_cycles:

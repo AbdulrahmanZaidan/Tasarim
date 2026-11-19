@@ -660,9 +660,9 @@ class TestNetlist(HwCase):
                 self.assertLessEqual(n, plan.get(part, 0), f'{m} {part}')
 
     def test_refs_notes_and_modules(self):
-        board = cpu.build()
+        board = cpu.build(vga='netlist')                    # M6 dahil: MODULES'un hepsi
         prefix = {'M1': 'U1', 'M2': 'U2', 'M3': 'U3', 'M4': 'U4', 'AUX': 'U5', 'M5': 'U6',
-                  'TB': 'X'}
+                  'M6': 'U7', 'TB': 'X'}
         for c in board.chips:
             self.assertTrue(c.ref.startswith(prefix[c.module]), c.ref)
             self.assertTrue(c.note, f'{c.ref}: not yok')

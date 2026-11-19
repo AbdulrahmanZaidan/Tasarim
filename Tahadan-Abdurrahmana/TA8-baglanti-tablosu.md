@@ -16,13 +16,20 @@ Kaynak: `sim/ta8/hw/cpu.py` (üretilmiştir, elle düzenlemeyin). Bacak numarala
 | M4 Veri ve ALU | 8 | 8 | 0 | 0 |
 | CPU yardımcı kapıları | 4 | 3 | 1 | 0 |
 | M5 Bellek + I/O | 6 | 6 | 0 | 0 |
-| **Toplam (CPU, M6/M7 hariç)** | **67** | **63** | **4** | **0** |
+| M6 VGA zamanlaması | 19 | 11 | 8 | 0 |
+| **Toplam (CPU + M6, M7 hariç)** | **86** | **74** | **12** | **0** |
 
 Kurulmayanlar:
 - M1 NE555 ×1: kapsam dışı: yavaş saat kaynağı; MCLK test tezgâhından
 - M1 74HC153 ×1: kapsam dışı: saat kaynağı seçici
 - M1 74HC14 ×1: kapsam dışı: RC reset / buton debounce / 555 kare dalgası
 - AUX 74HC00 ×1: kapsam dışı değil: 138'li WAIT (DOGRULAMA 2.5) ve G1 = CLK düzeltmesiyle NAND(MEMW_L, /VWR_s) ve OR kalktı; 12 NAND'ın 7'si yetiyor, 2. yardımcı 74HC00 gereksiz
+- M6 SST39SF010 ×1: sırada: font ROM'u (8.3)
+- M6 74HC157 ×3: sırada: VRAM adres seçimi (8.3, 8.5)
+- M6 CY62256 ×1: sırada: VRAM (şimdilik TB X1 taklidi)
+- M6 74HC245 ×1: sırada: DB → VRAM tamponu, /OE = /BUFEN (8.5)
+- M6 74HC166 ×1: sırada: glyph kaydırma registerı (8.3)
+- M6 74HC08 ×1: sırada: çıkış katı AND(QH, BLANK_n) (8.4)
 
 ## M1 Saat / reset / durdurma
 
@@ -248,7 +255,7 @@ FF1 BRK (10): commit'te (CLK, LED dalı) BRK D örneklenir. BRK_L = 1 → STOP �
 
 ### U111 · 74HC175
 
-/BUSREQ senkronlayıcısı (10): 2 FF, BRQ_s = NOT /BUSREQ iki MCLK gecikmeyle (/Q1). BRQ_s → STOP (U503) ve BUSACK D (U105). /MR = VCC (U107 gibi). FF2, FF3 planda VWR ×2 senkronlayıcısı; VWR_s şimdilik test tezgâhından (M6 ile), girişleri GND.
+/BUSREQ senkronlayıcısı (10): 2 FF, BRQ_s = NOT /BUSREQ iki MCLK gecikmeyle (/Q1). BRQ_s → STOP (U503) ve BUSACK D (U105). /MR = VCC (U107 gibi). FF2, FF3 VWR ×2 senkronlayıcısı (3.6): VWR (M6, T1 Q7) → VWR_S1 → VWR_s, iki MCLK kenarı. VWR 12.5 MHz DCLK ile değişir, MCLK ile ilgisiz: iki FF metastabiliteye karşı.
 
 | Bacak | Pin | Net |
 |---:|---|---|
@@ -261,12 +268,12 @@ FF1 BRK (10): commit'te (CLK, LED dalı) BRK D örneklenir. BRK_L = 1 → STOP �
 | 7 | `Q1` | — (boş) |
 | 8 | `GND` | *GND* (güç) |
 | 9 | `CP` | `MCLK` |
-| 10 | `Q2` | — (boş) |
+| 10 | `Q2` | `VWR_S1` |
 | 11 | `/Q2` | — (boş) |
-| 12 | `D2` | `GND` |
-| 13 | `D3` | `GND` |
+| 12 | `D2` | `VWR` |
+| 13 | `D3` | `VWR_S1` |
 | 14 | `/Q3` | — (boş) |
-| 15 | `Q3` | — (boş) |
+| 15 | `Q3` | `VWR_s` |
 | 16 | `VCC` | *VCC* (güç) |
 
 ## M2 Kontrol ünitesi
@@ -1639,6 +1646,271 @@ KSTAT (7.3): b7 = KRDY, b6 = VWR_s, b5..b0 = DIP SW5..SW0 → DB, /OE = /STAT_RD
 | 19 | `/OE` | `/STAT_RD` |
 | 20 | `VCC` | *VCC* (güç) |
 
+## M6 VGA zamanlaması
+
+### U701 · 74HC74
+
+FF1: 25 MHz ÷ 2 → DCLK 12.5 MHz (8.1). FF2: LD flip-flop'u, D = NAND4(Q2, Q1, Q0, 1); LD = /Q yalnız noktanın 0. periyodunda 1, CCLK = Q = /LD.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/1RD` | `VCC` |
+| 2 | `1D` | `/DCLK` |
+| 3 | `1CP` | `OSC25` |
+| 4 | `/1SD` | `VCC` |
+| 5 | `1Q` | `DCLK` |
+| 6 | `/1Q` | `/DCLK` |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `/2Q` | `LD` |
+| 9 | `2Q` | `CCLK` |
+| 10 | `/2SD` | `VCC` |
+| 11 | `2CP` | `DCLK` |
+| 12 | `2D` | `LD_D` |
+| 13 | `/2RD` | `VCC` |
+| 14 | `VCC` | *VCC* (güç) |
+
+### U702 · 74HC163
+
+Nokta sayacı (8.1): DCLK ile sayar; karakter = 8 nokta (Q0–Q2, mod 8). Q3 kullanılmaz.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/MR` | `VCC` |
+| 2 | `CP` | `DCLK` |
+| 3 | `D0` | `GND` |
+| 4 | `D1` | `GND` |
+| 5 | `D2` | `GND` |
+| 6 | `D3` | `GND` |
+| 7 | `CEP` | `VCC` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `/PE` | `VCC` |
+| 10 | `CET` | `VCC` |
+| 11 | `Q3` | `DOT3` |
+| 12 | `Q2` | `DOT2` |
+| 13 | `Q1` | `DOT1` |
+| 14 | `Q0` | `DOT0` |
+| 15 | `TC` | — (boş) |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U703 · 74HC20
+
+LD_D = NAND4(DOT2, DOT1, DOT0, 1): nokta 7'de 0. 2. kapı boş.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `1A` | `DOT2` |
+| 2 | `1B` | `DOT1` |
+| 4 | `1C` | `DOT0` |
+| 5 | `1D` | `VCC` |
+| 6 | `1Y` | `LD_D` |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `2Y` | — (boş) |
+| 9 | `2A` | `GND` |
+| 10 | `2B` | `GND` |
+| 12 | `2C` | `GND` |
+| 13 | `2D` | `GND` |
+| 14 | `VCC` | *VCC* (güç) |
+
+### U704 · 74HC163
+
+HCHAR alt 4 bit (8.2). /MR senkron temizleme = /HEND (ROM D4): H = 49'dan sonra 0.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/MR` | `/HEND` |
+| 2 | `CP` | `CCLK` |
+| 3 | `D0` | `GND` |
+| 4 | `D1` | `GND` |
+| 5 | `D2` | `GND` |
+| 6 | `D3` | `GND` |
+| 7 | `CEP` | `VCC` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `/PE` | `VCC` |
+| 10 | `CET` | `VCC` |
+| 11 | `Q3` | `H3` |
+| 12 | `Q2` | `H2` |
+| 13 | `Q1` | `H1` |
+| 14 | `Q0` | `H0` |
+| 15 | `TC` | `H_TC` |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U705 · 74HC163
+
+HCHAR üst 2 bit (H4, H5); Q2, Q3 kullanılmaz.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/MR` | `/HEND` |
+| 2 | `CP` | `CCLK` |
+| 3 | `D0` | `GND` |
+| 4 | `D1` | `GND` |
+| 5 | `D2` | `GND` |
+| 6 | `D3` | `GND` |
+| 7 | `CEP` | `VCC` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `/PE` | `VCC` |
+| 10 | `CET` | `H_TC` |
+| 11 | `Q3` | `H7` |
+| 12 | `Q2` | `H6` |
+| 13 | `Q1` | `H5` |
+| 14 | `Q0` | `H4` |
+| 15 | `TC` | — (boş) |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U706 · 74HC04
+
+HEND = NOT /HEND: VLINE satır sonunda bir artar. 2–6. kapı boş.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `1A` | `/HEND` |
+| 2 | `1Y` | `HEND` |
+| 3 | `2A` | `GND` |
+| 4 | `2Y` | — (boş) |
+| 5 | `3A` | `GND` |
+| 6 | `3Y` | — (boş) |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `4Y` | — (boş) |
+| 9 | `4A` | `GND` |
+| 10 | `5Y` | — (boş) |
+| 11 | `5A` | `GND` |
+| 12 | `6Y` | — (boş) |
+| 13 | `6A` | `GND` |
+| 14 | `VCC` | *VCC* (güç) |
+
+### U707 · 74HC163
+
+VLINE bit 0–3 (8.2): yalnız HEND = 1 iken (satır sonu) sayar. /MR = /VEND (ROM D5).
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/MR` | `/VEND` |
+| 2 | `CP` | `CCLK` |
+| 3 | `D0` | `GND` |
+| 4 | `D1` | `GND` |
+| 5 | `D2` | `GND` |
+| 6 | `D3` | `GND` |
+| 7 | `CEP` | `HEND` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `/PE` | `VCC` |
+| 10 | `CET` | `HEND` |
+| 11 | `Q3` | `V3` |
+| 12 | `Q2` | `V2` |
+| 13 | `Q1` | `V1` |
+| 14 | `Q0` | `V0` |
+| 15 | `TC` | `V_TC1` |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U708 · 74HC163
+
+VLINE bit 4–7.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/MR` | `/VEND` |
+| 2 | `CP` | `CCLK` |
+| 3 | `D0` | `GND` |
+| 4 | `D1` | `GND` |
+| 5 | `D2` | `GND` |
+| 6 | `D3` | `GND` |
+| 7 | `CEP` | `HEND` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `/PE` | `VCC` |
+| 10 | `CET` | `V_TC1` |
+| 11 | `Q3` | `V7` |
+| 12 | `Q2` | `V6` |
+| 13 | `Q1` | `V5` |
+| 14 | `Q0` | `V4` |
+| 15 | `TC` | `V_TC2` |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U709 · 74HC163
+
+VLINE bit 8–9; Q2, Q3 kullanılmaz.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/MR` | `/VEND` |
+| 2 | `CP` | `CCLK` |
+| 3 | `D0` | `GND` |
+| 4 | `D1` | `GND` |
+| 5 | `D2` | `GND` |
+| 6 | `D3` | `GND` |
+| 7 | `CEP` | `HEND` |
+| 8 | `GND` | *GND* (güç) |
+| 9 | `/PE` | `VCC` |
+| 10 | `CET` | `V_TC2` |
+| 11 | `Q3` | `V11` |
+| 12 | `Q2` | `V10` |
+| 13 | `Q1` | `V9` |
+| 14 | `Q0` | `V8` |
+| 15 | `TC` | — (boş) |
+| 16 | `VCC` | *VCC* (güç) |
+
+### U710 · SST39SF010
+
+Zamanlama ROM'u (8.2): A0–5 = H, A6–15 = V, A16 = SLOW. İçerik ta8.vga.timing_rom().
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 2 | `A16` | `SLOW` |
+| 3 | `A15` | `V9` |
+| 4 | `A12` | `V6` |
+| 5 | `A7` | `V1` |
+| 6 | `A6` | `V0` |
+| 7 | `A5` | `H5` |
+| 8 | `A4` | `H4` |
+| 9 | `A3` | `H3` |
+| 10 | `A2` | `H2` |
+| 11 | `A1` | `H1` |
+| 12 | `A0` | `H0` |
+| 13 | `DQ0` | `R_HSYNC_n` |
+| 14 | `DQ1` | `R_VSYNC_n` |
+| 15 | `DQ2` | `R_BLANK_n` |
+| 16 | `GND` | *GND* (güç) |
+| 17 | `DQ3` | `R_BUFEN_n` |
+| 18 | `DQ4` | `/HEND` |
+| 19 | `DQ5` | `/VEND` |
+| 20 | `DQ6` | `R_VMUX` |
+| 21 | `DQ7` | `R_VWR` |
+| 22 | `/CE` | `GND` |
+| 23 | `A10` | `V4` |
+| 24 | `/OE` | `GND` |
+| 25 | `A11` | `V5` |
+| 26 | `A9` | `V3` |
+| 27 | `A8` | `V2` |
+| 28 | `A13` | `V7` |
+| 29 | `A14` | `V8` |
+| 31 | `/WE` | `VCC` |
+| 32 | `VCC` | *VCC* (güç) |
+
+### U711 · 74HC377
+
+T1 registerı (8.2): /E = /LD = CCLK, CP = DCLK; ROM çıkışlarını karakter sınırında yakalar, böylece sync/blank kayan glyph ile aynı hizada çıkar (8.3). Q7 = VWR → M1 U111 senkronlayıcısı → VWR_s.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/E` | `CCLK` |
+| 2 | `Q0` | `/HSYNC` |
+| 3 | `D0` | `R_HSYNC_n` |
+| 4 | `D1` | `R_VSYNC_n` |
+| 5 | `Q1` | `/VSYNC` |
+| 6 | `Q2` | `BLANK_n` |
+| 7 | `D2` | `R_BLANK_n` |
+| 8 | `D3` | `R_BUFEN_n` |
+| 9 | `Q3` | `/BUFEN` |
+| 10 | `GND` | *GND* (güç) |
+| 11 | `CP` | `DCLK` |
+| 12 | `Q4` | `T1_HEND_n` |
+| 13 | `D4` | `/HEND` |
+| 14 | `D5` | `/VEND` |
+| 15 | `Q5` | `T1_VEND_n` |
+| 16 | `Q6` | `VMUX` |
+| 17 | `D6` | `R_VMUX` |
+| 18 | `D7` | `R_VWR` |
+| 19 | `Q7` | `VWR` |
+| 20 | `VCC` | *VCC* (güç) |
+
 ## Test tezgâhı taklitleri (M6/M7 yerine; entegre sayımına girmez)
 
 ### X1 · CY62256
@@ -1762,7 +2034,7 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 | `DIP3` | test tezgâhı girişi | varsayılan 0 |
 | `DIP4` | test tezgâhı girişi | varsayılan 0 |
 | `DIP5` | test tezgâhı girişi | varsayılan 0 |
-| `VWR_s` | test tezgâhı girişi | varsayılan 1 |
+| `SLOW` | test tezgâhı girişi | varsayılan 0 |
 | `KRDY` | test tezgâhı girişi | varsayılan 0 |
 | `KSR0` | test tezgâhı girişi | varsayılan 0 |
 | `KSR1` | test tezgâhı girişi | varsayılan 0 |
@@ -1773,13 +2045,15 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 | `KSR6` | test tezgâhı girişi | varsayılan 0 |
 | `KSR7` | test tezgâhı girişi | varsayılan 0 |
 | `MCLK` | saat | yarım periyot 125 ns |
+| `OSC25` | saat | yarım periyot 20 ns |
 
 ## Notlar
 
-- M1 kapsam dışı: NE555, 74HC153 (kaynak seçici; MCLK doğrudan test tezgâhından), 74HC14 (RC/debounce), U111'in VWR ×2 senkronlayıcısı (VWR_s test tezgâhından).
+- M1 kapsam dışı: NE555, 74HC153 (kaynak seçici; MCLK doğrudan test tezgâhından), 74HC14 (RC/debounce).
 - M2 kapsam dışı: MANUAL paneli yok: MANUAL = 0 (uROM /OE açık); 24 latch girişindeki 47k pull-down'lar ve DB DIP anahtarları da panelle birlikte.
 - AB: 16× 10k pull-up (boşta FFFF).
 - DB: 8× 10k pull-down (boşta 00).
 - Planda yardımcı 74HC00 ×2. 138'li WAIT çözümüyle (DOGRULAMA 2.5) NAND(MEMW_L, /VWR_s) kapısı kalktı ve Johnson 3 NAND + 1 OR oldu; 12 NAND'ın 7'si kullanılıyor (M1 U103: 4, U501: 3). 2. yardımcı 74HC00 gereksiz, netlist'te yok.
 - /ARD_RD, /ARD_WR, /BUSREQ: Arduino takılı değilken 10k pull-up. /BUSREQ açık-drain (Arduino yalnız 0 sürer ya da bırakır).
-- VWR_s gerçekte M1'deki 2. 74HC175'te VWR'den (M6) senkronlanır; burada test tezgâhı doğrudan VWR_s'i sürer (varsayılan 1 = pencere açık, NO-VGA jumper'ı gibi).
+- M6 kapsam dışı (sırada, 8.3–8.4): VRAM adres seçimi (3× 74HC157), VRAM (CY62256; şimdilik TB X1), font ROM'u, 74HC166, DB tamponu 74HC245 (/BUFEN), çıkış katı (74HC08, dirençler). SLOW test tezgâhından (gerçekte saat seçici).
+- VWR_s M1'deki U111'de VWR'den (M6) senkronlanıyor (vga='netlist').

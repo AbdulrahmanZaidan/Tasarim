@@ -32,7 +32,7 @@ def balanced(text):
 class TestKicad(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.board = cpu.build()
+        cls.board = cpu.build(vga="netlist")
         cls.tmp = tempfile.TemporaryDirectory()
         cls.proj, cls.files = kicad.write_project(cls.board, cls.tmp.name)
         cls.text = {f: (Path(cls.tmp.name) / f).read_text(encoding='utf-8') for f in cls.files}
