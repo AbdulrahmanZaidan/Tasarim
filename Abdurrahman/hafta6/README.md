@@ -11,7 +11,7 @@ Hazırlayan: Abdurrahman
 - **CPU + M6 birlikte çalışıyor:** `merhaba.asm`, gerçek 25 MHz VGA zamanlamasıyla, emülatörle **sıfır fark**. CPU, M6'nın açtığı VRAM penceresini ~15,4 ms bekliyor; "MERHABA, TA-8!" VRAM'e 482–522. satırlar arasında yazılıyor, pencere dışında yazma yok.
 - **VWR senkronlayıcısı kuruldu:** M1'deki U111'in boş iki flip-flop'u VWR'yi (T1 Q7) iki MCLK ile VWR_s'e çeviriyor (plan 3.6).
 - **M7 PS/2 klavye netlist'te (6/6 entegre + 2N7000, 2× 1N4148, RC):** `cpu.m7_ps2()`, `build(kbd='netlist')`. Gerçek PS/2 çerçeveleri (sanal klavye, `ta8/hw/ps2.py`) KCLK/KDATA'dan; `klavye.asm` CPU + M7 ile emülatörle **sıfır fark**. CPU + M6 + M7 birlikte de sıfır fark.
-- **Snake bütün sistemde çalışıyor:** CPU + M6 + M7 çip seviyesinde, 34 kare, 13 hamle, iki ok tuşu sanal klavyeden; emülatörle **sıfır fark**, 43 karenin hepsi VRAM'le nokta nokta aynı.
+- **Snake bütün sistemde çalışıyor:** CPU + M6 + M7 çip seviyesinde, oyun döngüsü 34 tur (43 VGA karesi), 13 hamle, iki ok tuşu sanal klavyeden; emülatörle **sıfır fark**, 43 karenin hepsi VRAM'le nokta nokta aynı.
 - **Bütün sistem netlist'te:** plan 92 entegre, netlist 88; eksik 4'ü bilinen (M1: NE555, 74HC153, 74HC14; AUX: gereksiz kalan 74HC00).
 - **KiCad şemaları** netlist'ten üretiliyor: `py cli.py hw kicad` → `sim/kicad/`, PDF: [TA8_semalar.pdf](TA8_semalar.pdf).
 - **Malzeme listesi:** [BOM.md](BOM.md), LCSC'ye yüklenecek dosya [BOM-lcsc.csv](BOM-lcsc.csv).
@@ -88,23 +88,24 @@ Yeni modeller: `ta8/hw/discrete.py` (2N7000, 1N4148, RC zaman aşımı; entegre 
 
 ## 4. Snake bütün sistemde (CPU + M6 + M7)
 
-`snake.c` (C, tacc), `HIZ_BAS=2` ile (2 karede bir hamle), çip seviyesindeki netlist'in tamamında: 88 entegre + ayrık parçalar, 25 MHz VGA saati, gerçek PS/2 çerçeveleri. Yeniden üretmek: `py -3 Abdurrahman/hafta6/snake_netlist.py` (~5 dk).
+`snake.c` (C, tacc), `HIZ_BAS=2` ile (2 turda bir hamle), çip seviyesindeki netlist'in tamamında: 88 entegre + ayrık parçalar, 25 MHz VGA saati, gerçek PS/2 çerçeveleri. Yeniden üretmek: `py -3 Abdurrahman/hafta6/snake_netlist.py` (~5 dk).
 
 | Ölçüm | Sonuç |
 |---|---|
-| Süre | 34 kare (571.201 çevrim, 730 ms simülasyon), 18. karede oyun başlıyor (VRAM temizleme + duvarlar) |
-| Tuşlar | 22. karede ↓, 28. karede ←; ikisi de M7'den geçip oyuna ulaşıyor |
+| Süre | 730 ms simülasyon (571.201 çevrim): oyunun ana döngüsü 34 tur, ekranda 43 VGA karesi (her biri 16,8 ms) |
+| Başlangıç | 9. turda (≈ 18. VGA karesi) VRAM temizleniyor, duvarlar çiziliyor; ilk hamle 10. turda |
+| Tuşlar | 22. turda ↓ (≈ 32. VGA karesi), 28. turda ← (≈ 38. VGA karesi); ikisi de M7'den geçip oyuna ulaşıyor |
 | Emülatörle karşılaştırma | **sıfır fark**; 13 hamle ikisinde de; son VRAM aynı |
-| Görüntü | 43 karenin hepsi, kendinden önceki pencerenin sonundaki VRAM'le nokta nokta aynı |
+| Görüntü | 43 VGA karesinin hepsi, kendinden önceki pencerenin sonundaki VRAM'le nokta nokta aynı |
 | İhlaller | 31 açılışta; 98.381 bilinen devir-teslim (U404/U601 vb., ~11 ns); 1.588 U718 setup, hepsi görüntüsüz satırlarda; başka yok |
 
-![Snake, kare 30: yılan sağa gidiyor](images/snake_kare30.png)
+![Snake, VGA karesi 30: yılan sağa gidiyor](images/snake_kare30.png)
 
-*Kare 30: yılan sağa gidiyor (`ooO`).*
+*VGA karesi 30: yılan sağa gidiyor (`ooO`).*
 
-![Snake, kare 42: aşağı ve sol tuşlarından sonra](images/snake_kare42.png)
+![Snake, VGA karesi 42: aşağı ve sol tuşlarından sonra](images/snake_kare42.png)
 
-*Kare 42: ↓ ve ← tuşlarından sonra yılan üç satır aşağıda, sola gidiyor (`Ooo`). İki görüntü de devrenin VIDEO çıkışından.*
+*VGA karesi 42: ↓ ve ← tuşlarından sonra yılan üç satır aşağıda, sola gidiyor (`Ooo`). İki görüntü de devrenin VIDEO çıkışından.*
 
 ## 5. Sırada
 

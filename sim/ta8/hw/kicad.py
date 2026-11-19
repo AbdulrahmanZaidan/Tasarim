@@ -159,6 +159,16 @@ POWER_LIB = {
 
 # ---------------------------------------------------------------- sayfa
 
+# Windows'ta ayrılmış dosya adları (aux, con, nul, ...): böyle bir dosya repo'da olursa
+# Windows'ta (ve bazı CI'larda) git clone başarısız olur.
+_RESERVED = {'con', 'prn', 'aux', 'nul'} | {f'{p}{i}' for p in ('com', 'lpt') for i in range(10)}
+
+
+def sheet_name(module):
+    n = module.lower()
+    return f'{n}_kart' if n in _RESERVED else n
+
+
 class Sheet:
     def __init__(self, project, module, chips, global_nets, notes):
         self.p = project
@@ -166,7 +176,7 @@ class Sheet:
         self.chips = chips
         self.glob = global_nets
         self.notes = notes
-        self.file = f'{module.lower()}.kicad_sch'
+        self.file = f'{sheet_name(module)}.kicad_sch'
         self.uuid = uid('sheet', module)
         self.items = []
         self.syms = {}

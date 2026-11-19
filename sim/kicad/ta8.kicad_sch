@@ -43,7 +43,7 @@
 (instances (project "ta8" (path "/eaeb4ec9-7aba-57f2-802b-5a7062af6ec9" (page "5")))))
 (sheet (at 279.4 38.1) (size 50.8 15.24) (fields_autoplaced yes) (stroke (width 0.1524) (type solid)) (fill (color 0 0 0 0.0000)) (uuid "bc1b966c-d9fa-5027-a679-ec1270400b13")
 (property "Sheetname" "CPU yardımcı kapıları" (at 279.4 36.83 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
-(property "Sheetfile" "aux.kicad_sch" (at 279.4 54.61 0) (effects (font (size 1.27 1.27)) (justify left top)))
+(property "Sheetfile" "aux_kart.kicad_sch" (at 279.4 54.61 0) (effects (font (size 1.27 1.27)) (justify left top)))
 (instances (project "ta8" (path "/eaeb4ec9-7aba-57f2-802b-5a7062af6ec9" (page "6")))))
 (sheet (at 25.4 68.58) (size 50.8 15.24) (fields_autoplaced yes) (stroke (width 0.1524) (type solid)) (fill (color 0 0 0 0.0000)) (uuid "3be54d99-82ad-5bca-9be4-fff48eb2f2e2")
 (property "Sheetname" "M5 Bellek + I/O" (at 25.4 67.31 0) (effects (font (size 1.27 1.27)) (justify left bottom)))
