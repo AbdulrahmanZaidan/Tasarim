@@ -72,6 +72,14 @@ class TestFont(unittest.TestCase):
         self.assertEqual(rom[0], 0x80)              # bit 0 (sol) -> bit 7
         self.assertEqual(rom[0x800], 0x80)          # bank 1 kopya
 
+    def test_real_font(self):
+        rom = vga.real_font()
+        a = [rom[0x41 << 3 | r] for r in range(8)]     # 'A': 0C 1E 33 33 3F 33 33 00, ters
+        self.assertEqual(a, [0x30, 0x78, 0xCC, 0xCC, 0xFC, 0xCC, 0xCC, 0x00])
+        self.assertEqual(bytes(rom[:0x100]), bytes(0x100))   # 00–1F boş
+        self.assertEqual(rom[0x800:0x1000], rom[:0x800])
+        self.assertEqual(vga.default_font(), rom)
+
 
 if __name__ == '__main__':
     unittest.main()

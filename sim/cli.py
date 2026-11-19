@@ -47,8 +47,10 @@ def cmd_roms(args):
     images['vga_timing'] = vga.timing_rom()
     if args.font:
         font = vga.font_from_c_header(Path(args.font).read_text(encoding='utf-8', errors='replace'))
-    else:
+    elif args.test_font:
         font = vga.test_font()
+    else:
+        font = vga.default_font()                   # sim/fonts/font8x8_basic.h
     images['font'] = font
     proteus = BUILD / 'proteus'
     proteus.mkdir(exist_ok=True)
@@ -272,7 +274,8 @@ def main(argv=None):
     sub = p.add_subparsers(dest='cmd', required=True)
 
     r = sub.add_parser('roms', help='ROM imajlarını üret')
-    r.add_argument('--font', help='font8x8_basic.h yolu (verilmezse test deseni)')
+    r.add_argument('--font', help='font8x8_basic.h biçiminde font dosyası (verilmezse sim/fonts/font8x8_basic.h)')
+    r.add_argument('--test-font', action='store_true', help='gerçek font yerine test deseni')
     r.set_defaults(func=cmd_roms)
 
     a = sub.add_parser('asm', help='assembly çevir')

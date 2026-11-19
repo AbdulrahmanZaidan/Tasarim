@@ -6,6 +6,7 @@ Hazırlayan: Abdurrahman
 
 - **M6'nın tamamı ana netlist'te (19/19 entegre):** `sim/ta8/hw/cpu.py` `m6_vga()`. Zamanlama (U701–U711, `hafta5/m6_uret.py`'den taşındı) + karakter hattı (U712–U719): 3× 74HC157, VRAM, DB tamponu, font ROM'u, 74HC166, çıkış katı. VRAM taklidi X1 kalktı.
 - **Devrenin görüntüsü nokta nokta doğru:** VIDEO çıkışı her DCLK'de yakalanıyor; 480 × 320 noktanın hepsi VRAM + font ROM'undan hesaplanan görüntüyle aynı (`sim/ta8/hw/screen.py`).
+- **Gerçek font:** `font8x8_basic` (kamu malı) `sim/fonts/`'ta; `vga.default_font()`, `py cli.py roms` ve M6 artık bunu kullanıyor (test deseni: `--test-font`).
 - **Bulgu:** pencerede /BUFEN kapalıyken VD0–7 yüzüyordu (font ROM'unun girişleri boşta). 10k pull-down SIP dizisi eklendi (planda yok).
 - **CPU + M6 birlikte çalışıyor:** `merhaba.asm`, gerçek 25 MHz VGA zamanlamasıyla, emülatörle **sıfır fark**. CPU, M6'nın açtığı VRAM penceresini ~15,4 ms bekliyor; "MERHABA, TA-8!" VRAM'e 482–522. satırlar arasında yazılıyor, pencere dışında yazma yok.
 - **VWR senkronlayıcısı kuruldu:** M1'deki U111'in boş iki flip-flop'u VWR'yi (T1 Q7) iki MCLK ile VWR_s'e çeviriyor (plan 3.6).
@@ -38,9 +39,13 @@ Pencere kapalıyken WAIT bir kareye (16,8 ms) kadar sürebildiği için `HwCpu.r
 | CPU + M6, merhaba.asm | yazmalardan sonraki kare beklenen görüntüyle aynı, ilk kare boş |
 | Entegre sayımı (M6) | plan 19, netlist 19, açıklanmamış fark 0 |
 
-![CPU + M6: merhaba.asm, devrenin VIDEO çıkışı (test fontu)](images/m6_cpu_merhaba.png)
+![CPU + M6: merhaba.asm, devrenin VIDEO çıkışı](images/m6_cpu_merhaba.png)
 
-Görüntü test fontuyla: her karakter kendi kodunun bitlerini çiziyor (gerçek font sırada). Test görüntüsü: [images/m6_test_ekrani.png](images/m6_test_ekrani.png).
+*CPU + M6: `merhaba.asm` "MERHABA, TA-8!" yazısını VRAM'e yazıyor, M6 sonraki karede çiziyor. Görüntü devrenin VIDEO çıkışından nokta nokta alındı (gerçek font: `font8x8_basic`, kamu malı, `sim/fonts/`).*
+
+![Yalnız M6: VRAM önceden yüklü, bütün karakter kümesi](images/m6_test_ekrani.png)
+
+*Yalnız M6: VRAM'e önceden yazı yüklendi (CPU yok); büyük/küçük harf, rakam ve işaretler.*
 
 ### Zamanlama ihlalleri
 
@@ -55,6 +60,5 @@ Testler: `sim/tests/test_m6_netlist.py` (12 test), `test_kicad.py` M6 dahil kart
 
 ## 3. Sırada
 
-- **Gerçek font** (`font8x8_basic`, kamu malı): `vga.font_from_c_header()` hazır, dosyası depoda yok.
 - **Digital'de ekranda yazı (K3):** `py cli.py hw digital` M6'yı da dışa aktarmalı; Digital'in VGA bileşeniyle.
 - **M7 PS/2.**

@@ -123,7 +123,7 @@ class TestM6System(unittest.TestCase):
 
     def test_text_on_screen(self):
         """Yazmalardan sonraki kare VRAM'deki yazıyı gösteriyor; ilk kare boş."""
-        want = screen.render(self.hw.vram(), vga.test_font())
+        want = screen.render(self.hw.vram(), vga.default_font())
         self.assertEqual(len(self.cap.frames), 2)
         self.assertEqual(screen.diff(self.cap.frames[1], want), [])
         self.assertEqual(sum(map(sum, self.cap.frames[0])), 0)

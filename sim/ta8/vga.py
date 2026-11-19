@@ -7,6 +7,7 @@ Font byte'ında bit 7 en soldaki noktadır (74HC166'nın H girişi).
 """
 
 import re
+from pathlib import Path
 
 ROM_SIZE = 0x20000
 H_TOTAL, V_TOTAL = 50, 525
@@ -95,6 +96,19 @@ def font_from_c_header(text):
             rom[i << 3 | row] = int(f'{b:08b}'[::-1], 2)
     _fill_banks(rom)
     return rom
+
+
+FONT_FILE = Path(__file__).resolve().parent.parent / 'fonts' / 'font8x8_basic.h'
+
+
+def real_font(path=FONT_FILE):
+    """font8x8_basic (kamu malı, sim/fonts/): gerçek 8×8 font ROM'u imajı."""
+    return font_from_c_header(Path(path).read_text(encoding='utf-8', errors='replace'))
+
+
+def default_font():
+    """Gerçek font (dosya varsa), yoksa test deseni."""
+    return real_font() if FONT_FILE.exists() else test_font()
 
 
 def _fill_banks(rom):

@@ -648,7 +648,7 @@ def m6_vga(dclk_ext=False, osc_half=20, vram_data=None, font=None, timing_only=F
     U701–U711 zamanlama (8.1–8.2), U712–U719 karakter hattı ve çıkış katı (8.3–8.5).
     timing_only: yalnız U701–U711 (hafta5/m6_uret.py ve gecikme analizi için).
     dclk_ext: ÷2 FF'si boşta, DCLK dışarıdan (en kötü gecikme analizinde).
-    font: font ROM'u imajı (varsayılan vga.test_font()). vram_data: VRAM başlangıç içeriği.
+    font: font ROM'u imajı (varsayılan vga.default_font(): font8x8_basic). vram_data: VRAM içeriği.
     Çıkışlar: VIDEO (= AND(QH, BLANK_n); R, G, B buna bağlı), /HSYNC, /VSYNC; CPU'ya VWR."""
     M = 'M6'
     gnd4 = {f'D{i}': 'GND' for i in range(4)}
@@ -736,7 +736,7 @@ def m6_vga(dclk_ext=False, osc_half=20, vram_data=None, font=None, timing_only=F
         **pins('DQ', nets('FD', 8)),
     }, M, 'Font ROM\'u (8.3): A0–2 = V3..V1 (font satırı, her satır iki kez), A3–10 = karakter '
           'kodu (VD), A11–16 = font bankası jumper\'ları (burada GND, bank 0). Bit 7 en soldaki nokta.',
-        data=bytes(font if font is not None else vga_tables.test_font()))
+        data=bytes(font if font is not None else vga_tables.default_font()))
     b.chips += [
         vram,
         _chip(HC245, 'U716', {'DIR': 'VCC', '/OE': '/BUFEN', **pins('A', nets('DB', 8)),
