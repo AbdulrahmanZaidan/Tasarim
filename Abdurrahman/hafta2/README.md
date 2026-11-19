@@ -2,11 +2,11 @@
 
 Hazırlayan: Abdurrahman
 
-> **Not:** Devre elle çizilmedi. `.dig` dosyası projenin netlist'inden (`sim/td8/hw/cpu.py`, Taha) Taha'nın Digital aracıyla (`sim/td8/hw/digital.py`) üretildi; bağlantılar `sim/digital/` altındaki dosyalarla aynı. Bu klasörde benim eklediklerim: testler, dalga şekilleri, ekran görüntüleri ve bu rapor.
+> **Not:** Devre elle çizilmedi. `.dig` dosyası projenin netlist'inden (`sim/ta8/hw/cpu.py`, Taha) Taha'nın Digital aracıyla (`sim/ta8/hw/digital.py`) üretildi; bağlantılar `sim/digital/` altındaki dosyalarla aynı. Bu klasörde benim eklediklerim: testler, dalga şekilleri, ekran görüntüleri ve bu rapor.
 
 ## Özet
 
-- İlk sürümdeki A, B ve IR şemaları SAP-1 yapısındaydı (74LS173, B registerı). TD-8 planına göre ([SISTEM-PLANI 5.1](../../SISTEM-PLANI.md)) **Digital'de yeniden kuruldu** (18 Kasım):
+- İlk sürümdeki A, B ve IR şemaları SAP-1 yapısındaydı (74LS173, B registerı). TA-8 planına göre ([SISTEM-PLANI 5.1](../../SISTEM-PLANI.md)) **Digital'de yeniden kuruldu** (18 Kasım):
   - **B registerı yok:** ALU'nun sağ girişi doğrudan veri yolu (DB).
   - **A:** 74HC377, girişi ALU sonucu (R), veri yolundan değil.
   - **IR:** 74HC377, girişi DB; veri yoluna geri çıkmaz, 8 bitin hepsi mikrokod ROM'larına gider.
@@ -36,7 +36,7 @@ Hazırlayan: Abdurrahman
 
 Üç register da **CLK_AFI** ile saatlenir: M1'deki CLK tamponunun (U109) A + F + IR dalı. A ve F aynı dalda olmalı (SISTEM-PLANI 3.5: A → ALU → F döngüsünün tutma payı ~8 ns).
 
-Bacak bağlantıları ve sinyal adları [TD8-baglanti-tablosu.md](../../Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md) bölüm M4 (U401–U404) ile birebir aynı (kaynak: projenin bağlantı listesi `sim/td8/hw/cpu.py`).
+Bacak bağlantıları ve sinyal adları [TA8-baglanti-tablosu.md](../../Tahadan-Abdurrahmana/TA8-baglanti-tablosu.md) bölüm M4 (U401–U404) ile birebir aynı (kaynak: projenin bağlantı listesi `sim/ta8/hw/cpu.py`).
 
 Veri yolunda 8× 10k pull-down var: hiçbir çip sürmediğinde DB = 00.
 

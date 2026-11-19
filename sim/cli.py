@@ -1,4 +1,4 @@
-"""TD-8 komut satırı aracı.
+"""TA-8 komut satırı aracı.
 
     py cli.py roms                      build/ altına tüm ROM imajlarını üretir
     py cli.py asm program.asm [-o x.bin] [--ihex]  programı çevirir, 32 KB ROM imajı yazar
@@ -9,7 +9,7 @@
                                         karşılaştırır, zamanlama özetini yazar
     py cli.py hw wiring [-o DOSYA]      pin pin kablolama tablosu (Markdown)
     py cli.py hw digital [-o KLASÖR] [--program X.asm] [--run N]
-                                        Digital (.dig): modül dosyaları + td8.dig; --run ile
+                                        Digital (.dig): modül dosyaları + ta8.dig; --run ile
                                         Digital'de N çevrim koşar, MicroEmu ile karşılaştırır
 """
 
@@ -17,10 +17,10 @@ import argparse
 import sys
 from pathlib import Path
 
-from td8 import alu, asm, ihex, isa, microcode, vectors, vga
-from td8.bus import Bus
-from td8.emu_micro import MicroEmu
-from td8.emu_ref import RefEmu
+from ta8 import alu, asm, ihex, isa, microcode, vectors, vga
+from ta8.bus import Bus
+from ta8.emu_micro import MicroEmu
+from ta8.emu_ref import RefEmu
 
 BUILD = Path(__file__).parent / 'build'
 
@@ -145,9 +145,9 @@ def cmd_vectors(args):
 
 
 def cmd_hw(args):
-    """Çip seviyesindeki netlist (td8/hw): çalıştırma ve kablolama tablosu."""
-    from td8.hw import harness, wiring
-    from td8.hw.cpu import build
+    """Çip seviyesindeki netlist (ta8/hw): çalıştırma ve kablolama tablosu."""
+    from ta8.hw import harness, wiring
+    from ta8.hw.cpu import build
     if hasattr(sys.stdout, 'reconfigure'):
         sys.stdout.reconfigure(errors='replace')        # Windows konsolunda → gibi işaretler
     if args.hw_cmd == 'wiring':
@@ -176,7 +176,7 @@ def cmd_hw(args):
     emu = harness.emu_like(hw, prog.image, hw.n if not hw.halted else args.cycles, keys)
     diffs = harness.compare(hw, emu)
     mhz = 1000 / (8 * hw.half)
-    print(f'TD-8 çip seviyesi: {args.source} | köşe {args.corner} | MCLK {4 * mhz:.2f} MHz '
+    print(f'TA-8 çip seviyesi: {args.source} | köşe {args.corner} | MCLK {4 * mhz:.2f} MHz '
           f'(CPU {mhz:.2f} MHz) | açılış {"rastgele, tohum %d" % args.seed if args.seed is not None else "sıfır"}'
           + (' | WAIT: planın yazdığı hâli' if args.plan_wait else ''))
     print(f'{"durdu (HALT)" if hw.halted else "çevrim sınırı doldu"} · {hw.n} çevrim · '
@@ -223,9 +223,9 @@ def cmd_hw(args):
 
 
 def cmd_hw_digital(args):
-    """Digital dosyaları (SISTEM-PLANI 12.2): m1_saat … m5_bellek, aux, tb ve td8.dig."""
+    """Digital dosyaları (SISTEM-PLANI 12.2): m1_saat … m5_bellek, aux, tb ve ta8.dig."""
     import time
-    from td8.hw import digital as dg, digital_cpu as dc
+    from ta8.hw import digital as dg, digital_cpu as dc
     src = Path(args.program)
     prog = _assemble(src)
     out = Path(args.output)
@@ -241,8 +241,8 @@ def cmd_hw_digital(args):
         return
     setup = dg.find_digital()
     if setup is None:
-        sys.exit('HATA: Digital bulunamadı (TD8_DIGITAL_HOME ya da ../araclar)')
-    run = dc.digital_trace(out / 'td8.dig', args.run, setup=setup)
+        sys.exit('HATA: Digital bulunamadı (TA8_DIGITAL_HOME ya da ../araclar)')
+    run = dc.digital_trace(out / 'ta8.dig', args.run, setup=setup)
     emu = dc.emu_reference(prog.image, args.run, run)
     diffs = dc.compare_run(run, emu)
     print(f'Digital: {len(run.trace)} çevrim, {"HALT" if run.halted else "çevrim sınırı"}, '
@@ -257,7 +257,7 @@ def cmd_hw_digital(args):
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(prog='cli.py', description='TD-8 araçları')
+    p = argparse.ArgumentParser(prog='cli.py', description='TA-8 araçları')
     sub = p.add_subparsers(dest='cmd', required=True)
 
     r = sub.add_parser('roms', help='ROM imajlarını üret')
@@ -293,7 +293,7 @@ def main(argv=None):
                    help='trace, digital: bu adla ilk sütun ekler, her satırda C (saat darbesi)')
     v.set_defaults(func=cmd_vectors)
 
-    h = sub.add_parser('hw', help='çip seviyesindeki devre (td8/hw)')
+    h = sub.add_parser('hw', help='çip seviyesindeki devre (ta8/hw)')
     hsub = h.add_subparsers(dest='hw_cmd', required=True)
     hr = hsub.add_parser('run', help='devrede çalıştır, MicroEmu ile karşılaştır')
     hr.add_argument('source')
@@ -313,12 +313,12 @@ def main(argv=None):
     hw_.add_argument('-o', '--output', help='çıktı dosyası (verilmezse ekrana)')
     hw_.add_argument('--plan-wait', action='store_true', help='düzeltmesiz WAIT kapısıyla')
     hw_.set_defaults(func=cmd_hw)
-    hd = hsub.add_parser('digital', help='Digital (.dig) dosyalarını üret (modüller + td8.dig)')
+    hd = hsub.add_parser('digital', help='Digital (.dig) dosyalarını üret (modüller + ta8.dig)')
     hd.add_argument('-o', '--output', default=str(Path(__file__).parent / 'digital'),
                     help='çıktı klasörü (varsayılan sim/digital)')
     hd.add_argument('--program', default=str(Path(__file__).parent / 'examples' / 'merhaba.asm'),
                     help='program ROM\'una yüklenecek .asm (varsayılan examples/merhaba.asm)')
-    hd.add_argument('--no-modules', action='store_true', help='yalnız td8.dig')
+    hd.add_argument('--no-modules', action='store_true', help='yalnız ta8.dig')
     hd.add_argument('--run', type=int, metavar='N', default=0,
                     help='Digital\'de N çevrime kadar koş, MicroEmu ile karşılaştır')
     hd.set_defaults(func=cmd_hw_digital)

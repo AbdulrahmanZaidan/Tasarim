@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TD-8 4. Hafta Raporu</title>
+<title>TA-8 4. Hafta Raporu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -172,14 +172,16 @@ figcaption { font-size: .8rem; color: var(--muted); }
 <main class="wrap">
   <header>
     <span class="eyebrow">Bitirme projesi · Haftalık durum</span>
-    <h1>TD-8: 4. hafta raporu</h1>
+    <h1>TA-8: 4. hafta raporu</h1>
     <p class="meta mono">17–23 Kasım 2026 · Simülasyon dönemi, hafta 4 / 10 · <a href="hafta3.html">3. hafta raporu</a></p>
+    <p class="cap">Ad: <b>TA-8</b>. TA, Taha ve Abdurrahman'ın baş harfleri; 8, işlemcinin 8 bitlik olması. 19 Kasım'a kadar TD-8 adıyla anıldı. Terimlerin sade açıklaması <a href="#sozluk">Sözlük</a> sekmesinde.</p>
   </header>
 
   <nav class="tabs" role="tablist" aria-label="Rapor bölümleri">
     <a href="#genel" id="t-genel" role="tab" aria-controls="genel" aria-selected="true">Genel bakış</a>
     <a href="#deniz" id="t-deniz" role="tab" aria-controls="deniz" aria-selected="false">Deniz <small>· yazılım</small></a>
     <a href="#abdurrahman" id="t-abdurrahman" role="tab" aria-controls="abdurrahman" aria-selected="false">Abdurrahman <small>· donanım</small></a>
+    <a href="#sozluk" id="t-sozluk" role="tab" aria-controls="sozluk" aria-selected="false">Sözlük <small>· terimler</small></a>
   </nav>
 
   <div class="panel" id="genel" role="tabpanel" aria-labelledby="t-genel">
@@ -190,6 +192,18 @@ figcaption { font-size: .8rem; color: var(--muted); }
         <div class="cal-bar"><div><i style="width: 40%"></i></div><div></div></div>
         <div class="cal-lbl"><span><b>Simülasyon</b> · hafta 4 / 10</span><span><b>Breadboard yapımı</b> · Ocak – Haziran 2027</span></div>
       </div>
+    </section>
+
+    <section>
+      <h2>Bu hafta, kısaca</h2>
+      <ul>
+        <li>İşlemcinin "beyni" (kontrol ünitesi, M2) ile "adres defteri" (bellek ve adres çözme, M5) entegre entegre bilgisayarda kuruldu ve planın istediği bütün denemelerden geçti.</li>
+        <li>Bunun için her entegreyi gerçek gecikmesiyle taklit eden bir program yazıldı. Aynı devre Digital'e aktarıldı; iki yerde de aynı sonucu veriyor.</li>
+        <li>Abdurrahman Proteus'tan Digital'e geçti. Saat, registerlar, hesap birimi (ALU) ve adres registerlarının denemelerini kurdu; ilk kilometre taşı geçti.</li>
+        <li>Bütün parçalar birleştirildi: işlemci üç programda, bilgisayardaki taklidiyle (emülatör) her adımda aynı sonucu veriyor. Bu, ikinci kilometre taşı.</li>
+        <li>Projenin adı TA-8 oldu.</li>
+      </ul>
+      <p class="cap">Mikrokod, register, flash gibi terimlerin açıklaması ve bir komutun adım adım nasıl çalıştığı: <a href="#sozluk">Sözlük</a>.</p>
     </section>
 
     <section>
@@ -262,7 +276,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
         <div class="col done">
           <h3>Yaptık</h3>
           <ul>
-            <li><span>Sistem planı ve TD-8 komut seti<small>bütçe 17.503 TL · 53 komut</small></span></li>
+            <li><span>Sistem planı ve TA-8 komut seti<small>bütçe 17.503 TL · 53 komut</small></span></li>
             <li><span>Simülasyon yazılımı ve kütüphane<small>assembler, 2 emülatör, çarpma ve bölme</small></span></li>
             <li><span>Saat, registerlar, ALU ve adres registerları Digital'de test edildi<small>Abdurrahman · 15 modül testi</small></span></li>
             <li><span>Bütün işlemci Digital'de, emülatörle sıfır fark<small>3 program · 33.170 çevrime kadar</small></span></li>
@@ -301,6 +315,16 @@ figcaption { font-size: .8rem; color: var(--muted); }
         <li><b>3 Oca</b>Tasarım donduruldu, yapıma hazır</li>
         <li><b>Nisan 2027</b>Breadboard'da işlemci program çalıştırıyor</li>
         <li><b>Mayıs 2027</b>Snake demosu çalışıyor</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Gelecek hafta (24–30 Kasım)</h2>
+      <ol class="next">
+        <li><span><b>Deniz:</b> hata ayıklama donanımı. İşlemciyi istenen adreste durdurmak (breakpoint) ve Arduino'nun işlemciyi durdurup belleğe program yüklemesi (BUSREQ). Digital'de denenecek.</span></li>
+        <li><span><b>Abdurrahman:</b> ekran (VGA) zamanlaması: monitörün istediği satır ve kare zamanlamasını üreten devre.</span></li>
+        <li><span><b>Malzeme:</b> stoğu azalan parçalar ve Arduino Mega yurt içinden, hızlı flash çipleri yurt dışından (üniversitenin gümrük muafiyet yazısıyla) sipariş edilecek. Gelen her parça giriş testinden geçecek.</span></li>
+        <li><span><b>Prototip a:</b> saat modülü breadboard'da, osiloskopla ölçülecek (parçalar gelince).</span></li>
       </ol>
     </section>
   </div>
@@ -347,15 +371,15 @@ figcaption { font-size: .8rem; color: var(--muted); }
       </ul>
       <p><b>Neleri yakalıyor:</b> iki entegrenin aynı hatta aynı anda çıkış vermesi (bus çakışması), boşta kalan giriş, kurulum ve tutma süresi ihlali, belleğe hatalı yazma.</p>
       <p>Testlerin gerçekten hata yakaladığı denendi: entegre modellerinde yapılan 7 bilinçli bozmanın 7'si yakalandı.</p>
-      <p class="cap">Dosyalar: <code>sim/td8/hw/kernel.py</code> (çekirdek), <code>chips.py</code> (25 entegre modeli; gecikme tablosunun bir kısmı tahmin, dosyada işaretli).</p>
+      <p class="cap">Dosyalar: <code>sim/ta8/hw/kernel.py</code> (çekirdek), <code>chips.py</code> (25 entegre modeli; gecikme tablosunun bir kısmı tahmin, dosyada işaretli).</p>
     </section>
 
     <section>
       <h2>Digital'e dışa aktarım</h2>
-      <p><code>sim/td8/hw/digital.py</code> bağlantı listesini Digital'in <code>.dig</code> dosyasına çeviriyor. Her entegre Digital'in kendi 74xx kütüphanesindeki bacaklı çip; her bacakta sinyal adı yazıyor.</p>
+      <p><code>sim/ta8/hw/digital.py</code> bağlantı listesini Digital'in <code>.dig</code> dosyasına çeviriyor. Her entegre Digital'in kendi 74xx kütüphanesindeki bacaklı çip; her bacakta sinyal adı yazıyor.</p>
       <figure>
-        <div class="img"><img src="img/hafta4-m2-digital.png" alt="Kontrol ünitesi M2, Digital'de: üstte 3 mikrokod ROM'u (U201–U203, SST39SF010) ve 3 kontrol latch'i (U204–U206, 74HC273); altta kod çözücüler (U207, U208 74HC138; U209 74HC139), adım sayacı (U210 74HC161) ve kutup düzeltme invertörü (U211 74HC04). Her bacakta sinyal adı var." width="2000" height="1096" loading="lazy"></div>
-        <figcaption>Kontrol ünitesi (M2) Digital'de: 3 mikrokod ROM'u ve 3 kontrol latch'i (üstte), kod çözücüler, adım sayacı ve invertör (altta). 11 entegre. Bacaklar aynı adlı sinyallerle birbirine bağlı.</figcaption>
+        <div class="img"><img src="img/hafta4-m2-digital.png" alt="Kontrol ünitesi M2, Digital'de: üstte 3 mikrokod ROM'u (U201–U203, SST39SF010) ve 3 kontrol latch'i (U204–U206, 74HC273); ortada kod çözücüler (U207, U208 74HC138; U209 74HC139), breakpoint karşılaştırıcıları (U212, U213 74HC688) ve adım sayacı (U210 74HC161); altta kutup düzeltme invertörü (U211 74HC04). Her bacakta sinyal adı var." width="2000" height="1482" loading="lazy"></div>
+        <figcaption>Kontrol ünitesi (M2) Digital'de, planın 13 entegresi: 3 mikrokod ROM'u ve 3 kontrol latch'i (üstte), kod çözücüler, adım sayacı ve invertör. Ortadaki iki 74HC688 (U212, U213) breakpoint karşılaştırıcıları; gelecek haftanın konusu. Bacaklar aynı adlı sinyallerle birbirine bağlı.</figcaption>
       </figure>
       <figure>
         <div class="img"><img src="img/hafta4-m5-digital.png" alt="Bellek M5, Digital'de: program ROM'u (U601 SST39SF010), RAM (U602 CY62256), adres çözme (U603 74HC20, U604 74HC138), LED portu (U605 74HC377) ve durum portu (U606 74HC245)." width="2000" height="769" loading="lazy"></div>
@@ -427,7 +451,7 @@ m5_cozme: passed         M5 adres çözme, 1.096 vektör</pre>
     <section>
       <h2>Gelecek hafta</h2>
       <ol class="next">
-        <li><span>Bütün işlemcinin birleştirilmesi: bütün modüller bir arada, emülatörle çevrim çevrim karşılaştırma.</span></li>
+        <li><span>Hata ayıklama donanımı (plan 5. hafta): donanım breakpoint'i (2× 74HC688 + BRK flip-flop'u) ve BUSREQ/BUSACK (Arduino'nun adres ve veri yolunu alıp belleğe yazması); çip seviyesinde ve Digital'de test.</span></li>
         <li><span>C derleyicisi: 6. hafta raporunun konusu.</span></li>
       </ol>
     </section>
@@ -438,7 +462,7 @@ m5_cozme: passed         M5 adres çözme, 1.096 vektör</pre>
       <span class="eyebrow">Donanım ve testler</span>
       <h2>Abdurrahman</h2>
       <p>Devre modüllerini Digital'de kuruyor ve test ediyor. Kendi notları: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/Abdurrahman">Abdurrahman klasörü</a> (her hafta için ayrı klasör: <code>hafta1</code> … <code>hafta4</code>).</p>
-      <p><b>Yeni not: 18 Kasım.</b> Proteus'taki ilk saat modülü dosyası silindiği için ekibin geri kalanıyla aynı araca, <b>Digital'e geçildi</b>. İlk haftalardaki SAP-1 şemaları (74LS173, B registerı, 74LS283 ALU, 16 baytlık RAM, MAR) TD-8 planına göre yenilendi; her modül planın istediği testlerle Digital'de denendi.</p>
+      <p><b>Yeni not: 18 Kasım.</b> Proteus'taki ilk saat modülü dosyası silindiği için ekibin geri kalanıyla aynı araca, <b>Digital'e geçildi</b>. İlk haftalardaki SAP-1 şemaları (74LS173, B registerı, 74LS283 ALU, 16 baytlık RAM, MAR) TA-8 planına göre yenilendi; her modül planın istediği testlerle Digital'de denendi.</p>
     </section>
 
     <section>
@@ -455,7 +479,7 @@ m5_cozme: passed         M5 adres çözme, 1.096 vektör</pre>
           </tbody>
         </table>
       </div>
-      <p class="cap">Entegre sayıları test dosyasındaki çipler: M1'de STOP OR'u (U503), M3'te CLK tamponu, adres yolu seçicisi (74HC139), invertör ve SP'nin NAND'ı da var. Bağlantılar <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md">bağlantı tablosuyla</a> birebir aynı (projenin netlist'i <code>sim/td8/hw/cpu.py</code>). Testler Digital'in kendi test aracıyla (<code>CLI test</code>) çalıştırıldı.</p>
+      <p class="cap">Entegre sayıları test dosyasındaki çipler: M1'de STOP OR'u (U503), M3'te CLK tamponu, adres yolu seçicisi (74HC139), invertör ve SP'nin NAND'ı da var. Bağlantılar <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Tahadan-Abdurrahmana/TA8-baglanti-tablosu.md">bağlantı tablosuyla</a> birebir aynı (projenin netlist'i <code>sim/ta8/hw/cpu.py</code>). Testler Digital'in kendi test aracıyla (<code>CLI test</code>) çalıştırıldı.</p>
     </section>
 
     <section>
@@ -492,7 +516,7 @@ m5_cozme: passed         M5 adres çözme, 1.096 vektör</pre>
 
     <section>
       <h2>Adres registerları (M3)</h2>
-      <p>TD-8'de ayrı bir MAR yok: adres yolunu dört register sürüyor. PC, AR ve X 16 bit (4× 74HC161), SP 8 bit yukarı/aşağı sayıcı (2× 74HC191) ve EF sayfasında. 74HC139 (#AS) aynı anda yalnız birinin tamponunu açar.</p>
+      <p>TA-8'de ayrı bir MAR yok: adres yolunu dört register sürüyor. PC, AR ve X 16 bit (4× 74HC161), SP 8 bit yukarı/aşağı sayıcı (2× 74HC191) ve EF sayfasında. 74HC139 (#AS) aynı anda yalnız birinin tamponunu açar.</p>
       <ul>
         <li>PC 0001, 0002, 0003 sayıyor; AR'dan 12FE yükleniyor ve 12FF → 1300 geçişinde dört 161 zincirleme taşıyor.</li>
         <li>AR ve X veri yolundan iki bayt halinde yükleniyor (34 sonra 12 → 1234).</li>
@@ -519,7 +543,7 @@ m5_cozme: passed         M5 adres çözme, 1.096 vektör</pre>
       </div>
       <div class="duo">
         <figure>
-          <div class="img"><img src="img/hafta4-merhaba.png" alt="merhaba.asm bittiğinde Digital'deki ekran belleği: MERHABA, TD-8! yazısı ve LED = 55." width="512" height="242" loading="lazy" style="min-width: 0"></div>
+          <div class="img"><img src="img/hafta4-merhaba.png" alt="merhaba.asm bittiğinde Digital'deki ekran belleği: MERHABA, TA-8! yazısı ve LED = 55." width="512" height="242" loading="lazy" style="min-width: 0"></div>
           <figcaption><code>merhaba.asm</code>: Digital'deki ekran belleği ve LED'ler.</figcaption>
         </figure>
         <figure>
@@ -532,7 +556,7 @@ m5_cozme: passed         M5 adres çözme, 1.096 vektör</pre>
 
     <section>
       <h2>Önceki haftalar</h2>
-      <p><b>1. hafta:</b> saat modülü Proteus'ta kurulmuştu; dosya silindi, 18 Kasım'da Digital'de yeniden yapıldı ve testleri eklendi. <b>2. hafta:</b> A, B ve IR şemaları SAP-1 yapısındaydı (74LS173); TD-8'e göre A, IR, F olarak yenilendi. <b>3. hafta:</b> ALU, RAM ve MAR notu SAP-1 yapısındaydı; TD-8'deki karşılıkları (flash'ta ALU, M3 adres registerları) kuruldu. RAM M5'in parçası (Deniz).</p>
+      <p><b>1. hafta:</b> saat modülü Proteus'ta kurulmuştu; dosya silindi, 18 Kasım'da Digital'de yeniden yapıldı ve testleri eklendi. <b>2. hafta:</b> A, B ve IR şemaları SAP-1 yapısındaydı (74LS173); TA-8'e göre A, IR, F olarak yenilendi. <b>3. hafta:</b> ALU, RAM ve MAR notu SAP-1 yapısındaydı; TA-8'deki karşılıkları (flash'ta ALU, M3 adres registerları) kuruldu. RAM M5'in parçası (Deniz).</p>
     </section>
 
     <section>
@@ -544,17 +568,83 @@ m5_cozme: passed         M5 adres çözme, 1.096 vektör</pre>
     </section>
   </div>
 
+  <div class="panel" id="sozluk" role="tabpanel" aria-labelledby="t-sozluk">
+    <section class="person">
+      <span class="eyebrow">Terimler</span>
+      <h2>Sözlük</h2>
+      <p>Raporda geçen terimlerin sade açıklaması. Önce bir komutun işlemcide adım adım nasıl yürüdüğü, sonra terimler alfabetik değil konu sırasıyla.</p>
+    </section>
+
+    <section>
+      <h2>Bir komut nasıl çalışır: <code>LDA $8000</code></h2>
+      <p>Anlamı: "bellekte 8000 adresindeki sayıyı A registerına koy". İşlemci bunu tek hamlede yapamaz, dört küçük adıma böler. Her adım 1 mikrosaniye sürer (1 MHz).</p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Adım</th><th>Ne olur</th><th>O adımda açık olan kontrol hatları</th></tr></thead>
+          <tbody>
+            <tr><td>1. Komutu getir</td><td style="white-space: normal">PC'nin gösterdiği adresten komutun kodu okunur, komut registerına (IR) yazılır, PC bir artar.</td><td style="white-space: normal">adres = PC · bellek veri yoluna · IR yüklensin · PC + 1</td></tr>
+            <tr><td>2. Adresin alt baytı</td><td style="white-space: normal">Sıradaki bayt (<b>00</b>) okunur, adres registerının (AR) alt yarısına yazılır.</td><td style="white-space: normal">adres = PC · bellek veri yoluna · AR alt yüklensin · PC + 1</td></tr>
+            <tr><td>3. Adresin üst baytı</td><td style="white-space: normal">Sıradaki bayt (<b>80</b>) okunur, AR'nin üst yarısına yazılır. AR artık 8000.</td><td style="white-space: normal">adres = PC · bellek veri yoluna · AR üst yüklensin · PC + 1</td></tr>
+            <tr><td>4. Veriyi al</td><td style="white-space: normal">8000 adresindeki sayı okunur, ALU'dan olduğu gibi geçip A'ya yazılır. Komut biter.</td><td style="white-space: normal">adres = AR · bellek veri yoluna · ALU = geçir · A yüklensin · son adım</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Her adımda kontrol ünitesi <b>mikrokod</b> tablosuna bakar: "bu komutun, bu adımında, bu bayraklarla hangi hatlar açık?" Cevap 24 bitlik bir satırdır (<b>kontrol kelimesi</b>). Kod çözücüler bu satırdan "kim veri yoluna konuşsun, kim dinlesin" sinyallerini üretir. Mutfak benzetmesiyle: komut menüdeki yemek, mikrokod tarif, her adım tarifin bir satırı, kontrol hatları ocağın ve fırının düğmeleri.</p>
+    </section>
+
+    <section>
+      <h2>Terimler</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Terim</th><th>Ne demek</th><th>Bizde</th></tr></thead>
+          <tbody>
+            <tr><td>TA-8</td><td style="white-space: normal">Projenin adı: Taha ve Abdurrahman'ın baş harfleri, 8 bitlik işlemci.</td><td style="white-space: normal">19 Kasım'a kadar TD-8</td></tr>
+            <tr><td>8 bit</td><td style="white-space: normal">İşlemcinin bir seferde işlediği sayı 8 ikilik basamak: 0–255.</td><td style="white-space: normal">Adresler 16 bit: 64 KB'lık adres alanı</td></tr>
+            <tr><td>Entegre (74HC…)</td><td style="white-space: normal">İçinde mantık kapıları ya da bellek olan küçük çip. 74HC, standart mantık çiplerinin bir ailesi.</td><td style="white-space: normal">İşlemcide 63 entegre (ekran ve klavye hariç)</td></tr>
+            <tr><td>Breadboard</td><td style="white-space: normal">Lehim gerektirmeyen, çiplerin ve kabloların takılıp söküldüğü delikli tahta.</td><td style="white-space: normal">Ocak'tan sonra, 24 tahta</td></tr>
+            <tr><td>Komut, opcode</td><td style="white-space: normal">İşlemcinin anladığı tek tek emirler (topla, yükle, atla…) ve her birinin sayı kodu.</td><td style="white-space: normal">53 komut, 88 opcode</td></tr>
+            <tr><td>Register</td><td style="white-space: normal">İşlemcinin içindeki küçük, hızlı hafıza hücreleri.</td><td style="white-space: normal">A (sonuç), X (işaretçi), PC (sıradaki komutun yeri), SP (yığın), IR (o anki komut), F (bayraklar)</td></tr>
+            <tr><td>Adres yolu, veri yolu</td><td style="white-space: normal">Bütün parçaları bağlayan ortak kablo demetleri. Adres yolu "nereye", veri yolu "ne" taşır. Aynı anda yalnız bir parça konuşabilir.</td><td style="white-space: normal">16 + 8 kablo</td></tr>
+            <tr><td>ALU</td><td style="white-space: normal">Hesap birimi: toplama, çıkarma, mantık işlemleri, kaydırma.</td><td style="white-space: normal">İki flash'ta tablo: hesaplamıyor, cevabı tablodan okuyor. 25 işlem</td></tr>
+            <tr><td>Bayraklar (Z, C, N, V)</td><td style="white-space: normal">Son işlemin özeti: sonuç sıfır mı, elde var mı, negatif mi, taşma var mı.</td><td style="white-space: normal">Karşılaştırma ve dallanmalar bunlara bakar</td></tr>
+            <tr><td>Flash</td><td style="white-space: normal">Elektrik gidince silinmeyen, yeniden yazılabilen bellek çipi.</td><td style="white-space: normal">SST39SF010: mikrokod, ALU tablosu, program</td></tr>
+            <tr><td>RAM (SRAM)</td><td style="white-space: normal">Çalışırken okunup yazılan, elektrik gidince silinen bellek.</td><td style="white-space: normal">CY62256, 32 KB</td></tr>
+            <tr><td>Mikrokod</td><td style="white-space: normal">İşlemcinin tarif defteri: her komutun her adımında hangi kontrol hatlarının açık olacağını yazan tablo. Kablolarla değil tabloyla yapıldığı için bir komutu düzeltmek, flash'ı yeniden yazmak kadar kolay.</td><td style="white-space: normal">3 flash çipinde</td></tr>
+            <tr><td>Kontrol kelimesi</td><td style="white-space: normal">Bir adımda 24 kontrol hattının açık/kapalı durumu.</td><td style="white-space: normal">Kontrol latch'inde tutulur, 24 LED'de görünür</td></tr>
+            <tr><td>Mikroadım, çevrim</td><td style="white-space: normal">Bir komutun tek adımı.</td><td style="white-space: normal">1 MHz'de her adım 1 µs; komutlar 2–7 adım</td></tr>
+            <tr><td>Saat, 4 faz</td><td style="white-space: normal">Her adımı dört parçaya bölen zamanlama: önce yollar kurulur, sonra gerekiyorsa belleğe yazılır, en son sonuçlar registerlara kaydedilir.</td><td style="white-space: normal">4 MHz saat, 1 MHz işlemci</td></tr>
+            <tr><td>WAIT</td><td style="white-space: normal">Ekran belleği o anda meşgulse işlemciyi kısa süre bekletme.</td><td style="white-space: normal">12 Kasım'da bir zamanlama hatası bulunup düzeltildi</td></tr>
+            <tr><td>Kontrol ünitesi (M2)</td><td style="white-space: normal">İşlemcinin "beyni": komutu adımlara böler, her adımda doğru hatları açar.</td><td style="white-space: normal">13 entegre</td></tr>
+            <tr><td>Adres çözme (M5)</td><td style="white-space: normal">Bir adresin hangi çipe gittiğine karar veren devre.</td><td style="white-space: normal">0000–7FFF ROM, 8000–EFFF RAM, F000–F7FF ekran belleği, F800–FFFF giriş/çıkış</td></tr>
+            <tr><td>Modüller (M1–M8)</td><td style="white-space: normal">İşlemcinin parçaları: M1 saat, M2 kontrol, M3 adres registerları, M4 veri ve ALU, M5 bellek, M6 ekran (VGA), M7 klavye, M8 hata ayıklama.</td><td style="white-space: normal">M1, M3, M4, M6, M7 Abdurrahman; M2, M5, M8 Deniz</td></tr>
+            <tr><td>Emülatör</td><td style="white-space: normal">İşlemcinin bilgisayardaki taklidi. "Doğru cevabı" o verir; devre ona göre denetlenir.</td><td style="white-space: normal">İki emülatör: komut ve mikroadım seviyesinde</td></tr>
+            <tr><td>Çip seviyesi simülatör</td><td style="white-space: normal">Her entegreyi ve her kabloyu gerçek gecikmeleriyle taklit eden program. "Kablolar doğru mu, sinyaller zamanında yetişiyor mu" sorusunu cevaplar.</td><td style="white-space: normal">25 entegre modeli</td></tr>
+            <tr><td>Digital</td><td style="white-space: normal">Ücretsiz devre simülatörü (Java ile çalışır). Devreyi entegre entegre kurup test tablosuyla otomatik dener.</td><td style="white-space: normal">İkimiz de bunu kullanıyoruz</td></tr>
+            <tr><td>Proteus</td><td style="white-space: normal">Ücretli devre simülatörü.</td><td style="white-space: normal">Bırakıldı; Abdurrahman da Digital'e geçti</td></tr>
+            <tr><td>Netlist (bağlantı listesi)</td><td style="white-space: normal">Hangi entegrenin hangi bacağının hangi kabloya bağlı olduğunun listesi.</td><td style="white-space: normal">Digital dosyaları ve breadboard tablosu buradan üretiliyor</td></tr>
+            <tr><td>Test vektörü</td><td style="white-space: normal">"Bu girişleri verirsen şu çıkışları görmelisin" satırlarından oluşan tablo.</td><td style="white-space: normal">Emülatörden üretiliyor</td></tr>
+            <tr><td>Kabul testi</td><td style="white-space: normal">Planın bir modül için koyduğu "bitti sayılmak için geçmeli" ölçütü.</td><td style="white-space: normal">Bu hafta M2, M4 ve M5'inkiler geçti</td></tr>
+            <tr><td>Sıfır fark</td><td style="white-space: normal">Devrenin, emülatörle her adımda adres, veri ve 24 kontrol hattında aynı olması.</td><td style="white-space: normal">3 programda, 33.170 adıma kadar</td></tr>
+            <tr><td>Kilometre taşı (K1, K2)</td><td style="white-space: normal">Takvimdeki ara hedefler.</td><td style="white-space: normal">K1 saat modülü testleri, K2 işlemcinin emülatörle sıfır farkı: ikisi de geçti</td></tr>
+            <tr><td>Prototip (a–e)</td><td style="white-space: normal">Simülasyonda görülemeyen şeylerin (sinyal çınlaması, gerilim, gerçek monitör ve klavye) masada küçük denemesi.</td><td style="white-space: normal">Parçalar gelince</td></tr>
+            <tr><td>Breakpoint, BUSREQ</td><td style="white-space: normal">İşlemciyi istenen adreste durdurma; Arduino'nun işlemciyi durdurup belleğe program yüklemesi.</td><td style="white-space: normal">Gelecek haftanın konusu</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
   <footer>
     <span>Ayrıntılar:</span>
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Taha/hafta4/README.md">4. hafta notları</a>
-    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/sim/td8/hw">Çip seviyesi simülatör</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/sim/ta8/hw">Çip seviyesi simülatör</a>
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/sim/digital">Digital devreleri</a>
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim">GitHub deposu</a>
   </footer>
 </main>
 <script>
 (function () {
-  var ids = ['genel', 'deniz', 'abdurrahman'];
+  var ids = ['genel', 'deniz', 'abdurrahman', 'sozluk'];
   function show(scroll) {
     var h = location.hash.slice(1);
     var cur = ids.indexOf(h) >= 0 ? h : 'genel';

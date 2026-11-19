@@ -28,7 +28,7 @@ Komut sayısı: 53, opcode sayısı: 88
 > py cli.py run examples/merhaba.asm
 durdu (HALT) · 573 çevrim (0.57 ms @ 1 MHz)
 PC=001D A=55 X=0041 SP=FF Z=1 C=0 N=0 V=0 LED=01010101
-|  MERHABA, TD-8!                        |
+|  MERHABA, TA-8!                        |
 ```
 
 ## Sorunlar / sorular

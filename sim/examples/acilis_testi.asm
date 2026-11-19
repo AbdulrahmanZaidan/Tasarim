@@ -1,4 +1,4 @@
-; acilis_testi.asm: TD-8 açılış kendi kendini testi (POST), ROM'da 0000'dan başlar.
+; acilis_testi.asm: TA-8 açılış kendi kendini testi (POST), ROM'da 0000'dan başlar.
 ; SISTEM-PLANI bölüm 16 madde 2: RAM, VRAM yazma ve ALU sınanır; sonuç LED'lerde ve ekranda.
 ; Çalıştırma: py cli.py run examples/acilis_testi.asm   (--dip 1 ile SW0 = 1)
 ; Testler:    py -m unittest tests.test_acilis
@@ -201,7 +201,7 @@ d4g:    BEQ f1
         BLS f1
 
 ; --- ALU vektörleri. Her vektör: giriş C/Z kurulur, işlem, 4 bayrak, sonuç (CMP #).
-;     Beklenen değerler td8/alu.py alu_ref ile hesaplandı. CMP eşit çıkınca Z=1 C=1 kalır.
+;     Beklenen değerler ta8/alu.py alu_ref ile hesaplandı. CMP eşit çıkınca Z=1 C=1 kalır.
 
 ; --- 1.01 TST, CLC, SEC (A değişmez; Z/N A'dan, V = 0)
         LDX #$01           ; alt test no (hata ekranında görünür)
@@ -1645,7 +1645,7 @@ l_ana:  .word VRAM+64*0
         .word VRAM+64*29
         .asciz "0123456789012345678901234567890123456789"
         .word VRAM+64*1+2
-        .asciz "TD-8 ACILIS TESTI"
+        .asciz "TA-8 ACILIS TESTI"
         .word VRAM+64*3+2
         .asciz "1 ALU VE BAYRAKLAR ....... TAMAM"
         .word VRAM+64*4+2

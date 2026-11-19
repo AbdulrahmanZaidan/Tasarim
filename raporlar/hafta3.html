@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TD-8 3. Hafta Raporu</title>
+<title>TA-8 3. Hafta Raporu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -172,7 +172,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
 <main class="wrap">
   <header>
     <span class="eyebrow">Bitirme projesi · Haftalık durum</span>
-    <h1>TD-8: 3. hafta raporu</h1>
+    <h1>TA-8: 3. hafta raporu</h1>
     <p class="meta mono">10–16 Kasım 2026 · Simülasyon dönemi, hafta 3 / 10 · <a href="hafta2.html">2. hafta raporu</a></p>
   </header>
 
@@ -260,7 +260,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
         <div class="col done">
           <h3>Yaptık</h3>
           <ul>
-            <li><span>Sistem planı ve TD-8 komut seti<small>bütçe 17.503 TL · 53 komut · seçimlerin araştırması</small></span></li>
+            <li><span>Sistem planı ve TA-8 komut seti<small>bütçe 17.503 TL · 53 komut · seçimlerin araştırması</small></span></li>
             <li><span>Simülasyon yazılımı ve kütüphane<small>assembler, 2 emülatör, çarpma ve bölme</small></span></li>
             <li><span>Saat modülü Proteus'ta kuruldu<small>Abdurrahman</small></span></li>
             <li><span>Java ve Digital kuruldu<small>ücretsiz devre simülatörü</small></span></li>
@@ -275,7 +275,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
             <li><span>Kontrol ünitesi ve bellek modüllerinin Digital testleri<small>Deniz</small></span></li>
             <li><span>C derleyicisi<small>Deniz · 6. hafta raporunda</small></span></li>
             <li><span>Saat modülü testleri<small>Abdurrahman · ilk kilometre taşı (K1)</small></span></li>
-            <li><span>Register şemalarını TD-8'e uyarlama<small>Abdurrahman</small></span></li>
+            <li><span>Register şemalarını TA-8'e uyarlama<small>Abdurrahman</small></span></li>
             <li><span>Flash çip siparişi<small>16 Kasım'a kadar</small></span></li>
           </ul>
         </div>
@@ -340,7 +340,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
         </table>
       </div>
       <ul>
-        <li>Deponun dışına kuruldu (<code>Desktop\bitirme ödevi\araclar\</code>). Yönetici izni gerekmedi, sistem ayarlarına dokunulmadı. Masaüstündeki "Digital (TD-8)" kısayolu programı açıyor.</li>
+        <li>Deponun dışına kuruldu (<code>Desktop\bitirme ödevi\araclar\</code>). Yönetici izni gerekmedi, sistem ayarlarına dokunulmadı. Masaüstündeki "Digital (TA-8)" kısayolu programı açıyor.</li>
         <li>Komut satırından örnek devrelerle çalıştığı doğrulandı: <code>araclar\digital-cli.cmd test -circ devre.dig</code>.</li>
         <li>Plandaki açık soru kapandı: kullandığımız 23 çeşit 74HC entegresinin hepsi Digital'in kütüphanesinde var (191, 166, 540 ve 688 dahil).</li>
         <li>Abdurrahman Proteus kullanıyor. Proteus ücretli olduğu için buraya kurulmadı; onun için Proteus'a uygun ROM dosyaları hazırlandı (aşağıda).</li>
@@ -366,7 +366,7 @@ OP A B Cin Zin R Z C N V
 3 0xF9 0x0E 1 1 0xEB 0 1 1 0</pre>
       </div>
       <p class="cap">Her satır bir deneme: soldaki beşi giriş (işlem kodu, A, B, gelen elde ve Z bayrağı), sağdaki beşi beklenen çıkış (sonuç ve Z, C, N, V bayrakları).</p>
-      <p><b>İz</b> (trace), bir programın her çevriminde adres yolunda, veri yolunda ve kontrol hatlarında ne olduğunun kaydı. İki izi karşılaştırıp <b>farkın başladığı ilk çevrimi</b> söyleyen bir fonksiyon da yazıldı (<code>compare_traces</code>, <code>sim/td8/vectors.py</code>); breadboard'da Arduino'nun kaydettiği iz de bununla karşılaştırılacak. <code>--format csv</code> ile bütün tablolar Excel'de açılabiliyor.</p>
+      <p><b>İz</b> (trace), bir programın her çevriminde adres yolunda, veri yolunda ve kontrol hatlarında ne olduğunun kaydı. İki izi karşılaştırıp <b>farkın başladığı ilk çevrimi</b> söyleyen bir fonksiyon da yazıldı (<code>compare_traces</code>, <code>sim/ta8/vectors.py</code>); breadboard'da Arduino'nun kaydettiği iz de bununla karşılaştırılacak. <code>--format csv</code> ile bütün tablolar Excel'de açılabiliyor.</p>
     </section>
 
     <section>
@@ -384,7 +384,7 @@ OP A B Cin Zin R Z C N V
       <h2>Abdurrahman'ın soruları</h2>
       <ul>
         <li><b>ROM'lara hangi dosya yüklenecek?</b> <code>sim/build/proteus/</code> klasöründeki <code>.bin</code> dosyaları; olmazsa aynı adlı <code>.hex</code>.</li>
-        <li><b>Sinyal adları şemadaki etiketlerle aynı olsun:</b> bunun için sinyal adları ve bacak bağlantıları listesi (<code>Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md</code>) iletildi.</li>
+        <li><b>Sinyal adları şemadaki etiketlerle aynı olsun:</b> bunun için sinyal adları ve bacak bağlantıları listesi (<code>Tahadan-Abdurrahmana/TA8-baglanti-tablosu.md</code>) iletildi.</li>
       </ul>
     </section>
 
@@ -428,8 +428,8 @@ OP A B Cin Zin R Z C N V
         <figcaption>B registerı şeması (Abdurrahman, 2. hafta).</figcaption>
       </figure>
       <div class="note">
-        <h3>Şemaları TD-8 planına uyarlamak gerekiyor</h3>
-        <p>Şemalar klasik SAP-1 yapısında. TD-8'de (SISTEM-PLANI bölüm 5.1):</p>
+        <h3>Şemaları TA-8 planına uyarlamak gerekiyor</h3>
+        <p>Şemalar klasik SAP-1 yapısında. TA-8'de (SISTEM-PLANI bölüm 5.1):</p>
         <ul>
           <li>B registerı yok; ALU'nun ikinci girişi doğrudan veri yolu.</li>
           <li>A registerı bir 74HC377; girişini ALU'nun sonucundan alır, veri yoluna 74HC245 ile çıkar.</li>
@@ -458,7 +458,7 @@ OP A B Cin Zin R Z C N V
       <p class="cap">Deniz'de Proteus kurulu olmadığı için bu adım denenmedi; bilgi forumlardan. Hangi dosyanın çalıştığını Abdurrahman deneyip yazacak.</p>
 
       <h3>Sinyal adları</h3>
-      <p>Şemadaki etiketler ortak olsun diye sinyal adları ve bacak bağlantıları listesi iletildi: <code>Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md</code>. Proteus'ta etiketler bu adlarla verilirse modüller birleşirken ad uyuşmazlığı olmaz. Şemayı çizmek, çalıştırmak ve test etmek Abdurrahman'da.</p>
+      <p>Şemadaki etiketler ortak olsun diye sinyal adları ve bacak bağlantıları listesi iletildi: <code>Tahadan-Abdurrahmana/TA8-baglanti-tablosu.md</code>. Proteus'ta etiketler bu adlarla verilirse modüller birleşirken ad uyuşmazlığı olmaz. Şemayı çizmek, çalıştırmak ve test etmek Abdurrahman'da.</p>
 
       <h3>Modül testleri için hazır tablolar</h3>
       <ul>
@@ -471,7 +471,7 @@ OP A B Cin Zin R Z C N V
       <h2>Sıradaki adımlar</h2>
       <ol class="next">
         <li><span>Saat modülünün 4 testi (ilk kilometre taşı, K1): normal çalışmada CLK, LCLK ve WSTB dalga şekilleri; STOP = 1 iken C fazında durma; bekleme girişi 1 iken D fazında bekleme; GO ile tam bir çevrim, reset ile C fazına dönüş.</span></li>
-        <li><span>Register şemalarını TD-8'e uyarlamak (A ve IR için 74HC377, F için 74HC161; B registerı yok) ve yükleme testlerini yapmak.</span></li>
+        <li><span>Register şemalarını TA-8'e uyarlamak (A ve IR için 74HC377, F için 74HC161; B registerı yok) ve yükleme testlerini yapmak.</span></li>
         <li><span>M3 adres registerlarının (PC, AR, X, SP) şemaları, iletilen listedeki sinyal adlarıyla.</span></li>
         <li><span>Proteus'ta ROM yüklemeyi denemek (<code>.bin</code>, olmazsa <code>.hex</code>) ve hangisinin çalıştığını <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahmandan-Tahaya/README.md">Abdurrahmandan-Tahaya</a> dosyasına yazmak.</span></li>
       </ol>
@@ -481,7 +481,7 @@ OP A B Cin Zin R Z C N V
   <footer>
     <span>Ayrıntılar:</span>
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Taha/hafta3/README.md">3. hafta notları</a>
-    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/sim/td8/vectors.py">Test vektörü üreticisi</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/sim/ta8/vectors.py">Test vektörü üreticisi</a>
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim">GitHub deposu</a>
   </footer>
 </main>

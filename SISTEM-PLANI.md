@@ -1,13 +1,13 @@
-# TD-8 Sistem Planı
+# TA-8 Sistem Planı
 
 > Sürüm 0.2 · 27 Ekim 2026 · Yapım Ocak–Haziran 2027 · 2 kişilik bitirme projesi
 > Bu dosya sistemin Türkçe ana referansı. Kaynaklar:
 > - [tasarim-taslaklari/ISA-v0-sentez.md](tasarim-taslaklari/ISA-v0-sentez.md): ayrıntılı tasarım, İngilizce
 > - [tasarim-taslaklari/DOGRULAMA.md](tasarim-taslaklari/DOGRULAMA.md): düzeltmeler
-> - [sim/td8/isa.py](sim/td8/isa.py): **komut setinin tek kaynağı**
+> - [sim/ta8/isa.py](sim/ta8/isa.py): **komut setinin tek kaynağı**
 >
 > Bir şey değişecekse sıra şu:
-> 1. `sim/td8/isa.py` güncellenir;
+> 1. `sim/ta8/isa.py` güncellenir;
 > 2. `py gen_roms.py` ve testler çalıştırılır;
 > 3. bu dosya güncellenir.
 >
@@ -41,7 +41,7 @@
 
 | Özellik | Değer |
 |---|---|
-| İşlemci | TD-8: 8-bit veri, 16-bit adres. Mikrokodlu, 74HC entegrelerle kurulu, kendi komut setimiz. |
+| İşlemci | TA-8: 8-bit veri, 16-bit adres. Mikrokodlu, 74HC entegrelerle kurulu, kendi komut setimiz. |
 | Saat | MCLK 4 MHz, 4 fazlı çevrim, CPU 1 MHz. Tek adım, 555 ve Arduino ile de sürülebilir. |
 | Komut seti | 53 komut, 88 opcode. Registerlar: A, X (16), SP, PC. Flag'ler: Z C N V. |
 | Bellek | 32 KB ROM, 28 KB RAM, 2 KB VRAM (yalnız yazılır), I/O `F800–FFFF` |
@@ -236,7 +236,7 @@ Johnson: Q2' = NAND(/Q1, /WAIT)
 | İlk tasarım (G1 = VCC) | 111 ns | 272 ns ✘ | 250 ns |
 | Düzeltilmiş (G1 = CLK) | 102 ns | 247 ns | 250 ns |
 
-En kötü durumda pay yalnız ~3 ns. Tipik değerlerle rahat; yine de **osiloskopla doğrulanacak** (prototip a). Gecikme tablosunun bir kısmı tahmindir (`sim/td8/hw/chips.py`).
+En kötü durumda pay yalnız ~3 ns. Tipik değerlerle rahat; yine de **osiloskopla doğrulanacak** (prototip a). Gecikme tablosunun bir kısmı tahmindir (`sim/ta8/hw/chips.py`).
 
 ---
 
@@ -290,7 +290,7 @@ En kötü durumda pay yalnız ~3 ns. Tipik değerlerle rahat; yine de **osilosko
 
 ### 4.5 Mikrokod üretici kuralları
 
-Üretici, `sim/td8/microcode.py` içindeki kontrol işlevlerinde bu kuralları otomatik denetler:
+Üretici, `sim/ta8/microcode.py` içindeki kontrol işlevlerinde bu kuralları otomatik denetler:
 
 1. **MEMW** varsa DSRC ∈ {A, PCL, PCH} olmalı. Yazma sırasında belleğin /OE'si hiçbir zaman açık olmaz.
 2. **Yasak kodlar:** DDST ≠ 7. DSRC 5 ve 6 (ayrılmış) kullanılmaz.
@@ -436,7 +436,7 @@ Zz = zincirli Z. Çevrim sayısı: `#` 2, `abs` 4, `(X)` ve `(X+)` 2. Byte sayı
 
 ### 6.4 Mikroadım tabloları
 
-Her adım bir tam çevrimdir. Gösterim: `adres kaynağı / DB kaynağı / hedef / ALU işlemi · diğer bitler`. Tüm tablo [sim/td8/isa.py](sim/td8/isa.py) içinde.
+Her adım bir tam çevrimdir. Gösterim: `adres kaynağı / DB kaynağı / hedef / ALU işlemi · diğer bitler`. Tüm tablo [sim/ta8/isa.py](sim/ta8/isa.py) içinde.
 
 | Komut | Adımlar (FETCH'ten sonra) |
 |---|---|
@@ -605,16 +605,16 @@ Her adım bir tam çevrimdir. Gösterim: `adres kaynağı / DB kaynağı / hedef
 ### 11.1 Araç zinciri
 
 ```
-sim/td8/isa.py ──► gen_roms.py ──► build/urom0..2, alu_lo/hi, vga_timing, font (.bin + .hex)
+sim/ta8/isa.py ──► gen_roms.py ──► build/urom0..2, alu_lo/hi, vga_timing, font (.bin + .hex)
        │                                  │
        ├──► asm.py (assembler) ──► program ROM imajı (.bin, T48 ile yazılır)
        │
        ├──► emu_micro.py: mikroadım emülatörü, ROM imajlarını aynen çalıştırır
        └──► emu_ref.py: komut seviyesi referans; mikrokodu çapraz kontrol eder
 
-C kaynağı ──► tdcc (Python C derleyicisi, `sim/tdcc/`) ──► assembly ──► asm.py
+C kaynağı ──► tacc (Python C derleyicisi, `sim/tacc/`) ──► assembly ──► asm.py
 
-isa.py + ROM imajları ──► td8/hw (çip seviyesi netlist, 63 entegre) ──► sıfır fark testi, bağlantı tablosu, Digital .dig
+isa.py + ROM imajları ──► ta8/hw (çip seviyesi netlist, 63 entegre) ──► sıfır fark testi, bağlantı tablosu, Digital .dig
 ```
 
 ### 11.2 C alt kümesi
@@ -660,7 +660,7 @@ isa.py + ROM imajları ──► td8/hw (çip seviyesi netlist, 63 entegre) ─�
 |---|---|
 | **Digital** (hneemann, Java 11+) | Devre simülasyonu; 74xx kütüphanesi, test vektörleri, VGA monitörü |
 | **Python 3.12** | `sim/`: ROM imajları, assembler, emülatörler, testler, C derleyicisi |
-| **Çip seviyesi simülatör** (`sim/td8/hw/`) | İşlemcinin pin pin bağlantı listesi; gecikmeli simülasyon (Digital'in modellemediği zamanlama), bus çakışması ve kurulum/tutma denetimi; Digital dosyaları ve bağlantı tablosu buradan üretilir |
+| **Çip seviyesi simülatör** (`sim/ta8/hw/`) | İşlemcinin pin pin bağlantı listesi; gecikmeli simülasyon (Digital'in modellemediği zamanlama), bus çakışması ve kurulum/tutma denetimi; Digital dosyaları ve bağlantı tablosu buradan üretilir |
 | Proteus | Abdurrahman'ın şema ve modül testleri; ROM dosyaları `sim/build/proteus/` |
 | KiCad | 13–15. haftada temiz şemalar ve breadboard yerleşimi |
 | PulseView | Lojik analizör (yapım döneminde) |
@@ -668,7 +668,7 @@ isa.py + ROM imajları ──► td8/hw (çip seviyesi netlist, 63 entegre) ─�
 
 ### 12.2 Digital modeli
 
-- **Dosya düzeni:** Her modül ayrı bir `.dig` dosyası olur: `m1_saat.dig`, `m2_kontrol.dig`, `m3_adres.dig`, `m4_alu.dig`, `m5_bellek.dig`, `m6_vga.dig`, `m7_ps2.dig`. Üst seviye `td8.dig` hepsini bağlar.
+- **Dosya düzeni:** Her modül ayrı bir `.dig` dosyası olur: `m1_saat.dig`, `m2_kontrol.dig`, `m3_adres.dig`, `m4_alu.dig`, `m5_bellek.dig`, `m6_vga.dig`, `m7_ps2.dig`. Üst seviye `ta8.dig` hepsini bağlar.
 - **Çipler:** Mümkün olduğunca Digital'in **74xx kütüphanesindeki pinli çipler** kullanılır. Böylece şema breadboard kablolamasıyla bire bir eşleşir.
 - **İlk hafta kontrolü:** Kütüphanede hangi çiplerin olduğuna bakın. Olmayanlar için aynı pin düzeninde alt devre yazın (olası adaylar: 74HC191, 166, 540, 688).
 - **Flash'lar:** Digital'in ROM bileşenine `build/*.bin` (ya da `.hex`) imajları yüklenir.
@@ -831,6 +831,6 @@ Satın alma listesi ve fiyatlar: PROJE-PLANI.md bölüm 14.
 | Arduino kartı ayrıntıları: MCLK girişinde (153 I3) pull-down, kontrol kelimesi ve durum hatlarında da 470 Ω, Arduino /RESET hattının bağlanacağı nokta, RAM'in açılış içeriği (iz karşılaştırması için) | Arduino kartı kablolanmadan önce; taslak pin tablosu `arduino/README.md` |
 | I/O'dan ROM'a geçişte DB'de ~18 ns çakışma (en kötü gecikmelerle; I/O seçimi 20→139→138 zinciriyle geç kapanıyor) | Osiloskop |
 | T48 cihaz listesinde A'sız SST39SF010 (-90) var mı | Parçalar gelince |
-| Gerçek 8×8 font: font8x8_basic (kamu malı); `sim/td8/vga.py` dönüştürücüsüyle | 7. hafta |
+| Gerçek 8×8 font: font8x8_basic (kamu malı); `sim/ta8/vga.py` dönüştürücüsüyle | 7. hafta |
 | VOH, PS/2 susturma, 80 ns'lik LD yolu | Prototip b, c, d |
 | Simülasyon ve prototiplerde açık kalan diğer maddeler | [DOGRULAMA.md](tasarim-taslaklari/DOGRULAMA.md) bölüm 3 |

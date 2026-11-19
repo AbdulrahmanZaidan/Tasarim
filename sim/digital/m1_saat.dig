@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>M1 Saat / reset / durdurma
-TD-8: td8.hw.digital ile üretildi (11 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (11 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M1</string></entry><entry><string>RectWidth</string><int>128</int></entry><entry><string>RectHeight</string><int>54</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="680" y="0"/></visualElement>

@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>74HC138 + 74HC139 + 74HC04 kod çözme
-TD-8: td8.hw.digital ile üretildi (3 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (3 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M5</string></entry><entry><string>RectWidth</string><int>56</int></entry><entry><string>RectHeight</string><int>29</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="500" y="0"/></visualElement>

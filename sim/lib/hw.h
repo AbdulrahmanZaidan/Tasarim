@@ -1,11 +1,11 @@
-/* hw.h: TD-8 donanım tanımları (SISTEM-PLANI 7.1, 7.3). tdcc ile kullanılır.
+/* hw.h: TA-8 donanım tanımları (SISTEM-PLANI 7.1, 7.3). tacc ile kullanılır.
  *
  *   VRAM[64*satir + sutun] = 'A';   ekrana karakter (yalnız yazılır, okunamaz)
  *   LEDS = 0x55;                    8 LED
  *   if (KSTAT & KRDY) k = KBD;      klavye: byte hazır mı, scan code'u oku
  */
-#ifndef TD8_HW_H
-#define TD8_HW_H
+#ifndef TA8_HW_H
+#define TA8_HW_H
 
 #define VRAM    ((volatile char *)0xF000)   /* 30 satır x 64 (40 sütun görünür) */
 #define LEDS    (*(volatile char *)0xF800)  /* yazma: 8 LED */

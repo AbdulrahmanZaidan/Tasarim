@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>M1 saat modülü (Abdurrahman, hafta 4)
-TD-8: td8.hw.digital ile üretildi (12 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (12 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>AUX</string></entry><entry><string>RectWidth</string><int>25</int></entry><entry><string>RectHeight</string><int>27</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="680" y="1160"/></visualElement>

@@ -1,4 +1,4 @@
-"""td8.hw: gecikmeli simülatör çekirdeği ve 74HC / bellek modelleri.
+"""ta8.hw: gecikmeli simülatör çekirdeği ve 74HC / bellek modelleri.
 
 Çalıştırma (sim/ klasöründen):
     py -3 -m unittest tests.test_hw_chips -v
@@ -11,11 +11,11 @@ import sys
 import time
 import unittest
 
-from td8.hw import (CHIP_TYPES, DELAYS, LIMITS, CY62256, HC00, HC02, HC04, HC08, HC14, HC20,
+from ta8.hw import (CHIP_TYPES, DELAYS, LIMITS, CY62256, HC00, HC02, HC04, HC08, HC14, HC20,
                     HC32, HC74, HC138, HC139, HC153, HC157, HC161, HC163, HC164, HC166, HC175,
                     HC191, HC245, HC273, HC377, HC540, HC688, SST39SF010, Sim, bus_pins,
                     pin_table)
-from td8.hw import chips as hwchips
+from ta8.hw import chips as hwchips
 
 
 def rig(cls, *args, init=None, corner='typ', **kw):

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TD-8 2. Hafta Raporu</title>
+<title>TA-8 2. Hafta Raporu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -174,7 +174,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
 <main class="wrap">
   <header>
     <span class="eyebrow">Bitirme projesi · Haftalık durum</span>
-    <h1>TD-8: 2. hafta raporu</h1>
+    <h1>TA-8: 2. hafta raporu</h1>
     <p class="meta mono">3–9 Kasım 2026 · Simülasyon dönemi, hafta 2 / 10 · <a href="hafta1.html">1. hafta raporu</a></p>
   </header>
 
@@ -263,7 +263,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
           <h3>Yaptık</h3>
           <ul>
             <li><span>Sistem planı ve bütçe<small>17.503 TL, sınır 30.000 TL</small></span></li>
-            <li><span>Kendi komut setimiz TD-8<small>53 komut, danışman onayladı</small></span></li>
+            <li><span>Kendi komut setimiz TA-8<small>53 komut, danışman onayladı</small></span></li>
             <li><span>Simülasyon yazılımı<small>assembler, 2 emülatör, 34 test</small></span></li>
             <li><span>Çarpma, bölme kütüphanesi ve 2 demo<small>asal sayılar, Fibonacci</small></span></li>
             <li><span>Saat modülü Proteus'ta kuruldu<small>Abdurrahman</small></span></li>
@@ -308,7 +308,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
     <section class="person">
       <span class="eyebrow">Yazılım ve kontrol</span>
       <h2>Deniz</h2>
-      <p>Simülasyon yazılımı, komut seti ve ileride C derleyicisi. Bu hafta: seçimlerimizin araştırması ve TD-8 assembly'sinde ilk kütüphane. Notlar: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Taha/hafta2/README.md">Taha/hafta2</a>.</p>
+      <p>Simülasyon yazılımı, komut seti ve ileride C derleyicisi. Bu hafta: seçimlerimizin araştırması ve TA-8 assembly'sinde ilk kütüphane. Notlar: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Taha/hafta2/README.md">Taha/hafta2</a>.</p>
     </section>
 
   <section>
@@ -319,7 +319,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
         <p>Hazır işlemci yolu daha az riskli (6502 için cc65, Z80 için SDCC derleyicisi hazır), bu yüzden yedek plan olarak duruyor. W65C02 hâlâ üretiliyor; Zilog bağımsız Z80'in üretimini 2024'te durdurdu.</p>
       </div></div>
       <div class="q"><h3>Hangi komut seti?</h3><div>
-        <p>Kendi tasarımımız <b>TD-8</b>: 53 komut, 88 opcode, 8-bit veri, 16-bit adres. A akümülatör, X 16-bit gösterici, 14 dallanma koşulu.</p>
+        <p>Kendi tasarımımız <b>TA-8</b>: 53 komut, 88 opcode, 8-bit veri, 16-bit adres. A akümülatör, X 16-bit gösterici, 14 dallanma koşulu.</p>
         <p>Üç öneri karşılaştırıldı: en az çip (54 entegre), C dostu (96), hata ayıklanabilir (115). Hata ayıklanabilir olan temel alındı, diğerlerinin iyi fikirleri eklendi, 92 entegreye indirildi.</p>
       </div></div>
       <div class="q"><h3>Kontrol ünitesi neden mikrokodlu?</h3><div>
@@ -334,12 +334,12 @@ figcaption { font-size: .8rem; color: var(--muted); }
       <div class="q"><h3>Hangi programlama dili?</h3><div>
         <ul>
           <li><b>Araçlar:</b> Python 3.12. Hızlı geliştirme, ek paket yok, test kolay. Emülatör saniyede 0,36–1,7 milyon çevrim çalıştırıyor, gerçek makine 1 milyon.</li>
-          <li><b>TD-8 programları:</b> şimdilik TD-8 assembly, yapım döneminde C'nin bir alt kümesi.</li>
-          <li><b>C derleyicisi:</b> kendimiz yazıyoruz (<code>tdcc</code>). GCC/LLVM'i yeni bir 8-bit işlemciye uyarlamak aylar sürer; Small-C ve LCC incelendi.</li>
+          <li><b>TA-8 programları:</b> şimdilik TA-8 assembly, yapım döneminde C'nin bir alt kümesi.</li>
+          <li><b>C derleyicisi:</b> kendimiz yazıyoruz (<code>tacc</code>). GCC/LLVM'i yeni bir 8-bit işlemciye uyarlamak aylar sürer; Small-C ve LCC incelendi.</li>
         </ul>
       </div></div>
       <div class="q"><h3>Hangi assembler?</h3><div>
-        <p>Kendi yazdığımız <code>asm.py</code> (~400 satır). Plan genel amaçlı customasm'i öneriyordu. Kendimizinkini seçtik çünkü opcode tablosunu doğrudan komut seti dosyasından okuyor: komut seti değişince assembler kendiliğinden güncelleniyor. Emülatör ve testlerle aynı kodun içinde, kurulum gerekmiyor. ca65, vasm gibi hazır assembler'lar var olan işlemciler için, TD-8'i bilmiyorlar.</p>
+        <p>Kendi yazdığımız <code>asm.py</code> (~400 satır). Plan genel amaçlı customasm'i öneriyordu. Kendimizinkini seçtik çünkü opcode tablosunu doğrudan komut seti dosyasından okuyor: komut seti değişince assembler kendiliğinden güncelleniyor. Emülatör ve testlerle aynı kodun içinde, kurulum gerekmiyor. ca65, vasm gibi hazır assembler'lar var olan işlemciler için, TA-8'i bilmiyorlar.</p>
       </div></div>
     </div>
   </section>
@@ -362,7 +362,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
 
   <section>
     <h2>Assembly simülasyonu</h2>
-    <p>C derleyicisinin ileride kullanacağı rutinleri şimdiden TD-8 assembly'sinde yazdık (<code>sim/lib/runtime.asm</code>) ve iki demo programla emülatörde çalıştırdık. Ekran çıktıları emülatörün ürettiği gerçek çıktılar.</p>
+    <p>C derleyicisinin ileride kullanacağı rutinleri şimdiden TA-8 assembly'sinde yazdık (<code>sim/lib/runtime.asm</code>) ve iki demo programla emülatörde çalıştırdık. Ekran çıktıları emülatörün ürettiği gerçek çıktılar.</p>
     <div class="duo">
       <div>
         <div class="screen" role="img" aria-label="Emülatör ekranı: 1000'den küçük 168 asal sayı, 8 sütun halinde.">
@@ -459,7 +459,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
     <section>
       <h2>Gelecek hafta</h2>
       <ol class="next">
-        <li><span>C derleyicisine (<code>tdcc</code>) başlamak. Emülatör ve kütüphane hazır olduğu için Ocak'ı beklemeye gerek yok. İlk hedef: C ile yazılmış "MERHABA" emülatörde.</span></li>
+        <li><span>C derleyicisine (<code>tacc</code>) başlamak. Emülatör ve kütüphane hazır olduğu için Ocak'ı beklemeye gerek yok. İlk hedef: C ile yazılmış "MERHABA" emülatörde.</span></li>
         <li><span>Flash çip siparişi (en geç 16 Kasım).</span></li>
       </ol>
     </section>
@@ -495,10 +495,10 @@ figcaption { font-size: .8rem; color: var(--muted); }
 
     <section>
       <div class="note">
-        <h3>Sıradaki adım: şemaları TD-8 planına uyarlamak</h3>
-        <p>Şemalar klasik SAP-1 register yapısında. TD-8 planında (SISTEM-PLANI bölüm 5.1) registerlar farklı:</p>
+        <h3>Sıradaki adım: şemaları TA-8 planına uyarlamak</h3>
+        <p>Şemalar klasik SAP-1 register yapısında. TA-8 planında (SISTEM-PLANI bölüm 5.1) registerlar farklı:</p>
         <ul>
-          <li>TD-8'de B registerı yok. ALU'nun ikinci girişi doğrudan veri yolu.</li>
+          <li>TA-8'de B registerı yok. ALU'nun ikinci girişi doğrudan veri yolu.</li>
           <li>A registerı bir 74HC377. Girişini veri yolundan değil ALU'nun sonucundan alır, veri yoluna 74HC245 ile çıkar.</li>
           <li>Komut registerı (IR) bir 74HC377. 8 bitin hepsi mikrokod ROM'unun adresine gider, veri yoluna çıkmaz.</li>
           <li>Entegre ailesi 74HC. Yükleme hatları ayrı anahtarlardan değil kontrol ünitesinin kod çözücüsünden gelir.</li>
@@ -510,7 +510,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
       <h2>Gelecek hafta</h2>
       <ol class="next">
         <li><span>Saat modülünün testlerini bitirmek (ilk kilometre taşı).</span></li>
-        <li><span>Register şemalarını TD-8 planına uyarlayıp yükleme ve veri yolu testlerini yapmak.</span></li>
+        <li><span>Register şemalarını TA-8 planına uyarlayıp yükleme ve veri yolu testlerini yapmak.</span></li>
         <li><span>Proteus proje dosyalarını ve test ekran görüntülerini klasöre eklemek.</span></li>
       </ol>
     </section>

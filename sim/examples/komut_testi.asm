@@ -1,4 +1,4 @@
-; komut_testi.asm: TD-8'in 88 opcode'unun hepsini çalıştıran test programı.
+; komut_testi.asm: TA-8'in 88 opcode'unun hepsini çalıştıran test programı.
 ;   - M grubu: 12 işlem × 4 kip (44 STA # ve 6C BIT # yasak) = 46 opcode
 ;   - U grubu (80–8C), LDX #/abs, INX, TAXL, TAXH, INCW, DECW (bayt taşmalarıyla),
 ;     PHA, PLA, JMP, CALL (3 seviye iç içe), RET, JMPI (ROM'daki ve RAM'deki tablo),

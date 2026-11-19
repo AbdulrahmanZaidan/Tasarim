@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>Tri-state bus: 2× 74HC245 + 74HC540 kaynak, pull-down, 74HC245 okuyucu
-TD-8: td8.hw.digital ile üretildi (4 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (4 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>BUS</string></entry><entry><string>RectWidth</string><int>71</int></entry><entry><string>RectHeight</string><int>33</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="520" y="0"/></visualElement>

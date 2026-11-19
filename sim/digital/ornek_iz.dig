@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>İz örneği: sayıcı → flash → 74HC377 (AB, DB, CW)
-TD-8: td8.hw.digital ile üretildi (4 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (4 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>LATCH</string></entry><entry><string>RectWidth</string><int>20</int></entry><entry><string>RectHeight</string><int>33</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="480" y="1640"/></visualElement>
@@ -131,7 +131,7 @@ TD-8: td8.hw.digital ile üretildi (4 çip). Elle düzenlemeyin; Python netlist'
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>AB5</string></entry></elementAttributes><pos x="1040" y="280"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>AB4</string></entry></elementAttributes><pos x="1040" y="240"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1040" y="160"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_h36ab4845ab.dig</elementName><elementAttributes><entry><string>Label</string><string>U3</string></entry></elementAttributes><pos x="600" y="820"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_h36ab4845ab.dig</elementName><elementAttributes><entry><string>Label</string><string>U3</string></entry></elementAttributes><pos x="600" y="820"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U3  SST39SF010</string></entry></elementAttributes><pos x="600" y="740"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>DB = tablo[AB]</string></entry></elementAttributes><pos x="600" y="770"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="600" y="860"/></visualElement>

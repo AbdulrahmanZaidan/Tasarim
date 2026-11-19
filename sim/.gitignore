@@ -2,5 +2,5 @@ build/
 __pycache__/
 examples/*.bin
 examples/*.hex
-digital/TD8_SST39SF010_prog_*.dig
-!digital/TD8_SST39SF010_prog_merhaba.dig
+digital/TA8_SST39SF010_prog_*.dig
+!digital/TA8_SST39SF010_prog_merhaba.dig

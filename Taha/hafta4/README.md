@@ -33,11 +33,11 @@ Neleri yakalıyor: iki entegrenin aynı hatta aynı anda çıkış vermesi (bus 
 
 Testlerin gerçekten hata yakaladığı denendi: entegre modellerinde yapılan 7 bilinçli bozmanın 7'si yakalandı.
 
-Dosyalar: `sim/td8/hw/kernel.py` (çekirdek), `chips.py` (25 entegre modeli; gecikme tablosunun bir kısmı tahmin, dosyada işaretli).
+Dosyalar: `sim/ta8/hw/kernel.py` (çekirdek), `chips.py` (25 entegre modeli; gecikme tablosunun bir kısmı tahmin, dosyada işaretli).
 
 ## 3. Digital'e dışa aktarım
 
-`sim/td8/hw/digital.py` bağlantı listesini Digital'in `.dig` dosyasına çeviriyor. Her entegre Digital'in kendi 74xx kütüphanesindeki bacaklı çip; her bacakta sinyal adı var.
+`sim/ta8/hw/digital.py` bağlantı listesini Digital'in `.dig` dosyasına çeviriyor. Her entegre Digital'in kendi 74xx kütüphanesindeki bacaklı çip; her bacakta sinyal adı var.
 
 - Dışa aktarılan devreler Digital'de ve bizim simülatörde aynı sonucu veriyor: 23 çeşit entegrenin hepsi, datasheet kurallarına uyan uyaranla denendi.
 - Digital gecikmeleri modellemez: orada yalnız işlev doğrulanır, zamanlama bizim simülatörde.

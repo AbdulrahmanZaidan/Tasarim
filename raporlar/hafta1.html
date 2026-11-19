@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}</style>
-<title>TD-8 1. Hafta Raporu</title>
+<title>TA-8 1. Hafta Raporu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -115,13 +115,13 @@ footer { font-size: .85rem; color: var(--muted); display: flex; flex-wrap: wrap;
 <main class="wrap">
   <header>
     <span class="eyebrow">Bitirme projesi · Haftalık durum</span>
-    <h1>TD-8: 1. hafta raporu</h1>
+    <h1>TA-8: 1. hafta raporu</h1>
     <p class="meta mono">27 Ekim – 2 Kasım 2026 · Simülasyon dönemi, hafta 1 / 10</p>
   </header>
 
   <section>
     <h2>Ne yapıyoruz</h2>
-    <p class="lead">74HC lojik entegreleriyle breadboard üzerinde, kendi komut setimizle çalışan 8-bit bir bilgisayar: <b>TD-8</b>. VGA monitöre yazı basacak, PS/2 klavyeden okuyacak. Proje sonunda C ile yazılmış bir Snake oyunu bu bilgisayarda çalışacak.</p>
+    <p class="lead">74HC lojik entegreleriyle breadboard üzerinde, kendi komut setimizle çalışan 8-bit bir bilgisayar: <b>TA-8</b>. VGA monitöre yazı basacak, PS/2 klavyeden okuyacak. Proje sonunda C ile yazılmış bir Snake oyunu bu bilgisayarda çalışacak.</p>
     <div class="specs" aria-label="Planlanan özellikler">
       <span>8-bit veri / 16-bit adres</span><span>CPU 1 MHz</span><span>53 komut</span><span>VGA 40×30 metin</span><span>PS/2 klavye</span><span>92 entegre · 24 breadboard</span>
     </div>
@@ -196,10 +196,10 @@ Ran 27 tests in 8.5s
 durdu (HALT) · 573 çevrim (0.57 ms @ 1 MHz)
 +--------------------+
 |                    |
-|  MERHABA, TD-8!    |
+|  MERHABA, TA-8!    |
 |                    |
 +--------------------+</pre>
-          <p class="cap">TD-8 için yazılmış ilk program emülatörde çalışıp ekrana yazı basıyor.</p>
+          <p class="cap">TA-8 için yazılmış ilk program emülatörde çalışıp ekrana yazı basıyor.</p>
         </div>
       </div>
 
@@ -222,14 +222,14 @@ durdu (HALT) · 573 çevrim (0.57 ms @ 1 MHz)
 
     <div class="sub">
       <h3>Neden yazılım gerekiyor</h3>
-      <p>TD-8'de hazır bir işlemci yok. İşlemcinin nasıl davranacağı flash çiplere yazılan tablolarda duruyor:</p>
+      <p>TA-8'de hazır bir işlemci yok. İşlemcinin nasıl davranacağı flash çiplere yazılan tablolarda duruyor:</p>
       <ul>
         <li><b>Mikrokod:</b> Her komutun hangi adımlarla çalışacağını söyler. 3 flash çipte tutulur, her adımda 24 kontrol sinyali verir.</li>
         <li><b>ALU tabloları:</b> Toplama, çıkarma, AND, OR, kaydırma gibi 25 işlemin sonuçları 2 flash çipte hazır tablo olarak durur.</li>
         <li><b>VGA zamanlaması ve yazı tipi:</b> Monitörün senkron sinyalleri ve harflerin piksel desenleri.</li>
       </ul>
       <p>Bunlar toplam 7 çip × 128 KB, yaklaşık 900 bin byte. Elle yazılamaz, bu yüzden Python ile üretiyoruz. İkinci sebep: 92 entegreyi kablolamadan önce makinenin doğru davranışını bilmemiz gerekiyor. Bunu yazdığımız emülatör söylüyor.</p>
-      <p class="goal"><b>Yazılımda son hedef:</b> C ile yazılmış Snake oyununun TD-8'de, Arduino bağlı olmadan ROM'dan çalışması.</p>
+      <p class="goal"><b>Yazılımda son hedef:</b> C ile yazılmış Snake oyununun TA-8'de, Arduino bağlı olmadan ROM'dan çalışması.</p>
     </div>
 
     <div class="sub">
@@ -258,7 +258,7 @@ durdu (HALT) · 573 çevrim (0.57 ms @ 1 MHz)
           <span class="node hw">Proteus'taki ROM'lar<small>yapımda: flash çipler</small></span>
         </div>
         <div class="lane">
-          <span class="node src">merhaba.asm<small>TD-8 programı</small></span><span class="arr">→</span>
+          <span class="node src">merhaba.asm<small>TA-8 programı</small></span><span class="arr">→</span>
           <span class="node">Assembler<small>asm.py</small></span><span class="arr">→</span>
           <span class="node">Program ROM'u<small>.bin, 32 KB</small></span><span class="arr">→</span>
           <span class="node hw">Emülatör<small>doğru sonucu verir</small></span>
@@ -272,7 +272,7 @@ durdu (HALT) · 573 çevrim (0.57 ms @ 1 MHz)
             <tr><td>microcode.py</td><td>3 mikrokod ROM'unun içeriğini üretir. Kuralları denetler: iki çip aynı anda veri yoluna yazmıyor, her komut düzgün bitiyor.</td></tr>
             <tr><td>alu.py</td><td>ALU'nun 2 flash tablosunu üretir. Karşılaştırma için bir referans ALU da içerir.</td></tr>
             <tr><td>vga.py</td><td>VGA zamanlama ROM'unu ve yazı tipi ROM'unu üretir.</td></tr>
-            <tr><td>asm.py</td><td>Assembler. Assembly ile yazılan programı TD-8'in makine koduna çevirir.</td></tr>
+            <tr><td>asm.py</td><td>Assembler. Assembly ile yazılan programı TA-8'in makine koduna çevirir.</td></tr>
             <tr><td>emu_micro.py</td><td>Mikroadım emülatörü. Üretilen ROM imajlarını gerçek devre gibi, çevrim çevrim çalıştırır.</td></tr>
             <tr><td>emu_ref.py</td><td>Komut seviyesi emülatör. Mikrokoddan bağımsız yazıldı, iki emülatör her komuttan sonra aynı sonucu vermek zorunda.</td></tr>
             <tr><td>cli.py</td><td>Hepsini tek komutla çalıştıran komut satırı aracı.</td></tr>
@@ -303,7 +303,7 @@ durdu (HALT) · 573 çevrim (0.57 ms @ 1 MHz)
             <tr><td>10–16 Kas</td><td>Emülatörden devre test vektörü üretici</td><td>Bütün CPU'yu simülasyonda çevrim çevrim kontrol etmek</td></tr>
             <tr><td>8–14 Ara</td><td>Gerçek yazı tipi</td><td>"MERHABA" yazısını simülasyonda VGA ekranda görmek</td></tr>
             <tr><td>22–28 Ara</td><td>Arduino iz ve yükleme yazılımı</td><td>Breadboard'daki sinyalleri Arduino ile okuyup emülatörle karşılaştırmak</td></tr>
-            <tr><td>Oca – Mar 2027</td><td>C derleyicisi (tdcc)</td><td>Programları assembly yerine C ile yazabilmek</td></tr>
+            <tr><td>Oca – Mar 2027</td><td>C derleyicisi (tacc)</td><td>Programları assembly yerine C ile yazabilmek</td></tr>
             <tr><td>Mar – Nis 2027</td><td>Snake oyunu (C) ve açılış test ROM'u</td><td>Final demosu</td></tr>
           </tbody>
         </table>

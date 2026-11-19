@@ -1,4 +1,4 @@
-"""Intel HEX, test vektörü üreticileri ve iz karşılaştırması (td8/ihex.py, td8/vectors.py)."""
+"""Intel HEX, test vektörü üreticileri ve iz karşılaştırması (ta8/ihex.py, ta8/vectors.py)."""
 
 import contextlib
 import io
@@ -10,9 +10,9 @@ from pathlib import Path
 from unittest import mock
 
 import cli
-from td8 import asm, ihex, isa, vectors
-from td8.bus import IO_BASE, ROM_END, VRAM_BASE, Bus
-from td8.emu_micro import MicroEmu
+from ta8 import asm, ihex, isa, vectors
+from ta8.bus import IO_BASE, ROM_END, VRAM_BASE, Bus
+from ta8.emu_micro import MicroEmu
 
 EXAMPLES = Path(__file__).resolve().parent.parent / 'examples'
 MERHABA = EXAMPLES / 'merhaba.asm'

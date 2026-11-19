@@ -8,10 +8,10 @@ import random
 import unittest
 from pathlib import Path
 
-from td8 import alu, asm, microcode
-from td8.bus import Bus
-from td8.emu_micro import MicroEmu
-from td8.emu_ref import RefEmu
+from ta8 import alu, asm, microcode
+from ta8.bus import Bus
+from ta8.emu_micro import MicroEmu
+from ta8.emu_ref import RefEmu
 
 SIM = Path(__file__).resolve().parent.parent
 EXAMPLES = SIM / 'examples'

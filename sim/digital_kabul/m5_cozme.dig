@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>M5 adres çözme (7.2): U603 U604 + AUX U501–U503 + M2 U209 U211
-TD-8: td8.hw.digital ile üretildi (7 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (7 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M5</string></entry><entry><string>RectWidth</string><int>43</int></entry><entry><string>RectHeight</string><int>29</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="640" y="1280"/></visualElement>

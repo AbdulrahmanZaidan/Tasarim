@@ -1,4 +1,4 @@
-"""Arduino iz ve yükleme aracı: td8/ardu.py, ardu_cli.py, arduino/td8_debug/td8_debug.ino.
+"""Arduino iz ve yükleme aracı: ta8/ardu.py, ardu_cli.py, arduino/ta8_debug/ta8_debug.ino.
 
 Donanımsız. Bilgisayar tarafı, sketch'in Python ikizi FakeDevice ile bayt akışı seviyesinde
 konuşur; istemci kodu (ArduClient, FrameReader) gerçek kartla konuşacak kodun aynısıdır.
@@ -21,13 +21,13 @@ from pathlib import Path
 from unittest import mock
 
 import ardu_cli
-from td8 import ardu, asm, isa, vectors
-from td8.ardu import (ArduClient, ArduDeviceError, ArduError, ArduTimeout, DeviceParser,
+from ta8 import ardu, asm, isa, vectors
+from ta8.ardu import (ArduClient, ArduDeviceError, ArduError, ArduTimeout, DeviceParser,
                       FakeDevice, FakeTransport, FrameReader, TraceCompare)
 
 SIM = Path(__file__).resolve().parent.parent
 EXAMPLES = SIM / 'examples'
-SKETCH = SIM.parent / 'arduino' / 'td8_debug' / 'td8_debug.ino'
+SKETCH = SIM.parent / 'arduino' / 'ta8_debug' / 'ta8_debug.ino'
 
 # ROM yalnız RAM'deki programa atlar; asıl program 8000'den (yükleme modu ile gelir).
 RAM_PROGRAM = """
@@ -232,7 +232,7 @@ class ConstantsTest(unittest.TestCase):
 
     def test_python_block_complete(self):
         # ardu.py'deki blokta tanımlı her ad PROTOCOL sözlüğünde de olmalı
-        src = (SIM / 'td8' / 'ardu.py').read_text(encoding='utf-8')
+        src = (SIM / 'ta8' / 'ardu.py').read_text(encoding='utf-8')
         block = src.split('# >>> PROTOKOL', 1)[1].split('# <<< PROTOKOL', 1)[0]
         names = re.findall(r'^([A-Z_0-9]+) = ', block, re.M)
         self.assertEqual(sorted(names), sorted(ardu.PROTOCOL))
@@ -303,7 +303,7 @@ class TraceTest(unittest.TestCase):
         for name, image in self.images.items():
             with self.subTest(name):
                 client, dev = connect(image)
-                self.assertEqual(client.hello().ident, 'TD8-ARDU')
+                self.assertEqual(client.hello().ident, 'TA8-ARDU')
                 res = traced(client)
                 ref = self.refs[name]
                 self.assertEqual(res.reason, ardu.END_HALT)
@@ -558,7 +558,7 @@ class ResyncTest(unittest.TestCase):
 
     def test_truncated_reply(self):
         client, _ = connect(rx_hook=lambda i, f: f[:6] if i == 0 else f)
-        self.assertEqual(client.hello().ident, 'TD8-ARDU')
+        self.assertEqual(client.hello().ident, 'TA8-ARDU')
         self.assertEqual(client.retried, 1)
 
     def test_truncated_request(self):
@@ -583,7 +583,7 @@ class ResyncTest(unittest.TestCase):
     def test_boot_announcement(self):
         dev = FakeDevice(announce=True)
         client = ArduClient(FakeTransport(dev))
-        self.assertEqual(client.wait_ready(boot_wait=0.1).ident, 'TD8-ARDU')
+        self.assertEqual(client.wait_ready(boot_wait=0.1).ident, 'TA8-ARDU')
         self.assertEqual(client.boots, 1)
 
 

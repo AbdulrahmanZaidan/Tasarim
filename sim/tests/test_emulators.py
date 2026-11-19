@@ -8,10 +8,10 @@ import random
 import unittest
 from pathlib import Path
 
-from td8 import alu, asm, isa, microcode
-from td8.bus import Bus
-from td8.emu_micro import MicroEmu
-from td8.emu_ref import RefEmu
+from ta8 import alu, asm, isa, microcode
+from ta8.bus import Bus
+from ta8.emu_micro import MicroEmu
+from ta8.emu_ref import RefEmu
 
 EXAMPLES = Path(__file__).resolve().parent.parent / 'examples'
 ROMS = microcode.build()
@@ -166,7 +166,7 @@ class TestPrograms(unittest.TestCase):
             self.assertEqual(m.sp, 0xFF)
 
     def test_examples(self):
-        for name, check in [('merhaba.asm', lambda bus: bus.screen()[1][2:16] == 'MERHABA, TD-8!'),
+        for name, check in [('merhaba.asm', lambda bus: bus.screen()[1][2:16] == 'MERHABA, TA-8!'),
                             ('klavye.asm', lambda bus: bus.screen()[0].startswith('1C F0 1C'))]:
             src = (EXAMPLES / name).read_text(encoding='utf-8')
             prog, ms = machines(src)
@@ -184,7 +184,7 @@ class TestPrograms(unittest.TestCase):
         cpu = MicroEmu(bus, ROMS, ALU)
         cpu.run(100_000)
         self.assertTrue(cpu.halted)
-        self.assertEqual(bus.screen()[1][2:16], 'MERHABA, TD-8!')
+        self.assertEqual(bus.screen()[1][2:16], 'MERHABA, TA-8!')
         self.assertGreater(cpu.stall_cycles, 0)
 
 

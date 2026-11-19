@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from td8 import asm
+from ta8 import asm
 
 
 def code(src):

@@ -1,8 +1,8 @@
-# TD-8 Arduino hata ayıklama kartı: iz ve yükleme
+# TA-8 Arduino hata ayıklama kartı: iz ve yükleme
 
 > **Durum: sürüm 0.1, donanımda HİÇ çalıştırılmadı.**
 > Sketch yalnızca `arduino:avr:mega` için derlendi. Bilgisayar tarafı, sketch'in Python ikizi
-> olan sahte bir cihazla (`sim/td8/ardu.py`, `FakeDevice`) sınandı. Aşağıdaki pin eşlemesi
+> olan sahte bir cihazla (`sim/ta8/ardu.py`, `FakeDevice`) sınandı. Aşağıdaki pin eşlemesi
 > **taslaktır**; kart kablolanınca kesinleşecek. Pin değişirse önce sketch'teki tablo, sonra bu
 > belge değişir.
 
@@ -27,8 +27,8 @@ Plan: SISTEM-PLANI bölüm 10 (M8), 3.1–3.4, 4.2, 16 (kabul ölçütü 3);
 
 | Dosya | İçerik |
 |---|---|
-| `arduino/td8_debug/td8_debug.ino` | Arduino Mega 2560 sketch'i |
-| `sim/td8/ardu.py` | Bilgisayar tarafı: çerçeveleme, istemci, iz karşılaştırma, yükleme, sahte cihaz |
+| `arduino/ta8_debug/ta8_debug.ino` | Arduino Mega 2560 sketch'i |
+| `sim/ta8/ardu.py` | Bilgisayar tarafı: çerçeveleme, istemci, iz karşılaştırma, yükleme, sahte cihaz |
 | `sim/ardu_cli.py` | Komut satırı |
 | `sim/tests/test_ardu.py` | Donanımsız testler (protokol sabitleri sketch'ten okunup karşılaştırılır) |
 
@@ -116,7 +116,7 @@ A5 5A | TİP | SIRA | UZUNLUK (0..250) | YÜK | CRC lo | CRC hi
 
 | Komut | Kod | Yük | Yanıt yükü |
 |---|---|---|---|
-| HELLO | 01 | – | protokol, sürüm (2), en büyük yük, en büyük blok, çerçeve başına kayıt, mod, `"TD8-ARDU"` |
+| HELLO | 01 | – | protokol, sürüm (2), en büyük yük, en büyük blok, çerçeve başına kayıt, mod, `"TA8-ARDU"` |
 | STATUS | 02 | – | mod, pinler, çevrim sayacı (u32), pinlerdeki AB/DB/CW (6), CRC hataları (u16), kesik çerçeveler (u16), bus tutuluyor |
 | MODE | 03 | mod (0 serbest, 1 iz) | mod |
 | RESET | 04 | – | pinler, C'den çıkmak için verilen MCLK darbesi (u32) |
@@ -168,8 +168,8 @@ Komutlar `Tasarim` klasöründen, `cmd` içinde:
 
 ```
 set CLI="C:\Users\deniz\Desktop\bitirme ödevi\araclar\arduino-cli\arduino-cli.exe" --config-file "C:\Users\deniz\Desktop\bitirme ödevi\araclar\arduino-cli\arduino-cli.yaml"
-%CLI% compile --fqbn arduino:avr:mega --build-path "C:\Users\deniz\Desktop\bitirme ödevi\araclar\arduino-cli\veri\derleme\td8_debug" arduino\td8_debug
-%CLI% upload -p COM5 --fqbn arduino:avr:mega --input-dir "C:\Users\deniz\Desktop\bitirme ödevi\araclar\arduino-cli\veri\derleme\td8_debug" arduino\td8_debug
+%CLI% compile --fqbn arduino:avr:mega --build-path "C:\Users\deniz\Desktop\bitirme ödevi\araclar\arduino-cli\veri\derleme\ta8_debug" arduino\ta8_debug
+%CLI% upload -p COM5 --fqbn arduino:avr:mega --input-dir "C:\Users\deniz\Desktop\bitirme ödevi\araclar\arduino-cli\veri\derleme\ta8_debug" arduino\ta8_debug
 ```
 
 Derleme sonucu (12 Kasım 2026): program 5454 bayt (%2), RAM 711 bayt (%8). **Yükleme

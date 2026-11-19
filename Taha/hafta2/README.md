@@ -25,7 +25,7 @@ Hazır parça kullandığımız yerler, tasarımın konusu olmayan kısımlar: k
 
 ### Hangi komut setini kullanıyoruz?
 
-Kendi tasarladığımız **TD-8** komut setini. Önce üç ayrı öneri hazırlandı ve karşılaştırıldı:
+Kendi tasarladığımız **TA-8** komut setini. Önce üç ayrı öneri hazırlandı ve karşılaştırıldı:
 
 | Öneri | Entegre | Öne çıkan yanı |
 |---|---|---|
@@ -35,7 +35,7 @@ Kendi tasarladığımız **TD-8** komut setini. Önce üç ayrı öneri hazırla
 
 Hata ayıklanabilir öneri temel alındı, diğer ikisinin iyi fikirleri eklendi, bulunan hatalar düzeltildi ve entegre sayısı 92'ye indirildi. Danışman onayladı.
 
-TD-8'in özellikleri:
+TA-8'in özellikleri:
 - 8-bit veri, 16-bit adres (64 KB).
 - 53 komut, 88 opcode.
 - Registerlar: A (akümülatör), X (16-bit gösterici), SP, PC; flag'ler Z C N V.
@@ -63,14 +63,14 @@ Flag'ler mikrokod adresinin parçası olduğu için koşullu dallanma ek devre i
 | Ne | Dil | Neden |
 |---|---|---|
 | Araçlar (ROM üreticileri, assembler, emülatörler, testler) | Python 3.12 | Hızlı geliştirme, ek paket gerekmiyor, test yazmak kolay. Hız sorun değil: emülatör saniyede 0,36–1,7 milyon çevrim çalıştırıyor, gerçek makine 1 milyon. |
-| TD-8 programları, şimdi | TD-8 assembly | Derleyici gelene kadar programlar ve kütüphane assembly ile yazılıyor. |
-| TD-8 programları, yapım döneminde | C'nin bir alt kümesi | Kendi derleyicimiz (`tdcc`, Python ile). Snake demosu C ile yazılacak. |
+| TA-8 programları, şimdi | TA-8 assembly | Derleyici gelene kadar programlar ve kütüphane assembly ile yazılıyor. |
+| TA-8 programları, yapım döneminde | C'nin bir alt kümesi | Kendi derleyicimiz (`tacc`, Python ile). Snake demosu C ile yazılacak. |
 
 GCC ya da LLVM'i yeni bir 8-bit akümülatörlü işlemciye uyarlamak aylar sürer, bu proje için gerçekçi değil. Small-C ve LCC uyarlamaları da incelendi. Kendi küçük derleyicimizi seçtik çünkü statik çerçeve sayesinde kod üretimi basit kalıyor ve tezde ayrı bir katkı oluyor.
 
 ### Hangi assembler'ı kullanıyoruz?
 
-Kendi yazdığımız assembler'ı: `sim/td8/asm.py` (~400 satır, iki geçişli).
+Kendi yazdığımız assembler'ı: `sim/ta8/asm.py` (~400 satır, iki geçişli).
 
 Plan, kuralları bir dosyada tanımlanan genel amaçlı **customasm**'i öneriyordu. Kendi assembler'ımızı seçme nedenlerimiz:
 - Opcode tablosunu doğrudan `isa.py`'den okuyor. Komut seti değişince assembler kendiliğinden güncelleniyor, iki yerde tutulan tablo birbirinden kaymıyor.
@@ -90,7 +90,7 @@ Devre, aynı programda emülatörden farklı davranırsa hata devrededir.
 
 ## 2. Assembly simülasyonu: çalışma zamanı kütüphanesi
 
-C derleyicisinin ileride ihtiyaç duyacağı rutinler şimdiden TD-8 assembly'sinde yazıldı ve emülatörde test edildi: [sim/lib/runtime.asm](../../sim/lib/runtime.asm).
+C derleyicisinin ileride ihtiyaç duyacağı rutinler şimdiden TA-8 assembly'sinde yazıldı ve emülatörde test edildi: [sim/lib/runtime.asm](../../sim/lib/runtime.asm).
 
 | Rutin | Ne yapar | Ortalama çevrim | En kötü | Plandaki tahmin |
 |---|---|---|---|---|
@@ -155,5 +155,5 @@ Python 3.12 (yalnızca standart kütüphane), unittest, Git/GitHub. Bu hafta yen
 
 ## Gelecek hafta
 
-- C derleyicisine (`tdcc`) başlamak: lexer ve parser. Emülatör ve runtime hazır olduğu için plandaki Ocak tarihini beklemeye gerek yok.
+- C derleyicisine (`tacc`) başlamak: lexer ve parser. Emülatör ve runtime hazır olduğu için plandaki Ocak tarihini beklemeye gerek yok.
 - İlk hedef: C ile yazılmış "MERHABA" programının emülatörde çalışması.

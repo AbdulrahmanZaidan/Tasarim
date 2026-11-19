@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>ALU: ALU-L (U407), ALU-H (U408), C = Clo OR Chi (U503) (Abdurrahman, hafta 3)
-TD-8: td8.hw.digital ile üretildi (3 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (3 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>AUX</string></entry><entry><string>RectWidth</string><int>25</int></entry><entry><string>RectHeight</string><int>27</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="500" y="980"/></visualElement>
@@ -10126,7 +10126,7 @@ OP A B Cin Zin R Z C N V
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>Nnew</string></entry></elementAttributes><pos x="320" y="280"/></visualElement>
     <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>V</string></entry></elementAttributes><pos x="320" y="320"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>Vnew</string></entry></elementAttributes><pos x="320" y="320"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_alu_lo.dig</elementName><elementAttributes><entry><string>Label</string><string>U407</string></entry></elementAttributes><pos x="660" y="160"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_alu_lo.dig</elementName><elementAttributes><entry><string>Label</string><string>U407</string></entry></elementAttributes><pos x="660" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U407  SST39SF010</string></entry></elementAttributes><pos x="660" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>ALU-L (5.2): A0–3 = A[3:0], A4–7…</string></entry></elementAttributes><pos x="660" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="660" y="200"/></visualElement>
@@ -10158,7 +10158,7 @@ OP A B Cin Zin R Z C N V
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>ALUOP4_L</string></entry></elementAttributes><pos x="820" y="280"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="820" y="200"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="820" y="160"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_alu_hi.dig</elementName><elementAttributes><entry><string>Label</string><string>U408</string></entry></elementAttributes><pos x="1100" y="160"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_alu_hi.dig</elementName><elementAttributes><entry><string>Label</string><string>U408</string></entry></elementAttributes><pos x="1100" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U408  SST39SF010</string></entry></elementAttributes><pos x="1100" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>ALU-H (5.2): A0–3 = A[7:4], A4–7…</string></entry></elementAttributes><pos x="1100" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1100" y="200"/></visualElement>

@@ -2,7 +2,7 @@
 
 Hazırlayan: Abdurrahman
 
-> **Not:** M6 projenin netlist'inde (`sim/td8/hw/cpu.py`) henüz yoktu; bu modülün bağlantıları [SISTEM-PLANI bölüm 8.1–8.2](../../SISTEM-PLANI.md)'den yeni çıkarıldı. Kullanılan araçlar projenin araçları: çip modelleri (`sim/td8/hw/chips.py`), çip seviyesi simülatör (`sim/td8/hw/kernel.py`), Digital dışa aktarıcısı (`sim/td8/hw/digital.py`) ve zamanlama ROM'u üreticisi (`sim/td8/vga.py`). Her şey `m6_uret.py` ile yeniden üretilebilir.
+> **Not:** M6 projenin netlist'inde (`sim/ta8/hw/cpu.py`) henüz yoktu; bu modülün bağlantıları [SISTEM-PLANI bölüm 8.1–8.2](../../SISTEM-PLANI.md)'den yeni çıkarıldı. Kullanılan araçlar projenin araçları: çip modelleri (`sim/ta8/hw/chips.py`), çip seviyesi simülatör (`sim/ta8/hw/kernel.py`), Digital dışa aktarıcısı (`sim/ta8/hw/digital.py`) ve zamanlama ROM'u üreticisi (`sim/ta8/vga.py`). Her şey `m6_uret.py` ile yeniden üretilebilir.
 
 ## Özet
 
@@ -18,7 +18,7 @@ Hazırlayan: Abdurrahman
 | Dosya | İçerik |
 |---|---|
 | `M6_vga_zamanlama.dig` | Devre + 2 test |
-| `TD8_SST39SF010_vga_zamanlama.dig` | Zamanlama ROM'unun alt devresi (içerik gömülü; `.dig` ile aynı klasörde durmalı) |
+| `TA8_SST39SF010_vga_zamanlama.dig` | Zamanlama ROM'unun alt devresi (içerik gömülü; `.dig` ile aynı klasörde durmalı) |
 | `m6_uret.py` | Netlist (`chips()`), Digital dosyası, testler, kare ölçümleri, gecikme analizi |
 | `images/m6_digital_ekran.png`, `images/m6_devre.svg` | Devrenin Digital'deki görüntüsü |
 | `images/m6_1_nokta_karakter.png`, `m6_2_satir.png`, `m6_3_dikey.png` | Dalga şekilleri |
@@ -37,7 +37,7 @@ Hazırlayan: Abdurrahman
 | U704, U705 74HC163 | **HCHAR** (H0–H5, 0..49) | CP = CCLK; /MR (senkron) = /HEND; U704 TC → U705 CET |
 | U706 74HC04 | HEND = NOT /HEND | VLINE'ın sayma izni |
 | U707–U709 74HC163 | **VLINE** (V0–V9, 0..524) | CP = CCLK; CEP = HEND (satır sonunda bir artar); /MR = /VEND; TC zinciri |
-| U710 SST39SF010 | **Zamanlama ROM'u** | A0–5 = H, A6–15 = V, A16 = SLOW. D0–D7 = /HSYNC, /VSYNC, BLANK_n, /BUFEN, /HEND, /VEND, VMUX, VWR (içerik `td8.vga.timing_rom()`) |
+| U710 SST39SF010 | **Zamanlama ROM'u** | A0–5 = H, A6–15 = V, A16 = SLOW. D0–D7 = /HSYNC, /VSYNC, BLANK_n, /BUFEN, /HEND, /VEND, VMUX, VWR (içerik `ta8.vga.timing_rom()`) |
 | U711 74HC377 | **T1**: ROM çıkışlarını karakter sınırında yakalar | CP = DCLK, /E = CCLK (= /LD); Q = /HSYNC, /VSYNC, BLANK_n, /BUFEN, VMUX, VWR |
 
 Tasarımda plan bir ayrıntı vermediği için seçilen yerler:
@@ -73,7 +73,7 @@ Her karakterde (CCLK düşüşü) H, V ve 6 çıkış kaydedildi; açılıştan 
 
 ### Test 4: Gerçek 25 MHz ve gecikmeler (projenin çip seviyesi simülatörü)
 
-Digital gecikmeleri modellemez. Aynı netlist `sim/td8/hw/kernel.py`'de, her entegrenin gecikmesi ve kurulum/tutma süreleriyle, **gerçek 25 MHz saatle** 2.2 kare koşturuldu.
+Digital gecikmeleri modellemez. Aynı netlist `sim/ta8/hw/kernel.py`'de, her entegrenin gecikmesi ve kurulum/tutma süreleriyle, **gerçek 25 MHz saatle** 2.2 kare koşturuldu.
 
 | Koşu | Kurulum / tutma ihlali | Kare ölçümleri | Digital ile karakter karakter |
 |---|---|---|---|

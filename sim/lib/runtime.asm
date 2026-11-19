@@ -1,4 +1,4 @@
-; runtime.asm: TD-8 çalışma zamanı kütüphanesi (C derleyicisinin de kullanacağı rutinler)
+; runtime.asm: TA-8 çalışma zamanı kütüphanesi (C derleyicisinin de kullanacağı rutinler)
 ;
 ; Kullanım: programın sonunda   .include "../lib/runtime.asm"
 ;

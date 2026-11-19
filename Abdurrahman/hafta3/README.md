@@ -2,11 +2,11 @@
 
 Hazırlayan: Abdurrahman
 
-> **Not:** Devre elle çizilmedi. `.dig` dosyası projenin netlist'inden (`sim/td8/hw/cpu.py`, Taha) Taha'nın Digital aracıyla (`sim/td8/hw/digital.py`) üretildi; bağlantılar `sim/digital/` altındaki dosyalarla aynı. Bu klasörde benim eklediklerim: testler, dalga şekilleri, ekran görüntüleri ve bu rapor.
+> **Not:** Devre elle çizilmedi. `.dig` dosyası projenin netlist'inden (`sim/ta8/hw/cpu.py`, Taha) Taha'nın Digital aracıyla (`sim/ta8/hw/digital.py`) üretildi; bağlantılar `sim/digital/` altındaki dosyalarla aynı. Bu klasörde benim eklediklerim: testler, dalga şekilleri, ekran görüntüleri ve bu rapor.
 
 ## Özet
 
-- İlk sürümdeki ALU, RAM ve MAR şemaları SAP-1 yapısındaydı (74LS283 toplayıcı, 16 baytlık RAM, 4-bit MAR). TD-8 planında bu parçalar farklı; plana göre **Digital'de yeniden kuruldu** (18 Kasım):
+- İlk sürümdeki ALU, RAM ve MAR şemaları SAP-1 yapısındaydı (74LS283 toplayıcı, 16 baytlık RAM, 4-bit MAR). TA-8 planında bu parçalar farklı; plana göre **Digital'de yeniden kuruldu** (18 Kasım):
   - **ALU:** toplayıcı entegresi yok; ALU **iki flash'ta tablo** (SST39SF010, ALU-L ve ALU-H), 25 işlem ve dört bayrak (Z, C, N, V). [SISTEM-PLANI 5.2–5.3](../../SISTEM-PLANI.md)
   - **MAR yok:** adres yolunu dört register sürüyor: **PC, AR, X, SP** (M3). AR, MAR'ın işini görüyor ama 16 bit ve sayabiliyor. [SISTEM-PLANI 5.1](../../SISTEM-PLANI.md)
   - **RAM** (CY62256, 32 KB) M5'in parçası; Taha'da, Digital'de test edildi. Bu klasörde yok.
@@ -17,7 +17,7 @@ Hazırlayan: Abdurrahman
 | Dosya | İçerik |
 |---|---|
 | `ALU.dig` | ALU devresi (U407, U408, U503) + 3 test |
-| `TD8_SST39SF010_alu_lo.dig`, `TD8_SST39SF010_alu_hi.dig` | İki flash'ın alt devreleri; ALU tabloları içlerine gömülü (`ALU.dig` bunları kullanıyor, aynı klasörde durmalı) |
+| `TA8_SST39SF010_alu_lo.dig`, `TA8_SST39SF010_alu_hi.dig` | İki flash'ın alt devreleri; ALU tabloları içlerine gömülü (`ALU.dig` bunları kullanıyor, aynı klasörde durmalı) |
 | `M3_adres.dig` | M3 devresi (U301–U322 + U109, U209, U211, U501) + 4 test |
 | `images/alu_digital_ekran.png`, `images/m3_digital_ekran.png` | Devrelerin Digital'deki ekran görüntüleri |
 | `images/alu_devre.svg`, `images/m3_devre.svg` | Devrelerin tamamı, Digital'den SVG |
@@ -38,8 +38,8 @@ Hazırlayan: Abdurrahman
 | U503 74HC32 (1. kapı) | Carry birleştirme | Cnew = Clo OR Chi |
 
 - ALU'nun sol girişi A registerı (ACC0–7), sağ girişi doğrudan veri yolu (DB0–7). İşlem kodu kontrol kelimesinin ALUOP alanı (5 bit).
-- Flash içerikleri `sim/td8/alu.py`'nin ürettiği tablolar (`py gen_roms.py` → `build/alu_lo.bin`, `alu_hi.bin`); Digital dosyasına gömüldü, ayrıca dosya yüklemek gerekmiyor.
-- Bacak bağlantıları [TD8-baglanti-tablosu.md](../../Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md) bölüm M4 (U407, U408) ve AUX (U503) ile birebir aynı.
+- Flash içerikleri `sim/ta8/alu.py`'nin ürettiği tablolar (`py gen_roms.py` → `build/alu_lo.bin`, `alu_hi.bin`); Digital dosyasına gömüldü, ayrıca dosya yüklemek gerekmiyor.
+- Bacak bağlantıları [TA8-baglanti-tablosu.md](../../Tahadan-Abdurrahmana/TA8-baglanti-tablosu.md) bölüm M4 (U407, U408) ve AUX (U503) ile birebir aynı.
 
 ### Test 1: `py cli.py vectors alu -n 10` (Taha'nın istediği 10 satır)
 
@@ -130,7 +130,7 @@ Her CPU çevrimi testte 3 satır: kontroller CLK = 1 iken verilir (74HC191'in /C
 | ASRC = 0, 1, 2, 3 | AB = 1111, 2222, 3333, EFFD | 1111, 2222, 3333, EFFD |
 | BUSACK = 1 | Dört tampon kapalı, AB pull-up ile FFFF | FFFF. **Geçti** |
 
-Projenin çip seviyesi simülatörü (`sim/td8/hw/`) her adımda iki çipin aynı hatta aynı anda çıkış vermesini (bus çakışması) denetliyor: testler boyunca çakışma yok. Tek istisna açılışın ilk 18 ns'si: 74HC139'un çıkışları henüz oturmadan tamponlar kısa bir an birlikte açık görünüyor (gerçek devrede de açılışta olur, reset sürerken önemsiz).
+Projenin çip seviyesi simülatörü (`sim/ta8/hw/`) her adımda iki çipin aynı hatta aynı anda çıkış vermesini (bus çakışması) denetliyor: testler boyunca çakışma yok. Tek istisna açılışın ilk 18 ns'si: 74HC139'un çıkışları henüz oturmadan tamponlar kısa bir an birlikte açık görünüyor (gerçek devrede de açılışta olur, reset sürerken önemsiz).
 
 ![M3 test 4](images/m3_4_adres_yolu.png)
 

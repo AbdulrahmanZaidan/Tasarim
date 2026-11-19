@@ -9,7 +9,7 @@ Her `.dig` dosyasında bir modülün entegreleri ve test tablosu birlikte durur 
 | `m4_alu_tablo.dig` | M4: iki ALU flash'ı + 74HC32 | 10.000 vektör |
 | `m5_cozme.dig` | M5: adres çözme | 1.096 vektör |
 
-`TD8_SST39SF010_*.dig` dosyaları flash'ların içeriği; aynı klasörde durmaları gerekiyor.
+`TA8_SST39SF010_*.dig` dosyaları flash'ların içeriği; aynı klasörde durmaları gerekiyor.
 
 **Digital'de:** dosyayı aç → araç çubuğunun en sağındaki yeşil tikli düğme (testleri çalıştır). Açılan pencerede satırlar yeşilse test geçmiş demektir.
 

@@ -1,4 +1,6 @@
-# TD-8 haftalık raporları
+# TA-8 haftalık raporları
+
+Projenin adı TA-8: Taha ve Abdurrahman'ın baş harfleri, 8 bit. 19 Kasım'a kadar TD-8 adıyla anıldı; eski raporlar da yeni adla güncellendi.
 
 Her hafta sonunda `Abdurrahman/haftaN/` ve `Taha/haftaN/` klasörlerindeki çalışmalar birleştirilip buraya `haftaN.html` olarak konur. Danışmana gösterilen sayfa budur.
 

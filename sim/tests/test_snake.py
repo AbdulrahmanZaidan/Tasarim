@@ -1,6 +1,6 @@
 """examples/snake.c: yılan oyunu testleri.
 
-Oyun tdcc ile derlenir ve emülatörde (Bus(vga_model=True): VRAM penceresi ve kare
+Oyun tacc ile derlenir ve emülatörde (Bus(vga_model=True): VRAM penceresi ve kare
 zamanlaması açık) koşturulur. Beklenen her şey C kodundan bağımsız, basit bir
 Python modelinden gelir (aynı kurallar, aynı LFSR). Emülatörle model hamle hamle
 eşlenir: oyunun RAM'deki `hamle_sayisi` sayacı artınca hamle bitmiştir; o anda
@@ -21,10 +21,10 @@ from collections import deque
 from pathlib import Path
 from unittest import mock
 
-from td8.bus import COLS, FRAME_CYCLES, ROWS, STRIDE, VWR_END, VWR_START, Bus
-from td8.emu_micro import MicroEmu
-from td8.emu_ref import RefEmu
-from tdcc import build, code_size
+from ta8.bus import COLS, FRAME_CYCLES, ROWS, STRIDE, VWR_END, VWR_START, Bus
+from ta8.emu_micro import MicroEmu
+from ta8.emu_ref import RefEmu
+from tacc import build, code_size
 
 SIM = Path(__file__).resolve().parent.parent
 SNAKE = SIM / 'examples' / 'snake.c'
@@ -68,7 +68,7 @@ class Model:
     def __init__(self, hiz_bas=8, uzun_max=256, lfsr=0xACE1):
         self.hiz_bas, self.uzun_max, self.lfsr = hiz_bas, uzun_max, lfsr
         self.ekran = [[' '] * COLS for _ in range(ROWS)]
-        self.yaz(0, 1, 'TD-8 YILAN OYUNU')
+        self.yaz(0, 1, 'TA-8 YILAN OYUNU')
         self.yaz(0, 30, 'SKOR')
         for c in range(COLS):
             self.ekran[1][c] = self.ekran[29][c] = '#'
@@ -401,7 +401,7 @@ class TestOyun(SnakeTest):
         oyun, model = Oyun(), Model()
         self.esit(oyun, model, 'açılış')
         ekran = oyun.ekran()
-        self.assertEqual(ekran[0], ' TD-8 YILAN OYUNU             SKOR 0000 ')
+        self.assertEqual(ekran[0], ' TA-8 YILAN OYUNU             SKOR 0000 ')
         self.assertEqual(ekran[1], '#' * 40)
         self.assertEqual(ekran[15][17:22], ' ooO ')
         self.assertEqual(ekran[29], '#' * 40)
@@ -751,7 +751,7 @@ class TestPlay(unittest.TestCase):
             rc = play.main([str(SNAKE), '--demo', '--frames', '240', '--speed', '0'])
         out = buf.getvalue()
         self.assertEqual(rc, 0)
-        self.assertIn('| TD-8 YILAN OYUNU             SKOR 0002 |', out)
+        self.assertIn('| TA-8 YILAN OYUNU             SKOR 0002 |', out)
         self.assertIn('LED ......*. ($02)   kare 240', out)
         self.assertNotIn('OYUN BITTI', out)
 

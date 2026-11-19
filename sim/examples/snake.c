@@ -1,6 +1,6 @@
-/* snake.c: TD-8 yılan oyunu (SISTEM-PLANI 11.4), projenin final demosu.
+/* snake.c: TA-8 yılan oyunu (SISTEM-PLANI 11.4), projenin final demosu.
  *
- *   py -3 -m tdcc examples/snake.c -o build/snake_c.asm     derle
+ *   py -3 -m tacc examples/snake.c -o build/snake_c.asm     derle
  *   py -3 play.py examples/snake.c                           klavyeyle oyna
  *
  * Ekran (40 x 30 karakter):
@@ -336,7 +336,7 @@ void ilk_kurulum(void)
     }
 
     /* ekran */
-    ekrana(BASLIK_SATIR * STRIDE + 1, "TD-8 YILAN OYUNU");
+    ekrana(BASLIK_SATIR * STRIDE + 1, "TA-8 YILAN OYUNU");
     ekrana(BASLIK_SATIR * STRIDE + SKOR_SUTUN - 5, "SKOR");
     v = VRAM + UST_DUVAR * STRIDE;
     for (k = 0; k < COLS; k++) {

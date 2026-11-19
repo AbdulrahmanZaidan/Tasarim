@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>M3 Adres registerları
-TD-8: td8.hw.digital ile üretildi (22 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (22 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M3</string></entry><entry><string>RectWidth</string><int>130</int></entry><entry><string>RectHeight</string><int>106</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="640" y="0"/></visualElement>

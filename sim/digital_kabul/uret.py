@@ -15,8 +15,8 @@ from pathlib import Path
 SIM = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SIM))
 
-from td8 import vectors                                  # noqa: E402
-from td8.hw import digital as dg                         # noqa: E402
+from ta8 import vectors                                  # noqa: E402
+from ta8.hw import digital as dg                         # noqa: E402
 from tests import test_hw_digital as t                   # noqa: E402
 
 OUT = Path(__file__).resolve().parent

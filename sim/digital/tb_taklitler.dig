@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>Test tezgâhı taklitleri (M6/M7 yerine; entegre sayımına girmez)
-TD-8: td8.hw.digital ile üretildi (2 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (2 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>TB</string></entry><entry><string>RectWidth</string><int>43</int></entry><entry><string>RectHeight</string><int>41</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="620" y="0"/></visualElement>
@@ -125,7 +125,7 @@ TD-8: td8.hw.digital ile üretildi (2 çip). Elle düzenlemeyin; Python netlist'
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB6</string></entry></elementAttributes><pos x="400" y="240"/></visualElement>
     <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>DB7_o</string></entry></elementAttributes><pos x="400" y="280"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>DB7</string></entry></elementAttributes><pos x="400" y="280"/></visualElement>
-    <visualElement><elementName>TD8_CY62256.dig</elementName><elementAttributes><entry><string>Label</string><string>X1</string></entry></elementAttributes><pos x="740" y="160"/></visualElement>
+    <visualElement><elementName>TA8_CY62256.dig</elementName><elementAttributes><entry><string>Label</string><string>X1</string></entry></elementAttributes><pos x="740" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>X1  CY62256</string></entry></elementAttributes><pos x="740" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>VRAM taklidi (M6 yok): yalnız …</string></entry></elementAttributes><pos x="740" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="740" y="160"/></visualElement>

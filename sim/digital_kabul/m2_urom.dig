@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>M2: uROM0–2 + kontrol latch'i (U201–U206)
-TD-8: td8.hw.digital ile üretildi (6 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (6 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M2</string></entry><entry><string>RectWidth</string><int>127</int></entry><entry><string>RectHeight</string><int>45</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="640" y="0"/></visualElement>
@@ -1076,7 +1076,7 @@ STEP IR Z C N V RESET_s_n LCLK CW0 CW1 CW2
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>NEXT_L</string></entry></elementAttributes><pos x="420" y="520"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>HALT_L</string></entry></elementAttributes><pos x="420" y="540"/></visualElement>
     <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>CW2</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="440" y="400"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_urom0.dig</elementName><elementAttributes><entry><string>Label</string><string>U201</string></entry></elementAttributes><pos x="780" y="160"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_urom0.dig</elementName><elementAttributes><entry><string>Label</string><string>U201</string></entry></elementAttributes><pos x="780" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U201  SST39SF010</string></entry></elementAttributes><pos x="780" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>uROM0 (4.1): A0–3 STEP, A4–11…</string></entry></elementAttributes><pos x="780" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="780" y="200"/></visualElement>
@@ -1109,7 +1109,7 @@ STEP IR Z C N V RESET_s_n LCLK CW0 CW1 CW2
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>N</string></entry></elementAttributes><pos x="940" y="280"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="940" y="200"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="940" y="160"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_urom1.dig</elementName><elementAttributes><entry><string>Label</string><string>U202</string></entry></elementAttributes><pos x="1180" y="160"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_urom1.dig</elementName><elementAttributes><entry><string>Label</string><string>U202</string></entry></elementAttributes><pos x="1180" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U202  SST39SF010</string></entry></elementAttributes><pos x="1180" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>uROM1 (4.1): A0–3 STEP, A4–11…</string></entry></elementAttributes><pos x="1180" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1180" y="200"/></visualElement>
@@ -1142,7 +1142,7 @@ STEP IR Z C N V RESET_s_n LCLK CW0 CW1 CW2
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>N</string></entry></elementAttributes><pos x="1340" y="280"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1340" y="200"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1340" y="160"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_urom2.dig</elementName><elementAttributes><entry><string>Label</string><string>U203</string></entry></elementAttributes><pos x="1580" y="160"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_urom2.dig</elementName><elementAttributes><entry><string>Label</string><string>U203</string></entry></elementAttributes><pos x="1580" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U203  SST39SF010</string></entry></elementAttributes><pos x="1580" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>uROM2 (4.1): A0–3 STEP, A4–11…</string></entry></elementAttributes><pos x="1580" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1580" y="200"/></visualElement>

@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>M2 Kontrol ünitesi
-TD-8: td8.hw.digital ile üretildi (13 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (13 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M2</string></entry><entry><string>RectWidth</string><int>127</int></entry><entry><string>RectHeight</string><int>93</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="720" y="0"/></visualElement>
@@ -245,7 +245,7 @@ TD-8: td8.hw.digital ile üretildi (13 çip). Elle düzenlemeyin; Python netlist
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>PCLD_n</string></entry></elementAttributes><pos x="460" y="1880"/></visualElement>
     <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>SPCNT_n</string></entry></elementAttributes><pos x="460" y="1920"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SPCNT_n</string></entry></elementAttributes><pos x="460" y="1920"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_urom0.dig</elementName><elementAttributes><entry><string>Label</string><string>U201</string></entry></elementAttributes><pos x="860" y="160"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_urom0.dig</elementName><elementAttributes><entry><string>Label</string><string>U201</string></entry></elementAttributes><pos x="860" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U201  SST39SF010</string></entry></elementAttributes><pos x="860" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>uROM0 (4.1): A0–3 STEP, A4–11…</string></entry></elementAttributes><pos x="860" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="860" y="200"/></visualElement>
@@ -278,7 +278,7 @@ TD-8: td8.hw.digital ile üretildi (13 çip). Elle düzenlemeyin; Python netlist
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>N</string></entry></elementAttributes><pos x="1020" y="280"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1020" y="200"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1020" y="160"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_urom1.dig</elementName><elementAttributes><entry><string>Label</string><string>U202</string></entry></elementAttributes><pos x="1260" y="160"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_urom1.dig</elementName><elementAttributes><entry><string>Label</string><string>U202</string></entry></elementAttributes><pos x="1260" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U202  SST39SF010</string></entry></elementAttributes><pos x="1260" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>uROM1 (4.1): A0–3 STEP, A4–11…</string></entry></elementAttributes><pos x="1260" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1260" y="200"/></visualElement>
@@ -311,7 +311,7 @@ TD-8: td8.hw.digital ile üretildi (13 çip). Elle düzenlemeyin; Python netlist
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>N</string></entry></elementAttributes><pos x="1420" y="280"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1420" y="200"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1420" y="160"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_urom2.dig</elementName><elementAttributes><entry><string>Label</string><string>U203</string></entry></elementAttributes><pos x="1660" y="160"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_urom2.dig</elementName><elementAttributes><entry><string>Label</string><string>U203</string></entry></elementAttributes><pos x="1660" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U203  SST39SF010</string></entry></elementAttributes><pos x="1660" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>uROM2 (4.1): A0–3 STEP, A4–11…</string></entry></elementAttributes><pos x="1660" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="1660" y="200"/></visualElement>

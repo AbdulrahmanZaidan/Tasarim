@@ -2,7 +2,7 @@
 
 import unittest
 
-from td8 import alu, isa
+from ta8 import alu, isa
 
 
 class TestAlu(unittest.TestCase):

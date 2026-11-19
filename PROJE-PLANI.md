@@ -10,7 +10,7 @@
 |---|---|
 | Ekip | 2 kişi |
 | Bütçe | 30.000 TL |
-| İşlemci | Kendi komut setimiz **TD-8**, 74HC entegrelerle kurulan mikrokodlu CPU (aşağıdaki B yolu). **Danışman onayladı.** |
+| İşlemci | Kendi komut setimiz **TA-8** (TA: Taha ve Abdurrahman, 8 bit; 19 Kasım'a kadar TD-8), 74HC entegrelerle kurulan mikrokodlu CPU (aşağıdaki B yolu). **Danışman onayladı.** |
 | FPGA | Kullanılmayacak |
 | Ölçüm ve programlama | Osiloskop var. Okulda **ayarlı güç kaynağı ve EEPROM programlayıcı** var. |
 | Takvim | Simülasyon 27 Ekim 2026 – 3 Ocak 2027 (10 hafta). Breadboard'da yapım **Ocak 2027**'de başlıyor; süre **Haziran 2027**'ye kadar (~23 hafta). |
@@ -42,7 +42,7 @@
 
 ## 2. Önerilen mimari (B yolu)
 
-> **Not:** Bu bölüm ilk öneri. Kesinleşen tasarım (TD-8) için **13. bölüme** bakın. Farklar:
+> **Not:** Bu bölüm ilk öneri. Kesinleşen tasarım (TA-8) için **13. bölüme** bakın. Farklar:
 > - B registerı yok;
 > - SP 8-bit ve EF sayfasında;
 > - stack'e göre adresleme yerine statik çerçeve kullanılıyor;
@@ -197,7 +197,7 @@ Jüriye en azından 1. seviyesi kesin çalışan bir sistemle gidersiniz.
 
 Tek bir simülasyon yetmez. Aynı programı farklı seviyelerde çalıştırıp çıktıları karşılaştırırsınız:
 
-1. **Tek doğruluk kaynağı:** Komut seti ve mikrokod tablosu tek bir dosyada dursun. Bu dosya artık [sim/td8/isa.py](sim/td8/isa.py). Python araçları bu dosyadan şunları üretir: mikrokod ROM imajları, ALU tabloları, assembler'ın komut tablosu, emülatör. Böylece "emülatörde çalışıyor, donanımda çalışmıyor" uyumsuzlukları baştan önlenir.
+1. **Tek doğruluk kaynağı:** Komut seti ve mikrokod tablosu tek bir dosyada dursun. Bu dosya artık [sim/ta8/isa.py](sim/ta8/isa.py). Python araçları bu dosyadan şunları üretir: mikrokod ROM imajları, ALU tabloları, assembler'ın komut tablosu, emülatör. Böylece "emülatörde çalışıyor, donanımda çalışmıyor" uyumsuzlukları baştan önlenir.
 2. **Komut seviyesinde emülatör (Python):** Hızlıdır, derleyici çıktısını burada test edersiniz. Her komuttan sonra bir iz (trace) satırı yazar: PC, A, B, X, SP, flag'ler.
 3. **Mikroadım seviyesinde emülatör:** Emülatör doğrudan mikrokod ROM imajını yorumlayarak çalışsın. Mikrokod hatalarını donanımdan önce bulur ve aynı formatta mikroadım izi üretir.
 4. **Çip seviyesinde Digital simülasyonu:** Her modül ayrı bir alt devre olsun (her biri ileride bir veya birkaç breadboard). Her modülün kendi test vektörleri olsun. Sonra tam bilgisayar Digital'de aynı `.bin` dosyasını çalıştırır ve izi emülatörün iziyle karşılaştırılır.
@@ -365,7 +365,7 @@ Simülasyon aşamasında Kişi 2'nin listesi daha uzun görünür. Yapım aşama
 ## 12. Açık noktalar ve sonraki adım
 
 **Tamamlananlar**
-- Komut seti v0 (TD-8): 13. bölüm.
+- Komut seti v0 (TA-8): 13. bölüm.
 - Bütçe: 14. bölüm.
 - Doğrulama: [tasarim-taslaklari/DOGRULAMA.md](tasarim-taslaklari/DOGRULAMA.md).
 
@@ -377,13 +377,13 @@ Simülasyon aşamasında Kişi 2'nin listesi daha uzun görünür. Yapım aşama
 - Yapım Ocak'ta başlıyor; süre Haziran'a kadar.
 
 **Sonraki adım**
-- Simülasyona başlandı. Komut seti artık `isa.yaml` yerine [sim/td8/isa.py](sim/td8/isa.py) içinde tanımlı; ROM imajları, emülatörler ve testler hazır ([sim/README.md](sim/README.md)).
+- Simülasyona başlandı. Komut seti artık `isa.yaml` yerine [sim/ta8/isa.py](sim/ta8/isa.py) içinde tanımlı; ROM imajları, emülatörler ve testler hazır ([sim/README.md](sim/README.md)).
 - Digital'de ilk modül: 4 fazlı saat (SISTEM-PLANI.md bölüm 12).
 - Stoğu azalan parçaları alın (15. bölüm).
 
 ---
 
-## 13. Komut seti v0: TD-8 (özet)
+## 13. Komut seti v0: TA-8 (özet)
 
 Ayrıntılı tasarım İngilizce olarak [tasarim-taslaklari/ISA-v0-sentez.md](tasarim-taslaklari/ISA-v0-sentez.md) dosyasında: tüm mikroadım tabloları, kontrol kelimesinin bitleri, ALU işlem kodları ve zamanlama analizleri. Üç ayrı tasarım önerisi hazırlandı (en az çip / C dostu / hata ayıklanabilir). Hata ayıklanabilir öneri temel alındı, diğer ikisinin iyi fikirleri eklendi ve bulunan hatalar düzeltildi. Düzeltmelerin ve Türkiye'deki parça durumunun ayrıntıları [tasarim-taslaklari/DOGRULAMA.md](tasarim-taslaklari/DOGRULAMA.md) dosyasında.
 

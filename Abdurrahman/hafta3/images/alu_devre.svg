@@ -610,7 +610,7 @@
 <path d="M 810,750 L 818,750 L 818,770 L 810,770" stroke="#000000" stroke-width="4.0" fill="none"/>
 <text text-anchor="end" x="805.0" y="766.75" fill="#808080" style="font-size:18px">DQ3</text>
 <path d="M 670,140 L 730,140 C 730,146 734,150 740,150 C 746,150 750,146 750,140 L 810,140 L 810,780 L 670,780 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
-<text text-anchor="end" x="740.0" y="179.0" fill="#000000" style="font-size:24px" transform="rotate(-90,740.0,170.0)" >TD8_SST39SF010_alu_lo</text>
+<text text-anchor="end" x="740.0" y="179.0" fill="#000000" style="font-size:24px" transform="rotate(-90,740.0,170.0)" >TA8_SST39SF010_alu_lo</text>
 <text text-anchor="middle" x="740.0" y="808.0" fill="#000000" style="font-size:24px">U407</text>
 <circle cx="660.0" cy="200.0" r="2.0" stroke="#0000b2" stroke-width="4.0" fill="#0000b2" />
 <circle cx="660.0" cy="240.0" r="2.0" stroke="#0000b2" stroke-width="4.0" fill="#0000b2" />
@@ -858,7 +858,7 @@
 <path d="M 1250,750 L 1258,750 L 1258,770 L 1250,770" stroke="#000000" stroke-width="4.0" fill="none"/>
 <text text-anchor="end" x="1245.0" y="766.75" fill="#808080" style="font-size:18px">DQ3</text>
 <path d="M 1110,140 L 1170,140 C 1170,146 1174,150 1180,150 C 1186,150 1190,146 1190,140 L 1250,140 L 1250,780 L 1110,780 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
-<text text-anchor="end" x="1180.0" y="179.0" fill="#000000" style="font-size:24px" transform="rotate(-90,1180.0,170.0)" >TD8_SST39SF010_alu_hi</text>
+<text text-anchor="end" x="1180.0" y="179.0" fill="#000000" style="font-size:24px" transform="rotate(-90,1180.0,170.0)" >TA8_SST39SF010_alu_hi</text>
 <text text-anchor="middle" x="1180.0" y="808.0" fill="#000000" style="font-size:24px">U408</text>
 <circle cx="1100.0" cy="200.0" r="2.0" stroke="#0000b2" stroke-width="4.0" fill="#0000b2" />
 <circle cx="1100.0" cy="240.0" r="2.0" stroke="#0000b2" stroke-width="4.0" fill="#0000b2" />

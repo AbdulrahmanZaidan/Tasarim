@@ -2,7 +2,7 @@
 
 import unittest
 
-from td8 import vga
+from ta8 import vga
 
 
 def bit(word, n):

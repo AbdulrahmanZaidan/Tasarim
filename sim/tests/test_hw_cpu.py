@@ -1,10 +1,10 @@
-"""Çip seviyesindeki TD-8 netlist'i (td8.hw.cpu) ile MicroEmu'nun çevrim çevrim karşılaştırması.
+"""Çip seviyesindeki TA-8 netlist'i (ta8.hw.cpu) ile MicroEmu'nun çevrim çevrim karşılaştırması.
 
 K2 kilometre taşının yazılım tarafı: bütün CPU, gecikmeli simülatörde, emülatörle sıfır fark.
 
 Çalıştırma (sim/ klasöründen):
     py -3 -m unittest tests.test_hw_cpu -v
-    TD8_SLOW=1 py -3 -m unittest tests.test_hw_cpu -v     fibonacci max köşe ve 1.5 MHz de
+    TA8_SLOW=1 py -3 -m unittest tests.test_hw_cpu -v     fibonacci max köşe ve 1.5 MHz de
 
 Sınıflar: 1 sıfır fark (merhaba, komut_testi, __mul16/__divmod16; typ ve max), 2 fibonacci,
 3 açılış/reset, 4 SP sınırları, 5 HALT/GO ve adımlama, 6 WAIT, 7 ihlaller, 8 entegre sayımı,
@@ -18,15 +18,15 @@ from collections import Counter
 from functools import lru_cache
 from pathlib import Path
 
-from td8 import asm, isa
-from td8.bus import Bus
-from td8.emu_micro import MicroEmu
-from td8.hw import cpu, wiring
-from td8.hw.harness import (HwCpu, classify_violations, compare, emu_like, emu_state,
+from ta8 import asm, isa
+from ta8.bus import Bus
+from ta8.emu_micro import MicroEmu
+from ta8.hw import cpu, wiring
+from ta8.hw.harness import (HwCpu, classify_violations, compare, emu_like, emu_state,
                             emu_vram_writes, handover_summary, run_and_compare)
 
 EXAMPLES = Path(__file__).resolve().parent.parent / 'examples'
-SLOW = os.environ.get('TD8_SLOW') == '1'
+SLOW = os.environ.get('TA8_SLOW') == '1'
 
 MULDIV = """
         .org 0
@@ -185,7 +185,7 @@ class TestZeroDiff(HwCase):
             hw, emu = self.check('merhaba', corner)
             self.assertEqual(len(hw.trace), 573)
             self.assertEqual(hw.leds(), 0x55)
-            self.assertEqual(hw.vram()[64 + 2:64 + 16], b'MERHABA, TD-8!')
+            self.assertEqual(hw.vram()[64 + 2:64 + 16], b'MERHABA, TA-8!')
 
     def test_komut_testi(self):
         for corner in ('typ', 'max'):
@@ -575,7 +575,7 @@ class TestWait(HwCase):
             self.assertGreater(hw.stall_ns, 0, f'{corner}: hiç beklemedi')
             self.assertEqual(hw.wait_errors, [], f'{corner}: pencere kapalıyken yazma')
             self.assertEqual([(a, d) for a, d, _ in hw.vram_writes], emu_vram_writes(emu))
-            self.assertEqual(hw.vram()[64 + 2:64 + 16], b'MERHABA, TD-8!')
+            self.assertEqual(hw.vram()[64 + 2:64 + 16], b'MERHABA, TA-8!')
             self.assertEqual(classify_violations(hw)['diger'], [], corner)
 
     def test_plan_version_misses_wait_at_max(self):

@@ -1,10 +1,10 @@
 """M6 VGA zamanlaması (SISTEM-PLANI 8.1–8.2): netlist, Digital dosyası, testler, ölçümler.
 
-Bu modül projenin netlist'inde (sim/td8/hw/cpu.py) henüz yok; burada plandan çizildi.
-Çip modelleri (td8.hw.chips) ve Digital dışa aktarıcısı (td8.hw.digital) projenin araçları.
+Bu modül projenin netlist'inde (sim/ta8/hw/cpu.py) henüz yok; burada plandan çizildi.
+Çip modelleri (ta8.hw.chips) ve Digital dışa aktarıcısı (ta8.hw.digital) projenin araçları.
 
 Çalıştırma (depo kökünden):  py Abdurrahman/hafta5/m6_uret.py
-Digital'i bulmak için TD8_DIGITAL_HOME (Digital.jar'ın üst klasörü) ayarlı olmalı.
+Digital'i bulmak için TA8_DIGITAL_HOME (Digital.jar'ın üst klasörü) ayarlı olmalı.
 """
 import json
 import os
@@ -15,10 +15,10 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(REPO / 'sim'))
-from td8 import vga                                                  # noqa: E402
-from td8.hw import HC04, HC20, HC74, HC163, HC377, SST39SF010          # noqa: E402
-from td8.hw import digital as dg                                      # noqa: E402
-from td8.hw.kernel import Sim                                         # noqa: E402
+from ta8 import vga                                                  # noqa: E402
+from ta8.hw import HC04, HC20, HC74, HC163, HC377, SST39SF010          # noqa: E402
+from ta8.hw import digital as dg                                      # noqa: E402
+from ta8.hw.kernel import Sim                                         # noqa: E402
 
 NAME = 'M6_vga_zamanlama'
 M = 'M6'
@@ -69,7 +69,7 @@ def chips(dclk_ext=False):
             'DQ0': 'R_HSYNC_n', 'DQ1': 'R_VSYNC_n', 'DQ2': 'R_BLANK_n', 'DQ3': 'R_BUFEN_n',
             'DQ4': '/HEND', 'DQ5': '/VEND', 'DQ6': 'R_VMUX', 'DQ7': 'R_VWR',
         }, data=bytes(vga.timing_rom()), module=M,
-            note='Zamanlama ROM\'u (8.2): A0–5 = H, A6–15 = V, A16 = SLOW. İçerik td8.vga.timing_rom().'),
+            note='Zamanlama ROM\'u (8.2): A0–5 = H, A6–15 = V, A16 = SLOW. İçerik ta8.vga.timing_rom().'),
         HC377('U711', {'/E': 'CCLK', 'CP': 'DCLK',
                        **{f'D{i}': n for i, n in enumerate(['R_HSYNC_n', 'R_VSYNC_n', 'R_BLANK_n',
                                                              'R_BUFEN_n', '/HEND', '/VEND', 'R_VMUX', 'R_VWR'])},

@@ -8,7 +8,7 @@
 | Devre test vektörü üreticisi | 5 çeşit vektör: ALU, mikrokod, kod çözücüler, adres çözme, bütün işlemcinin çevrim çevrim izi |
 | Proteus için ROM dosyaları | `sim/build/proteus/` altında 64 KB'lık `.bin` ve Intel HEX |
 | Abdurrahman'ın soruları | İkisi de cevaplandı: ROM dosyası biçimi ve sinyal adları |
-| C derleyicisi `tdcc` | Üzerinde çalışılıyor; 6. hafta notunda anlatılacak |
+| C derleyicisi `tacc` | Üzerinde çalışılıyor; 6. hafta notunda anlatılacak |
 | Otomatik testler | 34'ten 54'e çıktı, hepsi geçiyor |
 
 ## 1. İndirilen programlar
@@ -20,7 +20,7 @@ Kurulum yeri: `Desktop\bitirme ödevi\araclar\` (deponun dışında). Yönetici 
 | Eclipse Temurin JDK | 21.0.13 | Digital'in çalışması için Java |
 | Digital (hneemann) | 0.31 | Devre simülatörü: 74xx kütüphanesi, test bileşeni |
 
-- Masaüstündeki **"Digital (TD-8)"** kısayolu Digital'i açar.
+- Masaüstündeki **"Digital (TA-8)"** kısayolu Digital'i açar.
 - Komut satırından örnek devrelerle çalıştığı doğrulandı: `araclar\digital-cli.cmd test -circ devre.dig`.
 - Plandaki açık soru kapandı: kullandığımız 23 çeşit 74HC entegresinin hepsi Digital'in kütüphanesinde var (191, 166, 540 ve 688 dahil).
 - Abdurrahman Proteus kullanıyor. Proteus ücretli olduğu için buraya kurulmadı; onun için Proteus'a uygun ROM dosyaları hazırlandı (bölüm 3).
@@ -51,7 +51,7 @@ OP A B Cin Zin R Z C N V
 Her satır bir deneme: soldaki beşi giriş (işlem kodu, A, B, gelen elde ve Z bayrağı), sağdaki beşi beklenen çıkış (sonuç ve Z, C, N, V bayrakları).
 
 - `--format csv` ile Excel'de açılabilen tablo da üretir.
-- **İz** (trace): bir programın her çevriminde adres yolunda, veri yolunda ve kontrol hatlarında ne olduğunun kaydı. İki izi karşılaştırıp **farkın başladığı ilk çevrimi** söyleyen bir fonksiyon da var (`td8/vectors.py`, `compare_traces`); breadboard'da Arduino'nun kaydettiği iz de bununla karşılaştırılacak.
+- **İz** (trace): bir programın her çevriminde adres yolunda, veri yolunda ve kontrol hatlarında ne olduğunun kaydı. İki izi karşılaştırıp **farkın başladığı ilk çevrimi** söyleyen bir fonksiyon da var (`ta8/vectors.py`, `compare_traces`); breadboard'da Arduino'nun kaydettiği iz de bununla karşılaştırılacak.
 
 ## 3. Proteus için ROM dosyaları
 
@@ -72,9 +72,9 @@ Proteus tarafı henüz denenmedi (Proteus bende kurulu değil; bilgi forumlardan
 ## 4. Abdurrahman'ın soruları
 
 - **Proteus'ta ROM'lara `.bin` mi `.hex` mi?** `sim/build/proteus/` klasöründeki `.bin`; olmazsa aynı adlı `.hex` (bölüm 3).
-- **Sinyal adları şemadaki etiketlerle aynı olsun:** bunun için sinyal adları ve bacak bağlantıları listesi iletildi (`Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md`).
+- **Sinyal adları şemadaki etiketlerle aynı olsun:** bunun için sinyal adları ve bacak bağlantıları listesi iletildi (`Tahadan-Abdurrahmana/TA8-baglanti-tablosu.md`).
 
-## 5. C derleyicisi: `tdcc`
+## 5. C derleyicisi: `tacc`
 
 Üzerinde çalışılıyor; 6. hafta notunda anlatılacak.
 

@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>M5 Bellek + I/O
-TD-8: td8.hw.digital ile üretildi (6 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (6 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M5</string></entry><entry><string>RectWidth</string><int>120</int></entry><entry><string>RectHeight</string><int>45</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="640" y="0"/></visualElement>
@@ -173,7 +173,7 @@ TD-8: td8.hw.digital ile üretildi (6 çip). Elle düzenlemeyin; Python netlist'
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>LED6</string></entry></elementAttributes><pos x="400" y="640"/></visualElement>
     <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>LED7</string></entry></elementAttributes><pos x="400" y="680"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>LED7</string></entry></elementAttributes><pos x="400" y="680"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_prog_merhaba.dig</elementName><elementAttributes><entry><string>Label</string><string>U601</string></entry></elementAttributes><pos x="760" y="160"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_prog_merhaba.dig</elementName><elementAttributes><entry><string>Label</string><string>U601</string></entry></elementAttributes><pos x="760" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U601  SST39SF010</string></entry></elementAttributes><pos x="760" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>Program ROM (7.1): A0–14 …</string></entry></elementAttributes><pos x="760" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>GND</string></entry></elementAttributes><pos x="760" y="200"/></visualElement>
@@ -206,7 +206,7 @@ TD-8: td8.hw.digital ile üretildi (6 çip). Elle düzenlemeyin; Python netlist'
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>AB14</string></entry></elementAttributes><pos x="920" y="280"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="920" y="200"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="920" y="160"/></visualElement>
-    <visualElement><elementName>TD8_CY62256.dig</elementName><elementAttributes><entry><string>Label</string><string>U602</string></entry></elementAttributes><pos x="1120" y="160"/></visualElement>
+    <visualElement><elementName>TA8_CY62256.dig</elementName><elementAttributes><entry><string>Label</string><string>U602</string></entry></elementAttributes><pos x="1120" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U602  CY62256</string></entry></elementAttributes><pos x="1120" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>RAM CY62256-70 (7.1): 8000–EF…</string></entry></elementAttributes><pos x="1120" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>AB14</string></entry></elementAttributes><pos x="1120" y="160"/></visualElement>

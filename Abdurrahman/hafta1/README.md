@@ -2,7 +2,7 @@
 
 Hazırlayan: Abdurrahman
 
-> **Not:** Devre elle çizilmedi. `.dig` dosyası projenin netlist'inden (`sim/td8/hw/cpu.py`, Taha) Taha'nın Digital aracıyla (`sim/td8/hw/digital.py`) üretildi; bağlantılar `sim/digital/` altındaki dosyalarla aynı. Bu klasörde benim eklediklerim: testler, dalga şekilleri, ekran görüntüleri ve bu rapor.
+> **Not:** Devre elle çizilmedi. `.dig` dosyası projenin netlist'inden (`sim/ta8/hw/cpu.py`, Taha) Taha'nın Digital aracıyla (`sim/ta8/hw/digital.py`) üretildi; bağlantılar `sim/digital/` altındaki dosyalarla aynı. Bu klasörde benim eklediklerim: testler, dalga şekilleri, ekran görüntüleri ve bu rapor.
 
 ## Özet
 
@@ -38,7 +38,7 @@ Hazırlayan: Abdurrahman
 | U110 74HC74 | BRK ve BUSACK flip-flop'ları | 3.3 |
 | U111 74HC175 | /BUSREQ senkronlayıcısı | 3.3 |
 
-Bacak bağlantıları ve sinyal adları [TD8-baglanti-tablosu.md](../../Tahadan-Abdurrahmana/TD8-baglanti-tablosu.md) bölüm M1 ile birebir aynı (kaynak: projenin bağlantı listesi `sim/td8/hw/cpu.py`). Böylece modüller birleştirilirken ad uyuşmazlığı olmuyor.
+Bacak bağlantıları ve sinyal adları [TA8-baglanti-tablosu.md](../../Tahadan-Abdurrahmana/TA8-baglanti-tablosu.md) bölüm M1 ile birebir aynı (kaynak: projenin bağlantı listesi `sim/ta8/hw/cpu.py`). Böylece modüller birleştirilirken ad uyuşmazlığı olmuyor.
 
 Fazlar (Q1 Q2): **A = 00, B = 10, C = 11, D = 01**. MCLK 4 MHz, her faz 250 ns, CPU çevrimi 1 µs.
 

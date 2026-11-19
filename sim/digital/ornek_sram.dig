@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>CY62256: /WE darbesiyle yaz, /OE ile oku
-TD-8: td8.hw.digital ile üretildi (1 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (1 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M5</string></entry><entry><string>RectWidth</string><int>24</int></entry><entry><string>RectHeight</string><int>41</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="460" y="0"/></visualElement>
@@ -172,7 +172,7 @@ TD-8: td8.hw.digital ile üretildi (1 çip). Elle düzenlemeyin; Python netlist'
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>D6</string></entry></elementAttributes><pos x="260" y="120"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>D7</string></entry></elementAttributes><pos x="260" y="140"/></visualElement>
     <visualElement><elementName>Out</elementName><elementAttributes><entry><string>Label</string><string>Q</string></entry><entry><string>Bits</string><int>8</int></entry></elementAttributes><pos x="280" y="0"/></visualElement>
-    <visualElement><elementName>TD8_CY62256.dig</elementName><elementAttributes><entry><string>Label</string><string>U1</string></entry></elementAttributes><pos x="600" y="160"/></visualElement>
+    <visualElement><elementName>TA8_CY62256.dig</elementName><elementAttributes><entry><string>Label</string><string>U1</string></entry></elementAttributes><pos x="600" y="160"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U1  CY62256</string></entry></elementAttributes><pos x="600" y="80"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>RAM</string></entry></elementAttributes><pos x="600" y="110"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>ADDR14</string></entry></elementAttributes><pos x="600" y="160"/></visualElement>

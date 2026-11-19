@@ -1,6 +1,6 @@
-; crt0.asm: tdcc ile derlenen C programlarının reset girişi (SISTEM-PLANI 11.3).
+; crt0.asm: tacc ile derlenen C programlarının reset girişi (SISTEM-PLANI 11.3).
 ;
-; tdcc'nin ürettiği assembly bu dosyayı en başta .include eder. Derleyici şu
+; tacc'nin ürettiği assembly bu dosyayı en başta .include eder. Derleyici şu
 ; sembolleri tanımlar:
 ;   __data_rom   .data başlangıç değerlerinin ROM'daki kopyası
 ;   __data_ram   .data'nın RAM'deki yeri        __data_size  byte sayısı

@@ -163,7 +163,7 @@ Grafts:
 
 # STEP 2: Unified specification "ISA v0"
 
-Name: **TD-8**. Base: P3, with grafts from P1 and P2 and all the fixes above.
+Name: **TA-8**. Base: P3, with grafts from P1 and P2 and all the fixes above.
 
 ## 1. Programmer's model
 

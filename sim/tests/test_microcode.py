@@ -2,7 +2,7 @@
 
 import unittest
 
-from td8 import isa, microcode
+from ta8 import isa, microcode
 
 
 class TestMicrocode(unittest.TestCase):

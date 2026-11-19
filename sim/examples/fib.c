@@ -2,7 +2,7 @@
  * Sayılar sağa yaslı 5 hane yazılır; bölme/kalan runtime'a gider (__divmod16).
  * Sonuçlar ayrıca fib[] dizisinde kalır; LED'lere terim sayısı (25) yazılır.
  *
- *   py -3 -m tdcc examples/fib.c -o build/fib_c.asm --run
+ *   py -3 -m tacc examples/fib.c -o build/fib_c.asm --run
  */
 #include "hw.h"
 

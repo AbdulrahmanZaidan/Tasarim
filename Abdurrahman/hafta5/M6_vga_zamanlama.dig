@@ -3,7 +3,7 @@
   <version>2</version>
   <attributes>
     <entry><string>Description</string><string>M6 VGA zamanlaması: saatler, nokta/karakter/satır sayaçları, zamanlama ROM'u, T1 (Abdurrahman, hafta 5)
-TD-8: td8.hw.digital ile üretildi (11 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
+TA-8: ta8.hw.digital ile üretildi (11 çip). Elle düzenlemeyin; Python netlist'inden yeniden üretin.</string></entry>
   </attributes>
   <visualElements>
     <visualElement><elementName>Rectangle</elementName><elementAttributes><entry><string>Label</string><string>M6</string></entry><entry><string>RectWidth</string><int>122</int></entry><entry><string>RectHeight</string><int>68</int></entry><entry><string>textFontSize</string><int>24</int></entry></elementAttributes><pos x="580" y="0"/></visualElement>
@@ -1896,7 +1896,7 @@ SLOW OSC25 DOT DCLK CCLK LD H V HSYNC_n VSYNC_n BLANK_n BUFEN_n VMUX VWR HEND_n 
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>V9</string></entry></elementAttributes><pos x="1200" y="740"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>V8</string></entry></elementAttributes><pos x="1200" y="700"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>NetName</string><string>VCC</string></entry></elementAttributes><pos x="1200" y="620"/></visualElement>
-    <visualElement><elementName>TD8_SST39SF010_vga_zamanlama.dig</elementName><elementAttributes><entry><string>Label</string><string>U710</string></entry></elementAttributes><pos x="1480" y="620"/></visualElement>
+    <visualElement><elementName>TA8_SST39SF010_vga_zamanlama.dig</elementName><elementAttributes><entry><string>Label</string><string>U710</string></entry></elementAttributes><pos x="1480" y="620"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>U710  SST39SF010</string></entry></elementAttributes><pos x="1480" y="540"/></visualElement>
     <visualElement><elementName>Text</elementName><elementAttributes><entry><string>Description</string><string>Zamanlama ROM'u (8.2): A0–5 = H, A6…</string></entry></elementAttributes><pos x="1480" y="570"/></visualElement>
     <visualElement><elementName>Tunnel</elementName><elementAttributes><entry><string>rotation</string><rotation rotation="2"/></entry><entry><string>NetName</string><string>SLOW</string></entry></elementAttributes><pos x="1480" y="660"/></visualElement>

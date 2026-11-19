@@ -1,4 +1,4 @@
-; rt_c.asm: tdcc'nin runtime.asm'ye ek olarak kullandığı yardımcılar.
+; rt_c.asm: tacc'nin runtime.asm'ye ek olarak kullandığı yardımcılar.
 ; runtime.asm ile birlikte .include edilir (onun sembollerini kullanır).
 ;
 ;   __shl16   __rv <<= __cnt              (mantıksal)

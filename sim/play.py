@@ -1,4 +1,4 @@
-"""play.py: TD-8 programını terminalde gerçek zamanlı çalıştırır; klavyeyle oynanır.
+"""play.py: TA-8 programını terminalde gerçek zamanlı çalıştırır; klavyeyle oynanır.
 
     py -3 play.py examples/snake.c                  oyna: ok tuşları/WASD, Boşluk/Enter, Esc çıkış
     py -3 play.py examples/snake.c --speed 2        iki kat hızlı (0: olabildiğince hızlı)
@@ -8,7 +8,7 @@
     py -3 play.py examples/merhaba.asm              .asm (ya da 32 KB .bin) de olur
     py -3 play.py examples/snake.c --micro          mikroadım emülatörü (MicroEmu)
 
-Program C ise tdcc ile derlenir, .asm ise td8.asm ile çevrilir. Bus(vga_model=True):
+Program C ise tacc ile derlenir, .asm ise ta8.asm ile çevrilir. Bus(vga_model=True):
 VRAM penceresi ve kare zamanlaması (16.800 çevrim = 16,8 ms) açık; MicroEmu pencere
 kapalıyken VRAM'e yazan CPU'yu bekletir, RefEmu bekletmez (varsayılan, daha hızlı).
 
@@ -30,8 +30,8 @@ import sys
 import time
 from pathlib import Path
 
-from td8 import asm
-from td8.bus import COLS, FRAME_CYCLES, Bus
+from ta8 import asm
+from ta8.bus import COLS, FRAME_CYCLES, Bus
 
 # --- PS/2 set 2 ---------------------------------------------------------------
 
@@ -88,7 +88,7 @@ def load(path):
     p = Path(path)
     ext = p.suffix.lower()
     if ext == '.c':
-        from tdcc import build, code_size
+        from tacc import build, code_size
         res = build(p.read_text(encoding='utf-8'), str(p))
         prog = res.program
         info = (f'{p.name}: ROM {code_size(prog)} byte, RAM 8020-{res.ram_end - 1:04X} '
@@ -180,7 +180,7 @@ def frame_text(bus, frame, cpu, speed_now, info, help_line, rows=None):
 # --- Ana döngü ---------------------------------------------------------------------
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(prog='play.py', description='TD-8 programını gerçek zamanlı çalıştırır')
+    ap = argparse.ArgumentParser(prog='play.py', description='TA-8 programını gerçek zamanlı çalıştırır')
     ap.add_argument('program', help='.c, .asm ya da 32 KB .bin')
     ap.add_argument('--speed', type=float, default=1.0,
                     help='hız çarpanı (1 = 1 MHz gerçek zaman, 0 = olabildiğince hızlı)')
@@ -210,10 +210,10 @@ def main(argv=None):
     bus = Bus(vga_model=True)
     bus.load(image)
     if args.micro:
-        from td8.emu_micro import MicroEmu
+        from ta8.emu_micro import MicroEmu
         cpu = MicroEmu(bus)
     else:
-        from td8.emu_ref import RefEmu
+        from ta8.emu_ref import RefEmu
         cpu = RefEmu(bus)
     info += f' · {"MicroEmu" if args.micro else "RefEmu"}'
     if args.demo:

@@ -1,4 +1,4 @@
-# ISA v0 (TD-8) doğrulama notları
+# ISA v0 (TA-8) doğrulama notları
 
 > 27 Ekim 2026 · Kaynak: [ISA-v0-sentez.md](ISA-v0-sentez.md) (İngilizce, ayrıntılı tasarım)
 > Bu dosyada sentezin kontrolü var: neye bakıldı, ne doğru çıktı, ne düzeltilmeli, simülasyonda ne doğrulanacak.

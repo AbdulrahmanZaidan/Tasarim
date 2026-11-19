@@ -1,16 +1,16 @@
-"""td8.hw.digital: netlist → Digital (.dig) dışa aktarıcı; aynı devrenin td8.hw.Sim'de ve
+"""ta8.hw.digital: netlist → Digital (.dig) dışa aktarıcı; aynı devrenin ta8.hw.Sim'de ve
 Digital'de aynı sonucu verdiği.
 
 Çalıştırma (sim/ klasöründen):
     py -3 -m unittest tests.test_hw_digital -v
     py -3 -m tests.test_hw_digital --yaz      sim/digital/ örnek devrelerini yeniden üretir
     py -3 -m tests.test_hw_digital --bench    adımlayıcı hızı (test değil)
-    TD8_SLOW=1 py -3 -m unittest tests.test_hw_digital    + uzun koşular (fibonacci ×10)
+    TA8_SLOW=1 py -3 -m unittest tests.test_hw_digital    + uzun koşular (fibonacci ×10)
 
 Yöntem: her örnek devre bir Board'dur. Uyaranlar Sim'de koşulur, Sim'in çıkışları Digital
 Testcase'inin beklenen değerleri olur ve `CLI test` bunları Digital'in kendi 74xx modelleriyle
 denetler. Ayrıca Sim'in çıkışları Python'da bağımsız bir beklentiyle karşılaştırılır.
-Digital bulunamazsa (TD8_DIGITAL_HOME ya da <depo>/../araclar) Digital'i çağıran testler atlanır.
+Digital bulunamazsa (TA8_DIGITAL_HOME ya da <depo>/../araclar) Digital'i çağıran testler atlanır.
 """
 
 from collections import Counter
@@ -23,12 +23,12 @@ import time
 import unittest
 from pathlib import Path
 
-from td8 import alu, asm, vectors
-from td8.hw import (CHIP_TYPES, CY62256, HC04, HC32, HC74, HC138, HC139, HC161, HC191, HC245,
+from ta8 import alu, asm, vectors
+from ta8.hw import (CHIP_TYPES, CY62256, HC04, HC32, HC74, HC138, HC139, HC161, HC191, HC245,
                     HC273, HC377, HC540, SST39SF010, bus_pins)
-from td8.hw import cpu
-from td8.hw import digital as dg
-from td8.hw import digital_cpu as dc
+from ta8.hw import cpu
+from ta8.hw import digital as dg
+from ta8.hw import digital_cpu as dc
 
 SETUP = dg.find_digital()
 DIG_DIR = dg.SIM_DIR / 'digital'
@@ -37,12 +37,12 @@ TIMES = []                                 # (ne, süre sn) — Digital çağrı
 
 
 def needs_digital(fn):
-    return unittest.skipIf(SETUP is None, 'Digital bulunamadı (TD8_DIGITAL_HOME ya da ../araclar)')(fn)
+    return unittest.skipIf(SETUP is None, 'Digital bulunamadı (TA8_DIGITAL_HOME ya da ../araclar)')(fn)
 
 
 def tmpdir(test):
-    d = Path(tempfile.mkdtemp(prefix='td8dig_'))
-    if not os.environ.get('TD8_DIGITAL_KEEP'):
+    d = Path(tempfile.mkdtemp(prefix='ta8dig_'))
+    if not os.environ.get('TA8_DIGITAL_KEEP'):
         test.addCleanup(shutil.rmtree, d, True)
     return d
 
@@ -465,10 +465,10 @@ class TestExporter(unittest.TestCase):
         lo, hi = alu.build_tables()
         b = alu_board(lo, hi, BUILD / 'alu_lo.hex', BUILD / 'alu_hi.hex')
         a = dg.render(b, DIG_DIR, rom_mode='file')
-        self.assertIn('<file>../build/alu_lo.hex</file>', a['TD8_SST39SF010_alu_lo.dig'])
-        self.assertIn('<boolean>true</boolean>', a['TD8_SST39SF010_alu_lo.dig'])
+        self.assertIn('<file>../build/alu_lo.hex</file>', a['TA8_SST39SF010_alu_lo.dig'])
+        self.assertIn('<boolean>true</boolean>', a['TA8_SST39SF010_alu_lo.dig'])
         a = dg.render(b, DIG_DIR)                              # gömülü
-        self.assertIn(f'<data>{dg.data_string(lo)}</data>', a['TD8_SST39SF010_alu_lo.dig'])
+        self.assertIn(f'<data>{dg.data_string(lo)}</data>', a['TA8_SST39SF010_alu_lo.dig'])
 
     def test_validate_warns(self):
         u = HC04('U1', {'1A': 'NOWHERE', '2A': 'GND', '3A': 'GND', '4A': 'GND', '5A': 'GND',
@@ -606,7 +606,7 @@ class TestDigital(unittest.TestCase):
             self.assertPassed(r)
             self.assertEqual(r.results, [('alu10000', 'passed')])
         self.assertIn('<file>../rom/alu_lo.hex</file>',
-                      (d / 'TD8_SST39SF010_alu_lo.dig').read_text(encoding='utf-8'))
+                      (d / 'TA8_SST39SF010_alu_lo.dig').read_text(encoding='utf-8'))
         # göreli yol ÇALIŞMA KLASÖRÜNE göre çözülür: başka klasörden çalıştırınca bulunamaz
         r = dg.run_test(d / 'alu_file.dig', d / 'alu_test.dig', setup=SETUP, cwd=d.parent.parent)
         self.assertFalse(r.passed)
@@ -678,7 +678,7 @@ class TestDigital(unittest.TestCase):
         names = sorted(p.name for p in written)
         self.assertEqual(len(names), 5, names)               # flash alt devresi tek, paylaşılır
         self.assertEqual(names[1:], ['bellek.dig', 'latch.dig', 'ornek_iz.dig', 'sayac.dig'])
-        self.assertTrue(names[0].startswith('TD8_SST39SF010_h'), names)
+        self.assertTrue(names[0].startswith('TA8_SST39SF010_h'), names)
         rng = random.Random(5)
         for mod in ('SAYAC', 'BELLEK', 'LATCH'):
             mb = dg.module_board(trace_board(data), mod)
@@ -693,9 +693,9 @@ class TestDigital(unittest.TestCase):
 
 
 # ============================================================================
-# 2. aşama: TD-8 işlemcisi (td8.hw.cpu) Digital'de
+# 2. aşama: TA-8 işlemcisi (ta8.hw.cpu) Digital'de
 # ============================================================================
-SLOW = os.environ.get('TD8_SLOW') == '1'
+SLOW = os.environ.get('TA8_SLOW') == '1'
 EXAMPLES = dg.SIM_DIR / 'examples'
 
 
@@ -706,7 +706,7 @@ def assemble(name):
 
 def cpu_full():
     """Bütün kart (boş program); alt küme Board'ları için çip kaynağı (her çağrıda yeni çipler)."""
-    return dc.td8_board(b'')[0]
+    return dc.ta8_board(b'')[0]
 
 
 def bits(prefix, n, v):
@@ -1086,13 +1086,13 @@ K2_PROGRAMS = {'merhaba': 573, 'komut_testi': 796, 'fibonacci': 33170}
 
 @needs_digital
 class TestCpuK2(unittest.TestCase):
-    """K2: td8.dig Digital'de; her CPU çevriminde (AB, DB, CW), MicroEmu izine karşı sıfır fark."""
+    """K2: ta8.dig Digital'de; her CPU çevriminde (AB, DB, CW), MicroEmu izine karşı sıfır fark."""
 
     def check(self, name, cycles):
         d = tmpdir(self)
         prog = assemble(name)
         dc.export_cpu(d, prog.image, name, modules=False)
-        run = dc.digital_trace(d / 'td8.dig', cycles + 100, setup=SETUP)
+        run = dc.digital_trace(d / 'ta8.dig', cycles + 100, setup=SETUP)
         TIMES.append((f'K2 {name}', run.step.seconds))
         emu = dc.emu_reference(prog.image, cycles + 100, run)
         self.assertTrue(run.halted and emu.halted)
@@ -1111,14 +1111,14 @@ class TestCpuK2(unittest.TestCase):
     def test_fibonacci(self):
         self.check('fibonacci', K2_PROGRAMS['fibonacci'])
 
-    @unittest.skipUnless(SLOW, 'TD8_SLOW=1 ile')
+    @unittest.skipUnless(SLOW, 'TA8_SLOW=1 ile')
     def test_fibonacci_repeated(self):
         """Digital'in açılış yayılımı koşudan koşuya değişir; 10 koşunun hepsi sıfır fark."""
         for _ in range(10):
             self.check('fibonacci', K2_PROGRAMS['fibonacci'])
 
     def test_breakpoint_and_busreq(self):
-        """td8.dig'de hata ayıklama: (1) BP anahtarları + BP_EN_n = 0 → ilk erişimin commit'inden
+        """ta8.dig'de hata ayıklama: (1) BP anahtarları + BP_EN_n = 0 → ilk erişimin commit'inden
         sonra durur, iz o çevrimde biter; (2) /BUSREQ 40 MCLK tutulur → makine durup devam eder,
         iz yine MicroEmu'yla sıfır fark; (3) /BUSREQ bırakılmazsa iz kesilir."""
         d = tmpdir(self)
@@ -1131,17 +1131,17 @@ class TestCpuK2(unittest.TestCase):
         bp = next(a for a, c in sorted(acc.items()) if 3 <= c <= 20 and a < 0x8000)
         first = next(i for i, ab, _, cw in emu.trace
                      if ab == bp and ((cw >> 2) & 7 == 1 or cw & (1 << 14)))
-        run = dc.digital_trace(d / 'td8.dig', n, setup=SETUP,
+        run = dc.digital_trace(d / 'ta8.dig', n, setup=SETUP,
                                sets=[('BP', bp, 0), ('BP_EN_n', 0, 0)])
         self.assertEqual(len(run.trace), first + 1, f'BP {bp:04X}')
         self.assertIsNone(vectors.compare_traces(emu.trace[:first + 1], run.trace)[0])
         m = dc.RESET_MCLK + 4 * 200
-        run = dc.digital_trace(d / 'td8.dig', n + 100, setup=SETUP, extra_mclk=200,
+        run = dc.digital_trace(d / 'ta8.dig', n + 100, setup=SETUP, extra_mclk=200,
                                sets=[('BUSREQ_n', 0, m), ('BUSREQ_n', 1, m + 40)])
         ref = dc.emu_reference(prog.image, n + 100, run)
         self.assertEqual(dc.compare_run(run, ref), [])
         self.assertEqual(len(run.trace), n)
-        run = dc.digital_trace(d / 'td8.dig', n + 100, setup=SETUP, sets=[('BUSREQ_n', 0, m)])
+        run = dc.digital_trace(d / 'ta8.dig', n + 100, setup=SETUP, sets=[('BUSREQ_n', 0, m)])
         self.assertLessEqual(abs(len(run.trace) - 200), 2)
         self.assertIsNone(vectors.compare_traces(emu.trace[:len(run.trace)], run.trace)[0])
 
@@ -1149,11 +1149,11 @@ class TestCpuK2(unittest.TestCase):
         """Bozuk netlist (ALU-H'nin A8/A9'u yer değiştirmiş): iz farkı bulunmalı."""
         d = tmpdir(self)
         prog = assemble('komut_testi')
-        board, _ = dc.td8_board(prog.image, 'komut_testi')
+        board, _ = dc.ta8_board(prog.image, 'komut_testi')
         u = next(c for c in board.chips if c.ref == 'U408')
         u.pins['A8'], u.pins['A9'] = u.pins['A9'], u.pins['A8']
-        dg.export(board, d / 'td8.dig')
-        run = dc.digital_trace(d / 'td8.dig', 900, setup=SETUP)
+        dg.export(board, d / 'ta8.dig')
+        run = dc.digital_trace(d / 'ta8.dig', 900, setup=SETUP)
         emu = dc.emu_reference(prog.image, 900, run)
         diffs = dc.compare_run(run, emu)
         self.assertTrue(diffs and diffs[0].startswith('iz: satır'), diffs)
@@ -1162,28 +1162,28 @@ class TestCpuK2(unittest.TestCase):
 class TestCpuExport(unittest.TestCase):
     def test_deterministic_and_ports(self):
         prog = assemble('merhaba')
-        b1, _ = dc.td8_board(prog.image, 'merhaba')
-        b2, _ = dc.td8_board(prog.image, 'merhaba')
+        b1, _ = dc.ta8_board(prog.image, 'merhaba')
+        b2, _ = dc.ta8_board(prog.image, 'merhaba')
         a = dg.render(b1, DIG_DIR)
         self.assertEqual(a, dg.render(b2, DIG_DIR))
-        self.assertIn('TD8_SST39SF010_urom0.dig', a)
-        self.assertIn('TD8_SST39SF010_prog_merhaba.dig', a)
+        self.assertIn('TA8_SST39SF010_urom0.dig', a)
+        self.assertIn('TA8_SST39SF010_prog_merhaba.dig', a)
         self.assertEqual(b1.validate(), [])
         for mod in dc.MODULE_FILES:
             mb = dc.module_board(mod)
             self.assertEqual(mb.validate(), [], mod)
 
     def test_committed_cpu_files_up_to_date(self):
-        """sim/digital/td8.dig varsa `py cli.py hw digital` ile üretilmişle aynı olmalı."""
-        if not (DIG_DIR / 'td8.dig').is_file():
-            self.skipTest('sim/digital/td8.dig yok (py -3 cli.py hw digital)')
+        """sim/digital/ta8.dig varsa `py cli.py hw digital` ile üretilmişle aynı olmalı."""
+        if not (DIG_DIR / 'ta8.dig').is_file():
+            self.skipTest('sim/digital/ta8.dig yok (py -3 cli.py hw digital)')
         prog = assemble('merhaba')
         files = {}
         for mod, fname in dc.MODULE_FILES.items():
-            board, _ = dc.td8_board(prog.image, 'merhaba')
+            board, _ = dc.ta8_board(prog.image, 'merhaba')
             files.update(dg.render(dg.module_board(board, mod, fname,
                                                    cpu.MODULE_TITLES.get(mod)), DIG_DIR))
-        board, _ = dc.td8_board(prog.image, 'merhaba')
+        board, _ = dc.ta8_board(prog.image, 'merhaba')
         files.update(dg.render(board, DIG_DIR))
         for fname, text in files.items():
             self.assertEqual((DIG_DIR / fname).read_bytes(), text.encode('utf-8'),
@@ -1244,7 +1244,7 @@ def write_examples():
 def bench():
     if SETUP is None:
         sys.exit('Digital bulunamadı')
-    d = Path(tempfile.mkdtemp(prefix='td8bench_'))
+    d = Path(tempfile.mkdtemp(prefix='ta8bench_'))
     try:
         b = trace_board(trace_data())
         dg.export(b, d / f'{b.name}.dig')

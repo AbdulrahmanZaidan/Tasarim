@@ -1,4 +1,4 @@
-"""TD-8 Arduino hata ayıklama kartı: komut satırı (SISTEM-PLANI 10, kabul ölçütü 16.3).
+"""TA-8 Arduino hata ayıklama kartı: komut satırı (SISTEM-PLANI 10, kabul ölçütü 16.3).
 
 !!! Bu sürüm gerçek kartla HİÇ denenmedi; yalnız --fake (sahte cihaz) ile sınandı. !!!
 
@@ -16,7 +16,7 @@
     py -3 ardu_cli.py status --port COM5
     py -3 ardu_cli.py info --port COM5                    kimlik, durum, iz hızı tahmini
 
---port yerine --fake: gerçek kart yerine sahte cihaz (td8/ardu.py FakeDevice; arkasında
+--port yerine --fake: gerçek kart yerine sahte cihaz (ta8/ardu.py FakeDevice; arkasında
 MicroEmu + Bus). Sahte cihazın ROM'u: --fake-rom X.asm, verilmezse trace/load'daki programın
 ROM bölümü. Hata eklemek için: --fake-db-flip ÇEVRİM:MASKE, --fake-cw-stuck BİT:0|1,
 --fake-no-busack. Sahte cihaz her çalıştırmada sıfırdan kurulur (durum saklanmaz).
@@ -27,8 +27,8 @@ import sys
 import time
 from pathlib import Path
 
-from td8 import ardu, asm, microcode
-from td8.ardu import ArduError
+from ta8 import ardu, asm, microcode
+from ta8.ardu import ArduError
 
 
 def _assemble(path):
@@ -285,7 +285,7 @@ def main(argv=None):
     g.add_argument('--fake-no-busack', action='store_true', help='sahte cihaz: BUSACK hiç gelmez')
 
     p = argparse.ArgumentParser(prog='ardu_cli.py',
-                                description='TD-8 Arduino iz ve yükleme aracı (donanımda denenmedi)')
+                                description='TA-8 Arduino iz ve yükleme aracı (donanımda denenmedi)')
     sub = p.add_subparsers(dest='cmd', required=True)
 
     t = sub.add_parser('trace', parents=[common], help='iz al, MicroEmu ile karşılaştır')

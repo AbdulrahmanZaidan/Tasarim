@@ -35,4 +35,4 @@ puts:   LDX ps_s
         JMP puts
 bitti:  RET
 
-mesaj:  .asciz "MERHABA, TD-8!"
+mesaj:  .asciz "MERHABA, TA-8!"

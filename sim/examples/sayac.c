@@ -3,7 +3,7 @@
  * sınıflar (FizzBuzz), sınıf sayılarını ekrana ve sonucu LED'lere yazar.
  * Bölme yerine sayaçlar kullanılır (döngüde * / % kullanmamak, plan 11.2).
  *
- *   py -3 -m tdcc examples/sayac.c -o build/sayac_c.asm --run
+ *   py -3 -m tacc examples/sayac.c -o build/sayac_c.asm --run
  */
 #include "hw.h"
 
