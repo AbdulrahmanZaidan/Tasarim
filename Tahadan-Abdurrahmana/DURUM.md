@@ -47,11 +47,11 @@ Bütün bağlantılar tek kaynaktan: `sim/ta8/hw/cpu.py` (netlist). Digital dosy
 | Komut seti (`isa.py`), mikrokod ve ALU ROM'ları | Hazır, tek kaynak |
 | Assembler, iki emülatör, çarpma/bölme/yazdırma kütüphanesi | Hazır |
 | Test vektörü üreticisi, çip seviyesi simülatör (gecikmeli), Digital'e dışa aktarım | Hazır |
-| **C derleyicisi (`tacc`)** | Çalışıyor: Snake'i derliyor, 200 rastgele programda doğru. **Bu hafta biter:** `switch` için atlama tablosu (planın istediği son parça) |
+| **C derleyicisi (`tacc`)** | **Bitti (19 Kasım):** planın C alt kümesinin tamamı, son parça `switch` atlama tablosu da eklendi. Snake'i derliyor, 200 rastgele programda doğru |
 | Snake (C) | Emülatörde oynanıyor: `py play.py examples/snake.c` |
 | Açılış kendi kendini test ROM'u | Hazır: ALU, RAM, yığın, ekran belleği |
 | Arduino iz ve yükleme yazılımı | Hazır, Mega olmadığı için donanımda denenmedi |
-| Otomatik testler | **304**, hepsi geçiyor |
+| Otomatik testler | **305**, hepsi geçiyor |
 
 ---
 
@@ -70,7 +70,7 @@ Bütün bağlantılar tek kaynaktan: `sim/ta8/hw/cpu.py` (netlist). Digital dosy
 
 | Hafta | Taha | Abdurrahman | Birlikte |
 |---|---|---|---|
-| **Bu hafta (19–23 Kas)** | C derleyicisinin son parçası (`switch` tablosu); 5. hafta raporu taslağı | M6'yı `cpu.py` netlist'ine taşımak (birlikte, aşağıda) | Siparişlerin ilk kısmı (bölüm 6) |
+| **Bu hafta (19–23 Kas)** | ~~C derleyicisinin son parçası~~ (bitti); 5. hafta raporu taslağı | M6'yı `cpu.py` netlist'ine taşımak (birlikte, aşağıda) | Siparişlerin ilk kısmı (bölüm 6) |
 | **5. hafta (24–30 Kas)** | MANUAL paneli; M7 PS/2'ye başlangıç | M6 karakter hattı: ekran belleği adres seçimi (3× 74HC157), VRAM, font ROM'u, 74HC166, çıkış katı | Parçalar gelince giriş testleri, **prototip a** (saat modülü breadboard'da, osiloskopla) |
 | **6. hafta (1–7 Ara)** | M7 PS/2 Digital'de; prototip d (gerçek klavye) | M6 VRAM penceresi (CPU ile paylaşım), prototip c (gerçek monitör) | Kalan malzeme siparişi (1–7 Aralık) |
 
@@ -123,9 +123,9 @@ Gelen her parça giriş testinden geçer (liste: [Taha/hafta4/README.md](../Taha
 Hepsi `sim/` klasöründen, Python 3.12, ek paket yok:
 
 ```
-py -3 -m unittest                                   bütün testler (304, ~5 dk)
+py -3 -m unittest                                   bütün testler (305, ~5 dk)
 py -3 cli.py run examples/merhaba.asm               assembly programı emülatörde
-py -3 -m tacc examples/merhaba.c --run              C programını derle ve çalıştır
+py -3 -m tacc examples/merhaba.c -o build/merhaba_c.asm --run   C programını derle ve çalıştır (-o şart: yoksa merhaba.asm ezilir)
 py -3 play.py examples/snake.c                      Snake'i terminalde oyna
 py -3 cli.py hw run examples/merhaba.asm            çip seviyesi simülatörde, emülatörle karşılaştır
 py -3 cli.py hw digital --run 600                   Digital dosyalarını üret ve Digital'de koştur

@@ -228,6 +228,69 @@ class CodeGen(ExprGen):
             self.e.ins('JMP', lbody)
         self.e.label(lend)
 
+    # switch (SISTEM-PLANI 11.2): karşılaştırma zinciri ya da JMPI ile atlama tablosu.
+    # Ortalama çevrim (1 MHz'de µs): zincir case başına 8 bitte ~5, 16 bitte ~15 (bulunana
+    # kadar ortalama (n+1)/2 case); tablo sabit, 8 bitte ~38, 16 bitte ~52. Tablo yalnız
+    # kazandırıyorsa ve aralık sıkıysa (en çok 128 giriş, case başına en çok 3) seçilir.
+    JT_COST = {1: (5, 38), 2: (15, 52)}
+    JT_MAX_SPAN = 128
+
+    @staticmethod
+    def case_key(v, width, signed):
+        """case değerinin sıralama anahtarı: genişliğe göre kesilmiş, gerekiyorsa işaretli."""
+        bits = 8 * width
+        v &= (1 << bits) - 1
+        return v - (1 << bits) if signed and v >> (bits - 1) else v
+
+    def jump_table_plan(self, keys, width):
+        """Atlama tablosu kazandırıyorsa (en küçük anahtar, giriş sayısı), yoksa None."""
+        n = len(keys)
+        if n < 2:
+            return None
+        lo = min(keys)
+        span = max(keys) - lo + 1
+        if span > self.JT_MAX_SPAN or span > 3 * n:
+            return None
+        per_case, table = self.JT_COST[width]
+        if table >= per_case * (n + 1) / 2:
+            return None
+        return lo, span
+
+    def jump_table(self, op, width, lo, span, targets, ldefault):
+        """A'da (8 bit) ya da op'ta (16 bit) değer; hedef = tablo[değer - lo], aralık dışı
+        ldefault. Hedef adres __jt'ye kopyalanır, JMPI (__jt) ile atlanır (A ve X bozulur)."""
+        e = self.e
+        tbl = self.new_label()
+        if width == 1:
+            if lo & 0xFF:
+                e.ins('SUB', f'#${lo & 0xFF:02X}')
+        else:
+            self.load(op[0])
+            e.ins('SUB', f'#${lo & 0xFF:02X}')
+            e.ins('STA', '__jt')
+            self.load(op[1])
+            e.ins('SBC', f'#${(lo >> 8) & 0xFF:02X}')
+            e.ins('TST')                        # SBC'nin Z'si zincirli; yalnız üst bayt
+            e.ins('BNE', ldefault)
+            e.ins('LDA', '__jt')
+        e.ins('CMP', f'#${span:02X}')
+        e.ins('BCS', ldefault)                  # işaretsiz: değer - lo >= span
+        e.ins('SHL')                            # giriş 2 bayt (span <= 128: elde yok)
+        e.ins('ADD', f'#<{tbl}')
+        e.ins('TAXL')
+        e.ins('LDA', f'#>{tbl}')                # LDA bayraklara dokunmaz, elde korunur
+        e.ins('ADC', '#$00')
+        e.ins('TAXH')
+        e.ins('LDA', '(X+)')
+        e.ins('STA', '__jt')
+        e.ins('LDA', '(X)')
+        e.ins('STA', '__jt+1')
+        e.ins('JMPI', '(__jt)')
+        e.label(tbl)
+        words = [targets.get(lo + i, ldefault) for i in range(span)]
+        for i in range(0, span, 8):
+            e.text('        .word ' + ', '.join(words[i:i + 8]))
+
     def s_Switch(self, s):
         self.reset_temps()
         lend = self.new_label()
@@ -235,25 +298,38 @@ class CodeGen(ExprGen):
             c.label = self.new_label()
         if s.default is not None:
             s.default.label = self.new_label()
+        ldefault = s.default.label if s.default is not None else lend
         kind, inner = self.narrow(s.expr)
         if kind in ('z', 's'):
+            cases = [c for c in s.cases if self.fits(c.value & 0xFFFF, kind)]
+            targets = {self.case_key(c.value, 1, kind == 's'): c.label for c in cases}
+            plan = self.jump_table_plan(list(targets), 1)
             op = self.gen(inner, 1)
             self.load(op[0])
-            for c in s.cases:
-                v = c.value & 0xFFFF
-                if self.fits(v, kind):
-                    self.e.ins('CMP', f'#${v & 0xFF:02X}')
+            if plan:
+                self.jump_table(op, 1, plan[0], plan[1], targets, ldefault)
+            else:
+                for c in cases:
+                    self.e.ins('CMP', f'#${c.value & 0xFF:02X}')
                     self.e.ins('BEQ', c.label)
         else:
+            t = s.expr.type
+            signed = t.is_int and t.signed
+            targets = {self.case_key(c.value, 2, signed): c.label for c in s.cases}
+            plan = self.jump_table_plan(list(targets), 2)
             op = self.spill(self.gen(s.expr, 2))
-            for c in s.cases:
-                v = c.value & 0xFFFF
-                self.load(op[0])
-                self.e.ins('CMP', f'#${v & 0xFF:02X}')
-                self.load(op[1])
-                self.e.ins('CPC', f'#${v >> 8:02X}')
-                self.e.ins('BEQ', c.label)
-        self.e.ins('JMP', s.default.label if s.default is not None else lend)
+            if plan:
+                self.jump_table(op, 2, plan[0], plan[1], targets, ldefault)
+            else:
+                for c in s.cases:
+                    v = c.value & 0xFFFF
+                    self.load(op[0])
+                    self.e.ins('CMP', f'#${v & 0xFF:02X}')
+                    self.load(op[1])
+                    self.e.ins('CPC', f'#${v >> 8:02X}')
+                    self.e.ins('BEQ', c.label)
+        if not plan:
+            self.e.ins('JMP', ldefault)
         self.loop(s.body, lend, None)
         self.e.label(lend)
 

@@ -14,6 +14,7 @@ __rv     = $8000        ; int/işaretçi dönüş değeri (runtime.asm ile aynı
 __crt_s  = $801A        ; 2  kopyalama kaynağı      (yalnız main'den önce)
 __crt_d  = $801C        ; 2  kopyalama hedefi
 __crt_n  = $801E        ; 2  kalan byte sayısı
+__jt     = $801C        ; 2  switch atlama tablosundan okunan hedef (main'den sonra; __crt_d'nin yeri)
 
         .org $0000
 __start:

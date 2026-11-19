@@ -58,7 +58,7 @@ py play.py examples/snake.c --demo              hazır tuş senaryosunu oynat (~
 py ardu_cli.py trace examples/merhaba.asm --fake            Arduino aracını sahte cihazla dene
 py ardu_cli.py trace examples/merhaba.asm --port COM5       gerçek kart: izi al, emülatörle karşılaştır (pyserial gerekir)
 py ardu_cli.py load PROGRAM.asm --port COM5                 programı RAM'e 8000'den yükle ve doğrula
-py -m unittest discover -s tests -t .           tüm testler (304 test, ~5 dk)
+py -m unittest discover -s tests -t .           tüm testler (305 test, ~5 dk)
 ```
 
 Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODING=utf-8` yazın.
@@ -127,7 +127,7 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
   - Breakpoint ve BUSREQ Digital'de de: M1 modülünde ve bütün işlemcide (breakpoint'te durma, BUSREQ ile durup devam).
 - **C derleyicisi (`tacc`):**
   - 200 rastgele C programı (~4.400 ifade) emülatörde ve bağımsız bir Python hesaplayıcıda aynı sonucu veriyor.
-  - Kontrol akışı, fonksiyonlar, işaretçiler, diziler, switch, başlangıç değerleri, `const` tablolar, `volatile` erişimleri.
+  - Kontrol akışı, fonksiyonlar, işaretçiler, diziler, switch (sık case'lerde JMPI atlama tablosu; boşluk, aralık dışı, eksi değer, düşme, continue), başlangıç değerleri, `const` tablolar, `volatile` erişimleri.
   - Desteklenmeyen yapılar (özyineleme, struct, long, float, fonksiyon işaretçisi) satır numaralı Türkçe hata veriyor.
 - **Açılış testi (`examples/acilis_testi.asm`):**
   - Sağlam makinede iki emülatörde de "TEST TAMAM", aynı çevrim sayısı.
@@ -179,5 +179,5 @@ Windows konsolunda Türkçe harfler bozuk görünürse önce `set PYTHONIOENCODI
 | Simülasyon 5–7. hafta | VGA (M6) ve PS/2 (M7) netlist'i; taklitlerin yerine gerçek modüller |
 | Simülasyon 7. hafta | Gerçek font: `font8x8_basic.h` (kamu malı) → `py cli.py roms --font ...` |
 | Kart kurulunca | Arduino yazılımını donanımda denemek; pin tablosunu kesinleştirmek (`../arduino/README.md`) |
-| Sürekli | C derleyicisi (`tacc`): ilk sürüm hazır. Eksikler: `switch` için atlama tablosu, struct |
+| Bitti (19 Kasım) | C derleyicisi (`tacc`): plandaki alt kümenin tamamı, `switch` atlama tablosu dahil. Planın ilk sürümünde olmayanlar: struct, özyineleme, long, float, fonksiyon işaretçisi |
 | Yapım 12–17. hafta | Snake'in ince ayarı (hız, skor, yem) gerçek ekran ve klavyeyle |

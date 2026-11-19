@@ -674,6 +674,134 @@ int main(void) {
 }''')
         self.assertEqual(m.ints('r', 9), [100, 200, 300, 7, 400, 11, 510, 123, 114])
 
+    SWITCH_TABLE = r'''
+int r[4];
+int fu(unsigned char c) {           /* 8 bit işaretsiz, 6 boş: default */
+    switch (c) {
+    case 0: return 10; case 1: return 11; case 2: return 12; case 3: return 13;
+    case 4: return 14; case 5: return 15; case 7: return 17; case 8: return 18;
+    case 9: return 19; case 10: return 20; case 11: return 21; case 12: return 22;
+    case 13: return 23; case 14: return 24; case 15: return 25; case 16: return 26;
+    default: return -1;
+    }
+}
+int fs(signed char c) {             /* 8 bit işaretli, eksi aralık, default yok */
+    switch (c) {
+    case -8: return 1; case -7: return 2; case -6: return 3; case -5: return 4;
+    case -4: return 5; case -3: return 6; case -2: return 7; case -1: return 8;
+    case 0: return 9; case 1: return 10; case 2: return 11; case 3: return 12;
+    case 4: return 13; case 5: return 14; case 6: return 15; case 7: return 16;
+    }
+    return 0;
+}
+int fw(int x) {                     /* 16 bit, 1003 boş */
+    switch (x) {
+    case 1000: return 1; case 1001: return 2; case 1002: return 3; case 1004: return 5;
+    case 1005: return 6; case 1006: return 7; case 1007: return 8;
+    default: return 99;
+    }
+}
+int sparse(int x) {                 /* seyrek: karşılaştırma zinciri kalır */
+    switch (x) { case 1: return 1; case 500: return 2; case 9000: return 3; }
+    return 0;
+}
+int main(void) {
+    int i, t;
+    t = 0; for (i = 0; i < 20; i++) t = t * 3 + fu(i);
+    r[0] = t;
+    t = 0; for (i = -10; i < 10; i++) t = t * 3 + fs(i);
+    r[1] = t;
+    r[2] = fw(1000) + fw(1003) * 10 + fw(1007) * 100 + fw(-1) + fw(0) + fw(744)
+         + fw(1008) + fw(1256) + sparse(500) * 1000;
+    t = 0;
+    for (i = 0; i < 40; i++) {      /* düşme, break, continue tablolu switch içinde */
+        switch (i & 15) {
+        case 0: t += 1; continue;
+        case 1: t += 2;
+        case 2: t += 3; break;
+        case 3: t += 4; case 4: t += 5; case 5: t += 6; break;
+        case 6: case 7: case 8: t += 7; break;
+        case 9: t -= 1; break; case 10: t += 11; break; case 11: t += 12; continue;
+        case 12: t += 13; break; case 13: t *= 2; break; case 14: t += 15; break;
+        case 15: t ^= 255; break;
+        }
+        t += 1000;
+    }
+    r[3] = t;
+    return 0;
+}'''
+
+    @staticmethod
+    def switch_table_expected():
+        def w16(v):
+            v &= 0xFFFF
+            return v - 0x10000 if v & 0x8000 else v
+
+        def fu(c):
+            return 10 + c if 0 <= c <= 16 and c != 6 else -1
+
+        def fs(c):
+            return c + 9 if -8 <= c <= 7 else 0
+
+        def fw(x):
+            return {1000: 1, 1001: 2, 1002: 3, 1004: 5, 1005: 6, 1006: 7, 1007: 8}.get(x, 99)
+
+        r = []
+        t = 0
+        for i in range(20):
+            t = w16(t * 3 + fu(i))
+        r.append(t)
+        t = 0
+        for i in range(-10, 10):
+            t = w16(t * 3 + fs(i))
+        r.append(t)
+        r.append(w16(fw(1000) + fw(1003) * 10 + fw(1007) * 100 + fw(-1) + fw(0) + fw(744)
+                     + fw(1008) + fw(1256) + 2 * 1000))
+        t = 0
+        for i in range(40):
+            k = i & 15
+            if k == 0:
+                t += 1
+                continue
+            if k == 11:
+                t += 12
+                continue
+            if k in (1, 2):
+                t += (2 if k == 1 else 0) + 3
+            elif k in (3, 4, 5):
+                t += {3: 4 + 5 + 6, 4: 5 + 6, 5: 6}[k]
+            elif k in (6, 7, 8):
+                t += 7
+            elif k == 9:
+                t -= 1
+            elif k == 10:
+                t += 11
+            elif k == 12:
+                t += 13
+            elif k == 13:
+                t *= 2
+            elif k == 14:
+                t += 15
+            elif k == 15:
+                t ^= 255
+            t = w16(t + 1000)
+        r.append(w16(t))
+        return r
+
+    def test_switch_jump_table(self):
+        """Sık case'li switch JMPI tablosuyla (SISTEM-PLANI 11.2): 8 bit işaretsiz ve işaretli,
+        16 bit; boşluklar, aralık dışı (eksi, üst baytı dolu), düşme, break, continue."""
+        want = self.switch_table_expected()
+        for micro in (False, True):
+            m = compile_run(self.SWITCH_TABLE, micro=micro)
+            self.assertEqual(m.ints('r', 4), want, f'micro={micro}')
+        asm_text = m.res.asm
+        self.assertEqual(asm_text.count('JMPI'), 4)        # fu, fs, fw ve döngüdeki switch
+        sparse = asm_text[asm_text.index('_sparse:'):]
+        sparse = sparse[:sparse.index('RET')]
+        self.assertNotIn('JMPI', sparse)
+        self.assertIn('CPC', sparse)
+
     def test_short_circuit_side_effects(self):
         m = compile_run('''
 int calls, r[8];

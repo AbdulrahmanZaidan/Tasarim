@@ -621,7 +621,7 @@ isa.py + ROM imajları ──► ta8/hw (çip seviyesi netlist, 63 entegre) ─�
 
 - **Tipler:** `char` (işaretsiz), `signed char`, `int` (16-bit), `unsigned`, pointer'lar.
 - **Veri:** global 1-D ve 2-D diziler, string'ler, ROM'da `const` tablolar, `volatile`.
-- **Deyimler:** if/else, while, do/while, for, break, continue, return, switch (karşılaştırma zinciri ya da JMPI tablosu).
+- **Deyimler:** if/else, while, do/while, for, break, continue, return, switch (karşılaştırma zinciri ya da JMPI tablosu; derleyici ortalama çevrime göre hızlı olanı seçer: 8 bitlik ifadede ~14, 16 bitlikte ~6 case'ten itibaren tablo, aralık en çok 128 ve case başına en çok 3 giriş).
 - **Operatörler:** Hepsi. `* / %` ve değişken miktarda kaydırma runtime'a çağrılır (`sim/lib/runtime.asm`). Ölçülen süreler (CALL + RET dahil): `__mul16` ortalama ~1.070 çevrim, çarpan < 256 ise ~500; `__divmod16` ~1.250–1.400 çevrim. İlk tahmin (250–400 / 600–900) iyimserdi. Bu yüzden derleyici sabitle çarpma ve bölmeyi (ör. `satır*64`) kaydırmaya çevirir; döngülerde `* / %`'den kaçınılır.
 - **v1'de yok:** recursion (derleyici hata verir), struct, long, float, fonksiyon pointer'ı.
 
