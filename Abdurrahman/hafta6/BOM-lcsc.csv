@@ -1,0 +1,55 @@
+Quantity,Manufacturer Part Number,Description
+17,SN74HC161N,4-bit sync counter DIP-16
+17,SN74HC245N,octal bus transceiver DIP-20
+10,SST39SF010A-55-4C-NHE,1Mbit flash PLCC-32 (DIP out of stock)
+8,SN74HC163N,4-bit sync counter DIP-16
+7,SN74HC74N,dual D flip-flop DIP-14
+3,SN74AC74N,dual D flip-flop AC DIP-14
+5,SN74HC377N,octal D FF with enable DIP-20
+5,SN74HC138N,3-to-8 decoder DIP-16
+6,SN74HC08N,quad AND DIP-14
+4,SN74HC157N,quad 2-to-1 mux DIP-16
+4,SN74HC273N,octal D FF with clear DIP-20
+5,SN74HC00N,quad NAND DIP-14
+3,AS6C62256-55PCN,32Kx8 SRAM DIP-28
+3,SN74HC14N,hex Schmitt inverter DIP-14
+3,SN74HC20N,dual 4-input NAND DIP-14
+3,SN74HC688N,8-bit comparator DIP-20
+3,SN74HC191N,4-bit up/down counter DIP-16
+3,SN74HC164N,8-bit SIPO shift register DIP-14
+3,SN74HC175N,quad D FF DIP-16
+3,SN74HC04N,hex inverter DIP-14
+3,SN74HC32N,quad OR DIP-14
+2,SN74HC139N,dual 2-to-4 decoder DIP-16
+2,SN74HC166N,8-bit PISO shift register DIP-16
+2,SN74HC540N,octal inverting buffer DIP-20
+2,SN74HC153N,dual 4-to-1 mux DIP-16
+2,SN74HC02N,quad NOR DIP-14
+2,NE555P,timer DIP-8
+1,TLC555CP,CMOS timer DIP-8
+2,25MHz oscillator DIP,25.000MHz 5V full/half can through-hole
+2,4MHz oscillator DIP,4.000MHz 5V full/half can through-hole
+3,2N7000,N-MOSFET TO-92
+10,1N4148,diode DO-35
+150,100nF 50V ceramic 2.54mm,decoupling through-hole
+30,10uF 25V electrolytic,through-hole
+5,100uF 16V electrolytic,through-hole
+5,10nF 50V ceramic,through-hole
+250,470R 1/4W,metal film through-hole
+6,10K SIP9 bussed,resistor network 8x10k
+50,10K 1/4W,metal film through-hole
+50,4.7K 1/4W,metal film through-hole
+30,47K 1/4W,metal film through-hole
+10,2.2K 1/4W,metal film through-hole
+5,22K 1/4W,metal film through-hole
+5,100R 1/4W,metal film through-hole
+100,3mm LED red,through-hole
+100,3mm LED green,through-hole
+100,3mm LED yellow,through-hole
+8,DIP switch 8 position,2.54mm through-hole
+20,tact switch 6x6mm,through-hole
+6,SPDT slide/toggle switch,2.54mm through-hole
+10,pin header 1x40 2.54mm,male
+20,jumper shunt 2.54mm,
+2,Mini-DIN-6 female,PS/2 through-hole
+2,DE-15 HD15 female,VGA through-hole
