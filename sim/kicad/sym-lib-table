@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "ta8")(type "KiCad")(uri "${KIPRJMOD}/ta8.kicad_sym")(options "")(descr "TA-8 entegreleri, netlist'ten üretildi"))
+)

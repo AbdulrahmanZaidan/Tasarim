@@ -11,6 +11,7 @@
     py cli.py hw digital [-o KLASÖR] [--program X.asm] [--run N]
                                         Digital (.dig): modül dosyaları + ta8.dig; --run ile
                                         Digital'de N çevrim koşar, MicroEmu ile karşılaştırır
+    py cli.py hw kicad [-o KLASÖR]      KiCad şemaları (sim/kicad): modül başına bir sayfa
 """
 
 import argparse
@@ -222,6 +223,24 @@ def cmd_hw(args):
         sys.exit(1)
 
 
+def cmd_hw_kicad(args):
+    """KiCad şemaları (sim/kicad): netlist'teki modüller + M6 zamanlaması (henüz netlist'te değil)."""
+    import importlib.util
+    from ta8.hw import kicad
+    from ta8.hw.cpu import build
+    extra = []
+    m6 = Path(__file__).resolve().parent.parent / 'Abdurrahman' / 'hafta5' / 'm6_uret.py'
+    if not args.no_m6 and m6.exists():
+        spec = importlib.util.spec_from_file_location('m6_uret', m6)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        extra = mod.chips()
+    proj, files = kicad.write_project(build(), args.output, extra)
+    for s in proj.sheets:
+        print(f'{s.file:16} {len(s.chips):3} entegre  {s.page}  {kicad.TITLES.get(s.module, s.module)}')
+    print(f'{args.output}: {len(files)} dosya; KiCad\'de ta8.kicad_pro\'yu açın')
+
+
 def cmd_hw_digital(args):
     """Digital dosyaları (SISTEM-PLANI 12.2): m1_saat … m5_bellek, aux, tb ve ta8.dig."""
     import time
@@ -322,6 +341,12 @@ def main(argv=None):
     hd.add_argument('--run', type=int, metavar='N', default=0,
                     help='Digital\'de N çevrime kadar koş, MicroEmu ile karşılaştır')
     hd.set_defaults(func=cmd_hw_digital)
+    hk = hsub.add_parser('kicad', help='KiCad şemalarını üret (modül başına bir sayfa + kök sayfa)')
+    hk.add_argument('-o', '--output', default=str(Path(__file__).parent / 'kicad'),
+                    help='çıktı klasörü (varsayılan sim/kicad)')
+    hk.add_argument('--no-m6', action='store_true',
+                    help='M6 VGA zamanlamasını (Abdurrahman/hafta5/m6_uret.py) ekleme')
+    hk.set_defaults(func=cmd_hw_kicad)
 
     args = p.parse_args(argv)
     args.func(args)
