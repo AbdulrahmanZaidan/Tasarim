@@ -2,6 +2,8 @@
 
 Selam Abdurrahman, tasarımda gözden kaçmış veya unutulmuş olabilecek teknik detayları, 2. haftadaki şemalarda düzeltmemiz gereken yerleri ve 3. haftada yapılacakları senin için tek bir yerde topladım. Devreleri çizerken doğrudan buradaki pin ve çip listesini referans alabilirsin. **En yeni mesaj en üstte.**
 
+> **Projenin bütün durumu, iş bölümü ve siparişler: [DURUM.md](DURUM.md)** (19 Kasım). Önce onu oku.
+
 ---
 
 ## YENİ (19 Kasım): Projenin adı TA-8 oldu, dosya adları değişti
