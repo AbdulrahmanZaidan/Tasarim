@@ -1,0 +1,19 @@
+Quantity,Manufacturer Part Number,Description
+10,SST39SF010A-55-4C-NHE,1Mbit parallel flash PLCC-32 (DIP out of stock; PLCC32-DIP32 socket adapter from AliExpress)
+3,AS6C62256-55PCN,32Kx8 SRAM DIP-28
+17,SN74HC161N,4-bit sync counter DIP-16
+8,SN74HC163N,4-bit sync counter DIP-16
+5,SN74HC377N,octal D flip-flop with enable DIP-20
+2,SN74HC166N,8-bit PISO shift register DIP-16
+3,SN74HC175N,quad D flip-flop DIP-16
+3,SN74HC688N,8-bit identity comparator DIP-20
+3,SN74AC74N,dual D flip-flop AC DIP-14
+2,25MHz oscillator DIP 5V,25.000MHz 5V crystal oscillator full/half can through-hole
+2,4MHz oscillator DIP 5V,4.000MHz 5V crystal oscillator full/half can through-hole
+1,TLC555CP,CMOS timer DIP-8
+2,Mini-DIN-6 female PCB,PS/2 connector through-hole
+2,DE-15 HD15 female PCB,VGA connector 3-row through-hole
+3,SN74HCT273N,octal D flip-flop with clear HCT DIP-20 (spare if flash/SRAM VOH too low)
+4,74HCT377 DIP-20,octal D flip-flop with enable HCT (spare if VOH too low)
+2,74HCT161 DIP-16,4-bit sync counter HCT (spare if VOH too low)
+1,74HCT166 DIP-16,8-bit PISO shift register HCT (spare if VOH too low)
