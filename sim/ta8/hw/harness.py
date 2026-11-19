@@ -33,7 +33,7 @@ from .. import isa
 from ..bus import Bus, IO_BASE, VRAM_BASE
 from ..emu_micro import MicroEmu
 from ..vectors import compare_traces
-from . import cpu
+from . import cpu, ps2
 from .kernel import NEVER, Sim
 
 MCLK_HALF = {4: 125, 6: 83, 8: 62}       # MHz → yarım periyot (ns); 6 ve 8 MHz yuvarlanmış
@@ -52,19 +52,26 @@ class HwCpu:
     keys      klavyeden gönderilecek scan code'lar (bus.py zamanlamasıyla)
     vga       'taklit' (VWR_s = vwr anahtarı) ya da 'netlist' (M6 zamanlaması devrede, 25 MHz
               OSC25; VWR_s M1'de VWR'den senkronlanır, vwr yok sayılır). netlist kipi ~25 kat yavaş.
+    kbd       'taklit' (KRDY/KSR bus.py durum makinesinden) ya da 'netlist' (M7 devrede; tuşlar
+              ps2.Keyboard ile KCLK/KDATA'dan gönderilir; her commit'teki KRDY `krdy_seq`'e yazılır,
+              emu_like bunu MicroEmu'ya aynen oynatır).
     """
 
     def __init__(self, program=b'', *, corner='typ', mclk_mhz=4, mclk_half=None,
                  power_up='zero', seed=1, checks=True, stepmode=0, micro=0, vwr=1, dip=0,
                  keys=(), urom=None, alu_tables=None, rom_speed=90, bank=0, wait_fix=True,
-                 vga='taklit'):
+                 vga='taklit', kbd='taklit'):
         self.half = mclk_half or MCLK_HALF[mclk_mhz]
         self.cycle_ns = 8 * self.half
         self.sim = sim = Sim(corner=corner, checks=checks, power_up=power_up, seed=seed)
         self.board = cpu.build(sim, program=program, urom=urom, alu_tables=alu_tables,
                                rom_speed=rom_speed, bank=bank, mclk_half=self.half,
-                               wait_fix=wait_fix, vga=vga)
+                               wait_fix=wait_fix, vga=vga, kbd=kbd)
         self.vga = vga
+        self.kbd_mode = kbd
+        self.keys = tuple(keys)
+        self.krdy_seq = []                    # kbd='netlist': her commit'te KRDY
+        self.vwr_seq = []                     # vga='netlist': her commit'te VWR_s (KSTAT b6)
         self.ram_initial = self.vram_initial = None   # reset ilk bırakıldığında alınır
         self.release_time = None
         self.dip = dip
@@ -74,8 +81,13 @@ class HwCpu:
             sim.set('VWR_s', vwr)
         sim.set_bus('DIP', 6, dip)
         sim.set('/RESET', 0)                  # açılış: reset basılı
-        self.kbd = Bus()                      # yalnız klavye durum makinesi olarak
-        if keys:
+        self.kbd = Bus()                      # yalnız klavye durum makinesi olarak (taklit)
+        self.ps2 = None
+        if kbd == 'netlist':
+            self.ps2 = ps2.Keyboard(sim)
+            if keys:
+                self.ps2.press(*keys)
+        elif keys:
             self.kbd.press(*keys)
         ix = sim.index
         self._i_ab = [ix[f'AB{i}'] for i in range(16)]
@@ -83,7 +95,8 @@ class HwCpu:
         self._i_cw = [ix[n] for n in cpu.CW_L]
         self._i_cwin = [ix[n] for n in cpu.CW_NAMES]
         self._i_p1 = [ix[n] for n in P1_NETS]
-        for name in ('/RESET_s', 'Q1', 'CLK', 'STOP', '/GO', '/KBD_RD', 'VWR_s', 'Q2_D', '/WAIT'):
+        for name in ('/RESET_s', 'Q1', 'CLK', 'STOP', '/GO', '/KBD_RD', 'VWR_s', 'Q2_D', '/WAIT',
+                     'KRDY'):
             setattr(self, '_i_' + name.strip('/').replace('/', ''), ix[name])
         self.trace = []
         self.n = 0
@@ -211,6 +224,14 @@ class HwCpu:
             if last > self._tL:
                 self._note('yol1', last - self._tL, t - self._tL)
         self._tC = t
+        if self.vga == 'netlist':
+            self.vwr_seq.append(val[self._i_VWR_s])
+        if self.ps2 is not None:                        # M7 devrede: klavye KCLK/KDATA'dan
+            self.krdy_seq.append(val[self._i_KRDY])
+            self.ps2.poll()
+            if cw & isa.HALT:
+                self.halted = True
+            return
         # klavye: bus.py ile aynı durum makinesi (okuma sonrası temizleme + byte arası süre)
         kb = self.kbd
         before = (kb.krdy, kb.kbd_byte)
@@ -444,17 +465,57 @@ class HwCpu:
 def emu_like(hw, program, max_cycles=1_000_000, keys=()):
     """hw ile aynı başlangıç durumunda (ROM, RAM ve VRAM içeriği, DIP, klavye) bir
     MicroEmu kurar, izini tutarak çalıştırır ve döndürür."""
-    bus = Bus()
+    netl = hw.kbd_mode == 'netlist' or hw.vga == 'netlist'
+    bus = (ReplayBus(hw.krdy_seq if hw.kbd_mode == 'netlist' else None, keys or hw.keys,
+                     hw.vwr_seq if hw.vga == 'netlist' else None) if netl else Bus())
     bus.load(bytes(program[:0x8000]))
     bus.mem[0x8000:0xF000] = hw.ram_initial[:0x7000]
     bus.vram[:] = hw.vram_initial[:0x800]
     bus.dip = hw.dip
-    if keys:
-        bus.press(*keys)
+    if keys and hw.kbd_mode != 'netlist':
+        bus.press(*keys)                    # kbd taklit: bus.py durum makinesi (ReplayBus'ta da)
     emu = MicroEmu(bus, cpu.default_urom(), cpu.default_alu())
     emu.trace = []
     emu.run(max_cycles)
     return emu
+
+
+class ReplayBus(Bus):
+    """MicroEmu için: devrenin her commit'te gördüğü KRDY'yi (kbd='netlist') ve VWR_s'i
+    (vga='netlist') aynen oynatır. None verilen taraf bus.py modeliyle çalışır.
+    KRDY: byte'lar gönderilen sırayla, her yükseliş bir sonraki byte; F800 okuması KRDY'yi
+    kendisi temizlemez (devrede KCLR temizler, bu da diziye yansır)."""
+
+    def __init__(self, krdy_seq, keys, vwr_seq=None):
+        super().__init__()
+        self.kseq = None if krdy_seq is None else list(krdy_seq)
+        self.vseq = None if vwr_seq is None else list(vwr_seq)
+        self.keys = list(keys)
+        ks = self.kseq or []
+        self.rises = [i for i, v in enumerate(ks) if v and (i == 0 or not ks[i - 1])]
+
+    @staticmethod
+    def _at(seq, c):
+        return seq[c] if c < len(seq) else (seq[-1] if seq else 0)
+
+    def vwr(self):
+        return super().vwr() if self.vseq is None else self._at(self.vseq, self.cycle)
+
+    def tick(self, n=1):
+        if self.kseq is None:
+            return super().tick(n)
+        self.cycle += n
+
+    def read(self, addr):
+        if addr >= IO_BASE and self.kseq is not None:
+            reg = addr & 7
+            krdy = self._at(self.kseq, self.cycle)
+            if reg == 0:
+                k = sum(1 for r in self.rises if r <= self.cycle) - 1
+                return (self.keys[k] if 0 <= k < len(self.keys) else 0xFF) if krdy else 0xFF
+            if reg == 1:
+                return krdy << 7 | self.vwr() << 6 | (self.dip & 0x3F)
+        return super().read(addr)
 
 
 def emu_state(emu):

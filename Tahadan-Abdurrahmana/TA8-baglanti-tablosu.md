@@ -17,7 +17,8 @@ Kaynak: `sim/ta8/hw/cpu.py` (üretilmiştir, elle düzenlemeyin). Bacak numarala
 | CPU yardımcı kapıları | 4 | 3 | 1 | 0 |
 | M5 Bellek + I/O | 6 | 6 | 0 | 0 |
 | M6 VGA | 19 | 19 | 0 | 0 |
-| **Toplam (CPU + M6, M7 hariç)** | **86** | **82** | **4** | **0** |
+| M7 PS/2 klavye | 6 | 6 | 0 | 0 |
+| **Toplam (CPU + M6 + M7)** | **92** | **88** | **4** | **0** |
 
 Kurulmayanlar:
 - M1 NE555 ×1: kapsam dışı: yavaş saat kaynağı; MCLK test tezgâhından
@@ -2117,23 +2118,86 @@ Glyph kaydırma registerı (8.3): /PE = CCLK (= /LD), T1 ile aynı DCLK kenarın
 | 13 | `4B` | `GND` |
 | 14 | `VCC` | *VCC* (güç) |
 
-## Test tezgâhı taklitleri (M6/M7 yerine; entegre sayımına girmez)
+## M7 PS/2 klavye
 
-### X2 · 74HC540
+### U801 · 74HC14
 
-Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kaydırma registerının terslenmiş veri bitleri (test tezgâhı; boşken 00 → DB'de FF, bus.py ile aynı). KRDY de test tezgâhından; okuma sonrası temizleme (KCLR) test tezgâhında modellenir.
+Hat alıcıları (9): KCLK iki kez terslenir (KCLK_s, 164 saati: yükselen kenar), KDATA bir kez (/KDATA: start biti 1 olarak girer). KBD_RD = NOT /KBD_RD (KCLR D). 5. birim RC zaman aşımının eşik dedektörü: /TIMEOUT. 6. birim boş.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `1A` | `KCLK` |
+| 2 | `1Y` | `/KCLK_s` |
+| 3 | `2A` | `/KCLK_s` |
+| 4 | `2Y` | `KCLK_s` |
+| 5 | `3A` | `KDATA` |
+| 6 | `3Y` | `/KDATA` |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `4Y` | `KBD_RD` |
+| 9 | `4A` | `/KBD_RD` |
+| 10 | `5Y` | `/TIMEOUT` |
+| 11 | `5A` | `KTO_RC` |
+| 12 | `6Y` | — (boş) |
+| 13 | `6A` | `GND` |
+| 14 | `VCC` | *VCC* (güç) |
+
+### U802 · 74HC164
+
+SR1 (9): KCLK_s ile kaydırır. Çerçeve sonunda KS0 = /stop, KS1 = /eşlik, KS2..KS7 = /D7../D2.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `DSA` | `/KDATA` |
+| 2 | `DSB` | `VCC` |
+| 3 | `Q0` | `KS0` |
+| 4 | `Q1` | `KS1` |
+| 5 | `Q2` | `KS2` |
+| 6 | `Q3` | `KS3` |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `CP` | `KCLK_s` |
+| 9 | `/MR` | `/CLR164` |
+| 10 | `Q4` | `KS4` |
+| 11 | `Q5` | `KS5` |
+| 12 | `Q6` | `KS6` |
+| 13 | `Q7` | `KS7` |
+| 14 | `VCC` | *VCC* (güç) |
+
+### U803 · 74HC164
+
+SR2: KS8 = /D1, KS9 = /D0; 11. kenarda start işaretçisi Q2'ye gelir → KRDY (KSTAT b7, U606). Q3–Q7 boş.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `DSA` | `KS7` |
+| 2 | `DSB` | `VCC` |
+| 3 | `Q0` | `KS8` |
+| 4 | `Q1` | `KS9` |
+| 5 | `Q2` | `KRDY` |
+| 6 | `Q3` | — (boş) |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `CP` | `KCLK_s` |
+| 9 | `/MR` | `/CLR164` |
+| 10 | `Q4` | — (boş) |
+| 11 | `Q5` | — (boş) |
+| 12 | `Q6` | — (boş) |
+| 13 | `Q7` | — (boş) |
+| 14 | `VCC` | *VCC* (güç) |
+
+### U804 · 74HC540
+
+Okuma tamponu (9): F800 okunurken (/KBD_RD) terslenmiş veri bitlerini DB'ye gerçek değerleriyle koyar: A0 = KS9 (/D0) … A7 = KS2 (/D7). Boş SR → FF.
 
 | Bacak | Pin | Net |
 |---:|---|---|
 | 1 | `/OE1` | `/KBD_RD` |
-| 2 | `A0` | `KSR0` |
-| 3 | `A1` | `KSR1` |
-| 4 | `A2` | `KSR2` |
-| 5 | `A3` | `KSR3` |
-| 6 | `A4` | `KSR4` |
-| 7 | `A5` | `KSR5` |
-| 8 | `A6` | `KSR6` |
-| 9 | `A7` | `KSR7` |
+| 2 | `A0` | `KS9` |
+| 3 | `A1` | `KS8` |
+| 4 | `A2` | `KS7` |
+| 5 | `A3` | `KS6` |
+| 6 | `A4` | `KS5` |
+| 7 | `A5` | `KS4` |
+| 8 | `A6` | `KS3` |
+| 9 | `A7` | `KS2` |
 | 10 | `GND` | *GND* (güç) |
 | 11 | `/Y7` | `DB7` |
 | 12 | `/Y6` | `DB6` |
@@ -2145,6 +2209,86 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 | 18 | `/Y0` | `DB0` |
 | 19 | `/OE2` | `GND` |
 | 20 | `VCC` | *VCC* (güç) |
+
+### U805 · 74HC74
+
+KCLR flip-flop'u (9): D = AND(KBD_RD, KRDY), CP = CLK_IO (LED + BRK dalı, 3.5). F800'ün okunduğu çevrimin commit'inde 1 olur, bir çevrim sonra 0: SR'yi temizler. FF2 boş.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `/1RD` | `/RESET_s` |
+| 2 | `1D` | `KCLR_D` |
+| 3 | `1CP` | `CLK_IO` |
+| 4 | `/1SD` | `VCC` |
+| 5 | `1Q` | `KCLR` |
+| 6 | `/1Q` | `/KCLR` |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `/2Q` | — (boş) |
+| 9 | `2Q` | — (boş) |
+| 10 | `/2SD` | `VCC` |
+| 11 | `2CP` | `GND` |
+| 12 | `2D` | `GND` |
+| 13 | `/2RD` | `VCC` |
+| 14 | `VCC` | *VCC* (güç) |
+
+### U806 · 74HC08
+
+KCLR D ve SR temizleme (9): /CLR164 = AND(/RESET_s, /KCLR, /TIMEOUT), iki kapı. 4. kapı boş.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `1A` | `KBD_RD` |
+| 2 | `1B` | `KRDY` |
+| 3 | `1Y` | `KCLR_D` |
+| 4 | `2A` | `/RESET_s` |
+| 5 | `2B` | `/KCLR` |
+| 6 | `2Y` | `KCLR_RST` |
+| 7 | `GND` | *GND* (güç) |
+| 8 | `3Y` | `/CLR164` |
+| 9 | `3A` | `KCLR_RST` |
+| 10 | `3B` | `/TIMEOUT` |
+| 11 | `4Y` | — (boş) |
+| 12 | `4A` | `GND` |
+| 13 | `4B` | `GND` |
+| 14 | `VCC` | *VCC* (güç) |
+
+### D801 · 1N4148
+
+Susturma diyot-VEYA'sı (9): KRDY → KINH.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `K` | `KINH` |
+| 2 | `A` | `KRDY` |
+
+### D802 · 1N4148
+
+Susturma diyot-VEYA'sı: KCLR → KINH (temizleme bitene kadar susturma sürer).
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `K` | `KINH` |
+| 2 | `A` | `KCLR` |
+
+### Q801 · 2N7000
+
+Susturma (9): KINH = 1 iken KCLK'ı 0'a çeker; klavye bekler, byte kaybolmaz. KINH'de 100k pull-down (gate).
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `GND` | *GND* (güç) |
+| 2 | `G` | `KINH` |
+| 3 | `D` | `KCLK` |
+
+### RC801 · RC_TIMEOUT
+
+Zaman aşımı (9): 22k / 10 nF, 3. 1N4148 ile KCLK düşükken boşalır. KCLK ~190 µs kesintisiz yüksek kalırsa (yarım çerçeve, ya da boşta) U801/5 → /TIMEOUT = 0 → SR temizlenir. Susturmada KCLK düşük tutulduğu için hazır byte korunur.
+
+| Bacak | Pin | Net |
+|---:|---|---|
+| 1 | `IN` | `KCLK` |
+| 2 | `OUT` | `KTO_RC` |
+| 3 | `GND` | *GND* (güç) |
 
 ## Pull direnci, sabitler ve test tezgâhı girişleri
 
@@ -2185,6 +2329,9 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 | `VD5` | pull (10k aşağı) | 0 |
 | `VD6` | pull (10k aşağı) | 0 |
 | `VD7` | pull (10k aşağı) | 0 |
+| `KCLK` | pull (10k yukarı) | 1 |
+| `KDATA` | pull (10k yukarı) | 1 |
+| `KINH` | pull (10k aşağı) | 0 |
 | `MANUAL` | sabit (5. hafta, pasif değer) | 0 |
 | `/RESET` | test tezgâhı girişi | varsayılan 1 |
 | `GO_BTN` | test tezgâhı girişi | varsayılan 0 |
@@ -2214,15 +2361,6 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 | `DIP4` | test tezgâhı girişi | varsayılan 0 |
 | `DIP5` | test tezgâhı girişi | varsayılan 0 |
 | `SLOW` | test tezgâhı girişi | varsayılan 0 |
-| `KRDY` | test tezgâhı girişi | varsayılan 0 |
-| `KSR0` | test tezgâhı girişi | varsayılan 0 |
-| `KSR1` | test tezgâhı girişi | varsayılan 0 |
-| `KSR2` | test tezgâhı girişi | varsayılan 0 |
-| `KSR3` | test tezgâhı girişi | varsayılan 0 |
-| `KSR4` | test tezgâhı girişi | varsayılan 0 |
-| `KSR5` | test tezgâhı girişi | varsayılan 0 |
-| `KSR6` | test tezgâhı girişi | varsayılan 0 |
-| `KSR7` | test tezgâhı girişi | varsayılan 0 |
 | `MCLK` | saat | yarım periyot 125 ns |
 | `OSC25` | saat | yarım periyot 20 ns |
 
@@ -2236,4 +2374,5 @@ Klavye okuma tamponu taklidi (M7'nin 74HC540'ı, /OE1 = /KBD_RD): KSR0..7 = kayd
 - /ARD_RD, /ARD_WR, /BUSREQ: Arduino takılı değilken 10k pull-up. /BUSREQ açık-drain (Arduino yalnız 0 sürer ya da bırakır).
 - M6 BULGU (19 Kasım): VD0–7 pencerede /BUFEN kapalıyken yüzüyordu (font ROM'u girişleri boşta); 10k pull-down SIP dizisi eklendi (planda yok).
 - M6: SLOW test tezgâhından (gerçekte saat seçici). R/G/B dirençleri, renk jumper'ı ve DE-15 netlist dışında (pasif).
+- M7: KCLK/KDATA 4.7k pull-up (konnektör), KINH 100k pull-down. Klavye test tezgâhından (ta8.hw.ps2.Keyboard): açık akaç, ~12.5 kHz.
 - VWR_s M1'deki U111'de VWR'den (M6) senkronlanıyor (vga='netlist').

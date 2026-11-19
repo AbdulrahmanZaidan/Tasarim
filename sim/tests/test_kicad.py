@@ -32,7 +32,7 @@ def balanced(text):
 class TestKicad(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.board = cpu.build(vga="netlist")
+        cls.board = cpu.build(vga="netlist", kbd="netlist")
         cls.tmp = tempfile.TemporaryDirectory()
         cls.proj, cls.files = kicad.write_project(cls.board, cls.tmp.name)
         cls.text = {f: (Path(cls.tmp.name) / f).read_text(encoding='utf-8') for f in cls.files}
@@ -49,7 +49,7 @@ class TestKicad(unittest.TestCase):
     def test_every_chip_once(self):
         refs = Counter()
         for s in self.proj.sheets:
-            refs.update(re.findall(r'\(property "Reference" "(U\d+)"', self.text[s.file]))
+            refs.update(re.findall(r'\(property "Reference" "((?:U|D|Q|RC)\d+)"', self.text[s.file]))
         want = Counter(c.ref for c in self.board.chips if c.module != 'TB')
         self.assertEqual(refs, want)
 

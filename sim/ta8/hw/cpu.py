@@ -10,11 +10,13 @@ dışa aktarıcı her modülü ayrı bir .dig yapabilsin diye):
     m4_data()       M4  A, IR, F, ALU flash'ları, DB tamponları  U4xx
     aux_gates()     AUX CPU yardımcı kapıları                    U5xx
     m5_memory()     M5  ROM, RAM, adres çözme, LED, KSTAT        U6xx
-    m6_vga()        M6  VGA zamanlaması (sayaçlar, ROM, T1)      U7xx
+    m6_vga()        M6  VGA: zamanlama, VRAM, font, çıkış         U7xx
+    m7_ps2()        M7  PS/2 klavye alıcısı                       U8xx, D8xx, Q8xx
     stubs()         TB  henüz olmayan M6/M7 parçaları için taklitler  X…
 
     board = build(sim, program=prog.image)   # hepsini birleştirir, sim'e ekler
-    board = build(sim, vga='netlist')        # + M6 zamanlaması, VWR_s M1'de senkronlanır
+    board = build(sim, vga='netlist')        # + M6, VWR_s M1'de senkronlanır
+    board = build(sim, kbd='netlist')        # + M7, KRDY ve 540 gerçek; klavye KCLK/KDATA'dan
 
 vga='taklit' (varsayılan): M6 yok, VWR_s test tezgâhından (hızlı; sıfır fark testleri).
 vga='netlist': M6'nın tamamı (U701–U719, 25 MHz OSC25) devrede: zamanlama, VRAM adres
@@ -50,8 +52,9 @@ from dataclasses import dataclass, field
 from functools import lru_cache
 
 from .. import alu, isa, microcode, vga as vga_tables
-from .chips import (CY62256, HC00, HC02, HC04, HC08, HC20, HC32, HC74, HC138, HC139, HC161,
-                    HC157, HC163, HC166, HC175, HC191, HC245, HC273, HC377, HC540, HC688,
+from .discrete import D1N4148, Q2N7000, RCTimeout
+from .chips import (CY62256, HC00, HC02, HC04, HC08, HC14, HC20, HC32, HC74, HC138, HC139, HC161,
+                    HC157, HC163, HC164, HC166, HC175, HC191, HC245, HC273, HC377, HC540, HC688,
                     SST39SF010)
 
 # ----------------------------------------------------------------------------
@@ -65,7 +68,7 @@ for _name, _bit in isa.BITS.items():          # isa.py ile tutarlılık
     assert CW_NAMES[_bit.bit_length() - 1] == _name, _name
 assert (isa.ASRC_SHIFT, isa.DSRC_SHIFT, isa.DDST_SHIFT, isa.ALUOP_SHIFT) == (0, 2, 5, 8)
 
-MODULE_ORDER = ('M1', 'M2', 'M3', 'M4', 'AUX', 'M5', 'M6', 'TB')
+MODULE_ORDER = ('M1', 'M2', 'M3', 'M4', 'AUX', 'M5', 'M6', 'M7', 'TB')
 MODULE_TITLES = {
     'M1': 'M1 Saat / reset / durdurma',
     'M2': 'M2 Kontrol ünitesi',
@@ -74,6 +77,7 @@ MODULE_TITLES = {
     'AUX': 'CPU yardımcı kapıları',
     'M5': 'M5 Bellek + I/O',
     'M6': 'M6 VGA',
+    'M7': 'M7 PS/2 klavye',
     'TB': 'Test tezgâhı taklitleri (M6/M7 yerine; entegre sayımına girmez)',
 }
 
@@ -610,7 +614,7 @@ def m5_memory(program=b'', rom_speed=90, ram_data=None):
 # ----------------------------------------------------------------------------
 # Test tezgâhı taklitleri: M6 (VRAM) ve M7 (klavye okuma tamponu)
 # ----------------------------------------------------------------------------
-def stubs(vram_data=None, vga=False):
+def stubs(vram_data=None, vga=False, kbd=False):
     M = 'TB'
     chips = [] if vga else [
         _chip(CY62256, 'X1', {
@@ -621,7 +625,7 @@ def stubs(vram_data=None, vga=False):
               '(/OE = /BUFEN) üzerinden, adres 3× 74HC157 üzerinden gelir; burada '
               'doğrudan DB/AB.', data=vram_data),
     ]
-    chips += [
+    chips += [] if kbd else [
         _chip(HC540, 'X2', {
             '/OE1': '/KBD_RD', '/OE2': 'GND', **pins('A', nets('KSR', 8)),
             **pins('/Y', nets('DB', 8)),
@@ -631,8 +635,8 @@ def stubs(vram_data=None, vga=False):
               'okuma sonrası temizleme (KCLR) test tezgâhında modellenir.'),
     ]
     return Board(chips=chips,
-                 inputs={**({} if vga else {'VWR_s': 1}), 'KRDY': 0,
-                         **{f'KSR{i}': 0 for i in range(8)}},
+                 inputs={**({} if vga else {'VWR_s': 1}),
+                         **({} if kbd else {'KRDY': 0, **{f'KSR{i}': 0 for i in range(8)}})},
                  memories={} if vga else {'VRAM': chips[0]},
                  notes=['VWR_s M1\'deki U111\'de VWR\'den (M6) senkronlanıyor (vga=\'netlist\').'
                         if vga else
@@ -763,18 +767,87 @@ def m6_vga(dclk_ext=False, osc_half=20, vram_data=None, font=None, timing_only=F
     return b
 
 
+# ----------------------------------------------------------------------------
+# M7: PS/2 klavye alıcısı (SISTEM-PLANI 9)
+# ----------------------------------------------------------------------------
+def m7_ps2():
+    """PS/2 alıcısı: 6 entegre (U801–U806) + 2N7000, 2× 1N4148, RC zaman aşımı.
+
+    KCLK, KDATA: mini-DIN-6 (1 veri, 3 GND, 4 +5 V, 5 saat), 4.7k pull-up, açık akaç.
+    Klavye çerçevesi: start (0), 8 veri (LSB önce), tek eşlik, stop (1); veri saat yüksekken
+    değişir, düşen kenardan önce ve yükselen kenardan sonra ≥ 5 µs kararlı.
+    Kaydırma KCLK'nın YÜKSELEN kenarında (plan 9): zaman aşımı boşta etkin olduğu için düşen
+    kenarda kaydırılsaydı her çerçevenin start biti silinirdi; yükselende önceki düşük yarım
+    periyot (~40 µs) zaman aşımını bırakmaya yeter.
+    """
+    M = 'M7'
+    ks = [f'KS{i}' for i in range(10)]
+    chips = [
+        _chip(HC14, 'U801', {
+            '1A': 'KCLK', '1Y': '/KCLK_s', '2A': '/KCLK_s', '2Y': 'KCLK_s',
+            '3A': 'KDATA', '3Y': '/KDATA', '4A': '/KBD_RD', '4Y': 'KBD_RD',
+            '5A': 'KTO_RC', '5Y': '/TIMEOUT', '6A': 'GND',
+        }, M, 'Hat alıcıları (9): KCLK iki kez terslenir (KCLK_s, 164 saati: yükselen kenar), '
+              'KDATA bir kez (/KDATA: start biti 1 olarak girer). KBD_RD = NOT /KBD_RD (KCLR D). '
+              '5. birim RC zaman aşımının eşik dedektörü: /TIMEOUT. 6. birim boş.'),
+        _chip(HC164, 'U802', {'DSA': '/KDATA', 'DSB': 'VCC', 'CP': 'KCLK_s', '/MR': '/CLR164',
+                              **pins('Q', ks[:8])},
+              M, 'SR1 (9): KCLK_s ile kaydırır. Çerçeve sonunda KS0 = /stop, KS1 = /eşlik, '
+                 'KS2..KS7 = /D7../D2.'),
+        _chip(HC164, 'U803', {'DSA': 'KS7', 'DSB': 'VCC', 'CP': 'KCLK_s', '/MR': '/CLR164',
+                              'Q0': 'KS8', 'Q1': 'KS9', 'Q2': 'KRDY'},
+              M, 'SR2: KS8 = /D1, KS9 = /D0; 11. kenarda start işaretçisi Q2\'ye gelir → KRDY '
+                 '(KSTAT b7, U606). Q3–Q7 boş.'),
+        _chip(HC540, 'U804', {'/OE1': '/KBD_RD', '/OE2': 'GND',
+                              **{f'A{i}': ks[9 - i] for i in range(8)}, **pins('/Y', nets('DB', 8))},
+              M, 'Okuma tamponu (9): F800 okunurken (/KBD_RD) terslenmiş veri bitlerini DB\'ye '
+                 'gerçek değerleriyle koyar: A0 = KS9 (/D0) … A7 = KS2 (/D7). Boş SR → FF.'),
+        _chip(HC74, 'U805', {
+            '/1RD': '/RESET_s', '/1SD': 'VCC', '1CP': 'CLK_IO', '1D': 'KCLR_D', '1Q': 'KCLR',
+            '/1Q': '/KCLR', '/2RD': 'VCC', '/2SD': 'VCC', '2CP': 'GND', '2D': 'GND',
+        }, M, 'KCLR flip-flop\'u (9): D = AND(KBD_RD, KRDY), CP = CLK_IO (LED + BRK dalı, 3.5). '
+              'F800\'ün okunduğu çevrimin commit\'inde 1 olur, bir çevrim sonra 0: SR\'yi temizler. '
+              'FF2 boş.'),
+        _chip(HC08, 'U806', {
+            '1A': 'KBD_RD', '1B': 'KRDY', '1Y': 'KCLR_D',
+            '2A': '/RESET_s', '2B': '/KCLR', '2Y': 'KCLR_RST',
+            '3A': 'KCLR_RST', '3B': '/TIMEOUT', '3Y': '/CLR164',
+            '4A': 'GND', '4B': 'GND',
+        }, M, 'KCLR D ve SR temizleme (9): /CLR164 = AND(/RESET_s, /KCLR, /TIMEOUT), iki kapı. '
+              '4. kapı boş.'),
+        _chip(D1N4148, 'D801', {'A': 'KRDY', 'K': 'KINH'}, M,
+              'Susturma diyot-VEYA\'sı (9): KRDY → KINH.'),
+        _chip(D1N4148, 'D802', {'A': 'KCLR', 'K': 'KINH'}, M,
+              'Susturma diyot-VEYA\'sı: KCLR → KINH (temizleme bitene kadar susturma sürer).'),
+        _chip(Q2N7000, 'Q801', {'G': 'KINH', 'D': 'KCLK'}, M,
+              'Susturma (9): KINH = 1 iken KCLK\'ı 0\'a çeker; klavye bekler, byte kaybolmaz. '
+              'KINH\'de 100k pull-down (gate).'),
+        _chip(RCTimeout, 'RC801', {'IN': 'KCLK', 'OUT': 'KTO_RC'}, M,
+              'Zaman aşımı (9): 22k / 10 nF, 3. 1N4148 ile KCLK düşükken boşalır. KCLK ~190 µs '
+              'kesintisiz yüksek kalırsa (yarım çerçeve, ya da boşta) U801/5 → /TIMEOUT = 0 → SR '
+              'temizlenir. Susturmada KCLK düşük tutulduğu için hazır byte korunur.'),
+    ]
+    return Board(chips=chips, pulls={'KCLK': 1, 'KDATA': 1, 'KINH': 0},
+                 notes=['M7: KCLK/KDATA 4.7k pull-up (konnektör), KINH 100k pull-down. Klavye test '
+                        'tezgâhından (ta8.hw.ps2.Keyboard): açık akaç, ~12.5 kHz.'])
+
+
 MODULES = {'M1': m1_clock, 'M2': m2_control, 'M3': m3_address, 'M4': m4_data,
-           'AUX': aux_gates, 'M5': m5_memory, 'M6': m6_vga, 'TB': stubs}
+           'AUX': aux_gates, 'M5': m5_memory, 'M6': m6_vga, 'M7': m7_ps2, 'TB': stubs}
 
 
 def build(sim=None, program=b'', urom=None, alu_tables=None, rom_speed=90, bank=0,
-          mclk_half=125, ram_data=None, vram_data=None, wait_fix=True, vga='taklit'):
+          mclk_half=125, ram_data=None, vram_data=None, wait_fix=True, vga='taklit',
+          kbd='taklit'):
     """Bütün CPU kartını kurar. `sim` verilirse çipler, pull'lar, tie'lar ve girişlerin
     varsayılan değerleri ona eklenir (saat eklenmez). Board döndürür.
-    vga: 'taklit' (VWR_s test tezgâhından) ya da 'netlist' (M6 zamanlaması + VWR senkronu)."""
-    if vga not in ('taklit', 'netlist'):
-        raise ValueError(f"vga = 'taklit' | 'netlist', verilen: {vga!r}")
+    vga: 'taklit' (VWR_s test tezgâhından) ya da 'netlist' (M6 + VWR senkronu).
+    kbd: 'taklit' (KRDY, KSR ve X2 test tezgâhından) ya da 'netlist' (M7; klavye KCLK/KDATA)."""
+    for name, v in (('vga', vga), ('kbd', kbd)):
+        if v not in ('taklit', 'netlist'):
+            raise ValueError(f"{name} = 'taklit' | 'netlist', verilen: {v!r}")
     net = vga == 'netlist'
+    knet = kbd == 'netlist'
     board = Board.merge([
         m1_clock(mclk_half, wait_fix, vga=net),
         m2_control(urom, bank),
@@ -783,7 +856,8 @@ def build(sim=None, program=b'', urom=None, alu_tables=None, rom_speed=90, bank=
         aux_gates(),
         m5_memory(program, rom_speed, ram_data),
         *([m6_vga(vram_data=vram_data)] if net else []),
-        stubs(vram_data, vga=net),
+        *([m7_ps2()] if knet else []),
+        stubs(vram_data, vga=net, kbd=knet),
     ])
     if wait_fix:
         board.notes.extend(f'PLAN DÜZELTMESİ: {f}' for f in PLAN_FIXES)

@@ -154,7 +154,7 @@ def cmd_hw(args):
     if hasattr(sys.stdout, 'reconfigure'):
         sys.stdout.reconfigure(errors='replace')        # Windows konsolunda → gibi işaretler
     if args.hw_cmd == 'wiring':
-        text = wiring.wiring_table(build(wait_fix=not args.plan_wait, vga=args.vga))
+        text = wiring.wiring_table(build(wait_fix=not args.plan_wait, vga=args.vga, kbd=args.vga))
         if args.output:
             Path(args.output).write_text(text, encoding='utf-8')
             print(f'{args.output}: {len(text.splitlines())} satır')
@@ -229,7 +229,8 @@ def cmd_hw_kicad(args):
     """KiCad şemaları (sim/kicad): netlist'teki modüller (M6 dahil, vga='netlist')."""
     from ta8.hw import kicad
     from ta8.hw.cpu import build
-    proj, files = kicad.write_project(build(vga='taklit' if args.no_m6 else 'netlist'), args.output)
+    proj, files = kicad.write_project(build(vga='taklit' if args.no_m6 else 'netlist', kbd='netlist'),
+                                      args.output)
     for s in proj.sheets:
         print(f'{s.file:16} {len(s.chips):3} entegre  {s.page}  {kicad.TITLES.get(s.module, s.module)}')
     print(f'{args.output}: {len(files)} dosya; KiCad\'de ta8.kicad_pro\'yu açın')
@@ -327,7 +328,7 @@ def main(argv=None):
     hw_.add_argument('-o', '--output', help='çıktı dosyası (verilmezse ekrana)')
     hw_.add_argument('--plan-wait', action='store_true', help='düzeltmesiz WAIT kapısıyla')
     hw_.add_argument('--vga', choices=['taklit', 'netlist'], default='netlist',
-                     help="M6 dahil ('netlist', varsayılan) ya da VWR_s test tezgâhından ('taklit')")
+                     help="M6 ve M7 dahil ('netlist', varsayılan) ya da taklitlerle ('taklit')")
     hw_.set_defaults(func=cmd_hw)
     hd = hsub.add_parser('digital', help='Digital (.dig) dosyalarını üret (modüller + ta8.dig)')
     hd.add_argument('-o', '--output', default=str(Path(__file__).parent / 'digital'),

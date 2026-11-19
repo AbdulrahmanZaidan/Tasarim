@@ -660,19 +660,21 @@ class TestNetlist(HwCase):
                 self.assertLessEqual(n, plan.get(part, 0), f'{m} {part}')
 
     def test_refs_notes_and_modules(self):
-        board = cpu.build(vga='netlist')                    # M6 dahil: MODULES'un hepsi
+        board = cpu.build(vga='netlist', kbd='netlist')     # M6, M7 dahil: MODULES'un hepsi
         prefix = {'M1': 'U1', 'M2': 'U2', 'M3': 'U3', 'M4': 'U4', 'AUX': 'U5', 'M5': 'U6',
-                  'M6': 'U7', 'TB': 'X'}
+                  'M6': 'U7', 'M7': ('U8', 'D8', 'Q8', 'RC8'), 'TB': 'X'}
         for c in board.chips:
             self.assertTrue(c.ref.startswith(prefix[c.module]), c.ref)
             self.assertTrue(c.note, f'{c.ref}: not yok')
         # modül kurucuları tek tek çağrılabilir; birleşimleri build() ile aynı
         refs = []
         for m, fn in cpu.MODULES.items():
-            part = fn(vga=True) if m in ('M1', 'TB') else fn()     # netlist kipi: X1 yok
+            part = (fn(vga=True, kbd=True) if m == 'TB' else fn(vga=True) if m == 'M1'
+                    else fn())                              # netlist kipi: X1, X2 yok
             self.assertTrue(all(c.module == m for c in part.chips), m)
             refs += [c.ref for c in part.chips]
-            self.assertTrue(board.ports(m), m)
+            if part.chips:
+                self.assertTrue(board.ports(m), m)
         self.assertEqual(refs, [c.ref for c in board.chips])
         # sözlükteki adlar
         users = board.net_users()

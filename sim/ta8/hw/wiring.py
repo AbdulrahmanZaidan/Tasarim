@@ -27,6 +27,7 @@ PLAN_COUNTS = {
 # M6 (SISTEM-PLANI 15.1, 19 entegre): yalnız build(vga='netlist') kartında sayılır.
 M6_PLAN = {'74HC74': 1, '74HC163': 6, 'SST39SF010': 2, '74HC377': 1, '74HC157': 3, 'CY62256': 1,
            '74HC245': 1, '74HC166': 1, '74HC08': 1, '74HC20': 1, '74HC04': 1}
+M7_PLAN = {'74HC164': 2, '74HC540': 1, '74HC14': 1, '74HC74': 1, '74HC08': 1}   # 15.1, 6 entegre
 M6_NOT_BUILT = []          # 19 Kasım: 19 entegrenin hepsi netlist'te (U701–U719)
 
 # Plan sayısından netlist'e girmeyenler ve nedeni.
@@ -47,6 +48,8 @@ def chip_counts(board, include_tb=False):
     for c in board.chips:
         if c.module == 'TB' and not include_tb:
             continue
+        if getattr(c, 'DISCRETE', False):          # 2N7000, diyot, RC: entegre değil
+            continue
         out.setdefault(c.module, Counter())[c.KIND] += 1
     out = {m: out[m] for m in MODULE_ORDER if m in out}
     total = Counter()
@@ -58,9 +61,13 @@ def chip_counts(board, include_tb=False):
 
 def _plans(board):
     """(plan, kurulmayanlar): CPU modülleri + kartta M6 varsa M6."""
-    if any(c.module == 'M6' for c in board.chips):
-        return {**PLAN_COUNTS, 'M6': M6_PLAN}, {**NOT_BUILT, 'M6': M6_NOT_BUILT}
-    return PLAN_COUNTS, NOT_BUILT
+    plans, nb = dict(PLAN_COUNTS), dict(NOT_BUILT)
+    mods = {c.module for c in board.chips}
+    if 'M6' in mods:
+        plans['M6'], nb['M6'] = M6_PLAN, M6_NOT_BUILT
+    if 'M7' in mods:
+        plans['M7'], nb['M7'] = M7_PLAN, []
+    return plans, nb
 
 
 def count_rows(board):
@@ -90,8 +97,10 @@ def count_table(board):
         pl, nl, x, d = (sum(r[k] for r in mr) for k in (2, 3, 4, 5))
         lines.append(f'| {MODULE_TITLES[m]} | {pl} | {nl} | {x} | {d} |')
     pl, nl, x, d = (sum(r[k] for r in rows) for k in (2, 3, 4, 5))
-    lines.append(f'| **Toplam (CPU{" + M6" if "M6" in plans else ""}, '
-                 f'{"M7" if "M6" in plans else "M6/M7"} hariç)** | **{pl}** | **{nl}** | **{x}** | **{d}** |')
+    extra = [m for m in ('M6', 'M7') if m in plans]
+    missing = [m for m in ('M6', 'M7') if m not in plans]
+    label = 'CPU' + ''.join(f' + {m}' for m in extra) + (f', {"/".join(missing)} hariç' if missing else '')
+    lines.append(f'| **Toplam ({label})** | **{pl}** | **{nl}** | **{x}** | **{d}** |')
     lines.append('')
     lines.append('Kurulmayanlar:')
     for m, items in not_built.items():
@@ -143,5 +152,5 @@ def wiring_table(board, title='TA-8 CPU kablolama tablosu'):
     return '\n'.join(out)
 
 
-__all__ = ['PLAN_COUNTS', 'NOT_BUILT', 'M6_PLAN', 'M6_NOT_BUILT', 'PLAN_FIXES', 'chip_counts', 'count_rows', 'count_table',
+__all__ = ['PLAN_COUNTS', 'NOT_BUILT', 'M6_PLAN', 'M6_NOT_BUILT', 'M7_PLAN', 'PLAN_FIXES', 'chip_counts', 'count_rows', 'count_table',
            'wiring_table']

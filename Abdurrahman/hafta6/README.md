@@ -1,4 +1,4 @@
-# Hafta 6 (1–7 Aralık 2026): M6 netlist'te, KiCad şemaları, malzeme listesi
+# Hafta 6 (1–7 Aralık 2026): M6 ve M7 netlist'te, KiCad şemaları, malzeme listesi
 
 Hazırlayan: Abdurrahman
 
@@ -10,6 +10,8 @@ Hazırlayan: Abdurrahman
 - **Bulgu:** pencerede /BUFEN kapalıyken VD0–7 yüzüyordu (font ROM'unun girişleri boşta). 10k pull-down SIP dizisi eklendi (planda yok).
 - **CPU + M6 birlikte çalışıyor:** `merhaba.asm`, gerçek 25 MHz VGA zamanlamasıyla, emülatörle **sıfır fark**. CPU, M6'nın açtığı VRAM penceresini ~15,4 ms bekliyor; "MERHABA, TA-8!" VRAM'e 482–522. satırlar arasında yazılıyor, pencere dışında yazma yok.
 - **VWR senkronlayıcısı kuruldu:** M1'deki U111'in boş iki flip-flop'u VWR'yi (T1 Q7) iki MCLK ile VWR_s'e çeviriyor (plan 3.6).
+- **M7 PS/2 klavye netlist'te (6/6 entegre + 2N7000, 2× 1N4148, RC):** `cpu.m7_ps2()`, `build(kbd='netlist')`. Gerçek PS/2 çerçeveleri (sanal klavye, `ta8/hw/ps2.py`) KCLK/KDATA'dan; `klavye.asm` CPU + M7 ile emülatörle **sıfır fark**. CPU + M6 + M7 birlikte de sıfır fark.
+- **Bütün sistem netlist'te:** plan 92 entegre, netlist 88; eksik 4'ü bilinen (M1: NE555, 74HC153, 74HC14; AUX: gereksiz kalan 74HC00).
 - **KiCad şemaları** netlist'ten üretiliyor: `py cli.py hw kicad` → `sim/kicad/`, PDF: [TA8_semalar.pdf](TA8_semalar.pdf).
 - **Malzeme listesi:** [BOM.md](BOM.md), LCSC'ye yüklenecek dosya [BOM-lcsc.csv](BOM-lcsc.csv).
 
@@ -56,9 +58,35 @@ Pencere kapalıyken WAIT bir kareye (16,8 ms) kadar sürebildiği için `HwCpu.r
 | U718 (166) setup | yalnız VMUX penceresinde (satır ≥ 480) | VD orada DB'yi izliyor; çıkış BLANK_n = 0 ile kapalı, ekranda etkisi yok (test ediliyor) |
 | U404/U601 vb. çakışmalar | CPU, M6'sız da aynı sayıda | Eski, bilinen devir-teslim (~11 ns) |
 
-Testler: `sim/tests/test_m6_netlist.py` (12 test), `test_kicad.py` M6 dahil kartla.
+Testler: `sim/tests/test_m6_netlist.py` (12 test), `test_m7_netlist.py` (10 test), `test_kicad.py` M6 ve M7 dahil kartla.
 
-## 3. Sırada
+## 3. M7 PS/2 klavye
+
+| Parça | Görev |
+|---|---|
+| U801 74HC14 | KCLK (iki kez terslenir → 164 saati, yükselen kenar), KDATA → /KDATA, KBD_RD, zaman aşımı eşiği |
+| U802, U803 2× 74HC164 | Kaydırma; start biti 1 olarak girer, 11. kenarda U803 Q2'ye gelir → **KRDY** |
+| U804 74HC540 | F800 okunurken byte'ı DB'ye koyar (tersleyerek gerçek değer) |
+| U805 74HC74 + U806 74HC08 | KCLR: okuma çevriminin commit'inde bir çevrimlik temizleme darbesi |
+| D801, D802, Q801 | KRDY veya KCLR → 2N7000 KCLK'ı düşük tutar (susturma): klavye bekler, byte kaybolmaz |
+| RC801 | 22k / 10 nF: KCLK ~190 µs yüksek kalırsa yarım çerçeveyi atar |
+
+Yeni modeller: `ta8/hw/discrete.py` (2N7000, 1N4148, RC zaman aşımı; entegre sayımına girmez), `ta8/hw/ps2.py` (açık akaç sanal klavye, 12.5 kHz, PS/2 kuralları: 50 µs boşta bekleme, tek eşlik). Emülatör karşılaştırmasında KRDY ve VWR_s devreden oynatılıyor (`harness.ReplayBus`).
+
+| Test | Sonuç |
+|---|---|
+| Yalnız M7: 6 byte (00, FF dahil), CPU 250 µs geç okuyor | hepsi doğru; beklerken KCLK düşük (susturma), okumadan sonra KRDY = 0 ve KCLK bırakılıyor; ihlal yok |
+| Yarım çerçeve, sonraki byte ≥ 200 µs sonra | zaman aşımı atıyor, sonraki byte doğru |
+| Zaman aşımı zorla kapalı (kontrol) | sonraki byte bozuluyor: test gerçekten zaman aşımını ölçüyor |
+| klavye.asm, CPU + M7, 5 tuş | sıfır fark, ekranda `1C F0 1C 29 5A`, LED = 5A |
+| klavye.asm, CPU + M6 + M7 | sıfır fark |
+
+**Bulgu (karar ikimizin):** PS/2 cihazı 50 µs boşluktan sonra gönderebilir, zaman aşımı ise 190 µs. Yarım kalan bir çerçeveden < 190 µs sonra gelen byte bozuluyor (50/100/150 µs: bozuk; 200/300 µs: doğru). Yarım çerçeve nadir (tak-çıkar, gürültü). Kısaltmak mümkün: 22k / 4.7 nF ≈ 90 µs (saatin en uzun yüksek süresi 50 µs, 10 kHz'de; ondan kısa olamaz). Test bu sınırlamayı belgeliyor (`test_finding_fast_frame_after_partial_corrupts`).
+
+**Plan ayrıntısı:** kaydırma KCLK'nın yükselen kenarında olmalı (plan da böyle yazıyor). Düşen kenarda olsaydı zaman aşımı boşta etkin olduğu için her çerçevenin start biti silinirdi.
+
+## 4. Sırada
 
 - **Digital'de ekranda yazı (K3):** `py cli.py hw digital` M6'yı da dışa aktarmalı; Digital'in VGA bileşeniyle.
-- **M7 PS/2.**
+- **Snake bütün sistemde:** CPU + M6 + M7 netlist'te C ile yazılmış Snake (yavaş: her kare ~4 s simülasyon).
+- **Zaman aşımı kararı** (yukarıdaki bulgu).

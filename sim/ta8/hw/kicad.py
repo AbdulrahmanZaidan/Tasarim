@@ -88,9 +88,12 @@ class Sym:
             self.at[p] = (-self.w / 2 - GRID, top - i * GRID, 0)
         for i, p in enumerate(self.right):
             self.at[p] = (self.w / 2 + GRID, top - i * GRID, 180)
-        self.at['VCC'] = (0, self.h / 2 + GRID, 270)
-        self.at['GND'] = (0, -self.h / 2 - GRID, 90)
+        if 'VCC' in cls.PINOUT:
+            self.at['VCC'] = (0, self.h / 2 + GRID, 270)
+        if 'GND' in cls.PINOUT:
+            self.at['GND'] = (0, -self.h / 2 - GRID, 90)
         self.pinout = cls.PINOUT
+        self._fp = getattr(cls, 'FOOTPRINT', None)     # ayrık parçalar (2N7000, diyot, RC)
 
     @property
     def lib_id(self):
@@ -98,6 +101,8 @@ class Sym:
 
     @property
     def footprint(self):
+        if self._fp:
+            return self._fp
         wide = '15.24' if self.legs >= 24 else '7.62'
         return f'Package_DIP:DIP-{self.legs}_W{wide}mm'
 
@@ -402,10 +407,12 @@ class Project:
             '(descr "TA-8 entegreleri, netlist\'ten üretildi"))\n'
             ')\n',
             encoding='utf-8')
+        fplibs = sorted({self._syms[k].footprint.split(':')[0] for k in self._syms})
         (out / 'fp-lib-table').write_text(
             '(fp_lib_table\n  (version 7)\n'
-            '  (lib (name "Package_DIP")(type "KiCad")(uri "${KICAD10_FOOTPRINT_DIR}/Package_DIP.pretty")'
-            '(options "")(descr ""))\n)\n', encoding='utf-8')
+            + ''.join(f'  (lib (name "{n}")(type "KiCad")(uri "${{KICAD10_FOOTPRINT_DIR}}/{n}.pretty")'
+                      '(options "")(descr ""))\n' for n in fplibs)
+            + ')\n', encoding='utf-8')
         return [f'{PROJECT}.kicad_pro', f'{PROJECT}.kicad_sch', f'{PROJECT}.kicad_sym',
                 'sym-lib-table', 'fp-lib-table'] + files
 
