@@ -96,7 +96,7 @@ Her rapor sade bir "bu hafta, kısaca" bölümü ve Sözlük sekmesiyle hazırla
 
 ## 6. Siparişler (sırayla, acele etmeden)
 
-> **Güncel (19 Kasım toplantısı):** siparişler **Arabistan üzerinden**: Abdurrahman'ın [malzeme listesi](../Abdurrahman/hafta6/BOM.md) (LCSC + AliExpress), Türkiye'den yalnız breadboard, kablo, klavye. Aşağıdaki n11/direnc listesi ve MODEL muafiyet yazısı **iptal**; yalnız LCSC'de 25 MHz DIP osilatör yoksa n11'deki son lot alınır. Kararlar: [Toplanti/2026-11-19-gundem.md](../Toplanti/2026-11-19-gundem.md).
+> **Güncel (19 Kasım toplantısı):** siparişler **Arabistan üzerinden**: Abdurrahman'ın [malzeme listesi](../Abdurrahman/hafta5.1/BOM.md) (LCSC + AliExpress), Türkiye'den yalnız breadboard, kablo, klavye. Aşağıdaki n11/direnc listesi ve MODEL muafiyet yazısı **iptal**; yalnız LCSC'de 25 MHz DIP osilatör yoksa n11'deki son lot alınır. Kararlar: [Toplanti/2026-11-19-gundem.md](../Toplanti/2026-11-19-gundem.md).
 
 **Önce yurt içi, stokta az kalanlar** (19 Kasım'da kontrol edildi):
 

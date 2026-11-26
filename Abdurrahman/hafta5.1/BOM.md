@@ -1,6 +1,6 @@
 # TA-8 malzeme listesi (BOM), eksiksiz
 
-Hazırlayan: Abdurrahman · 6. hafta (1–7 Aralık 2026)
+Hazırlayan: Abdurrahman · hafta 5.1 (24–30 Kasım 2026)
 
 Kaynak: [SISTEM-PLANI bölüm 15.1](../../SISTEM-PLANI.md) (92 entegre), netlist ile karşılaştırıldı (`sim/ta8/hw/cpu.py`: M1–M5 aynı; M1'in NE555, 74HC153, 74HC14'ü MANUAL paneliyle gelecek) ve `Abdurrahman/hafta5/m6_uret.py` (M6 zamanlaması, 11 entegre, aynı).
 

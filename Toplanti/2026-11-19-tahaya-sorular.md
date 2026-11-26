@@ -10,7 +10,7 @@ Sorulabilecekler: ne yapacağız, nasıl gidiyor, kim neyi bekliyor, bir şeyin 
 
 **1.** Parçaları Türkiye'den almak zor ya da pahalı olursa Abdurrahman Çin'den Arabistan'a sipariş verip getirebilir. Hangi kalemler için bu daha mantıklı (ör. 10 flash, breadboard'lar, kablo)? Fiyat karşılaştırmasını kim yapsın?
 
-Cevap: **Hepsi Arabistan'dan**, senin BOM'undaki gibi ([Abdurrahman/hafta6/BOM.md](../Abdurrahman/hafta6/BOM.md)):
+Cevap: **Hepsi Arabistan'dan**, senin BOM'undaki gibi ([Abdurrahman/hafta5.1/BOM.md](../Abdurrahman/hafta5.1/BOM.md)):
 - Entegreler, osilatörler, pasifler, konnektörler: LCSC, tek paket.
 - Arduino Mega, PLCC adaptörleri, ZIF, lojik analizör: AliExpress, aynı adrese.
 - Türkiye'den yalnız ağır/ucuz olanlar: breadboard, kablo, jumper; PS/2 klavye.

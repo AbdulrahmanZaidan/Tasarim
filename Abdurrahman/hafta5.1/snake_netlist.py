@@ -1,6 +1,6 @@
 """Snake bütün sistemde: CPU + M6 (VGA) + M7 (PS/2), çip seviyesinde netlist (~5 dk).
 
-Çalıştırma (depo kökünden):  py -3 Abdurrahman/hafta6/snake_netlist.py
+Çalıştırma (depo kökünden):  py -3 Abdurrahman/hafta5.1/snake_netlist.py
 - snake.c HIZ_BAS=2 ile derlenir (2 turda bir hamle), ana döngü 34 tur koşturulur.
 - 22. turda aşağı, 28. turda sol ok tuşu sanal PS/2 klavyeden (KCLK/KDATA) gönderilir.
 - Emülatörle iz karşılaştırması (KRDY ve VWR_s devreden oynatılır), her karenin VIDEO

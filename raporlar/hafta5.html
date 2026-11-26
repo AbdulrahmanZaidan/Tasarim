@@ -201,6 +201,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
         <li><b>İşlemciye hata ayıklama donanımı eklendi:</b> programı istenen adreste durdurmak (breakpoint) ve Arduino'nun işlemciyi durdurup belleğe program yüklemesi (BUSREQ). İkisi de simülasyonda ve Digital'de denendi.</li>
         <li><b>Planda bulunan bir zamanlama hatası:</b> ekran belleğine yazarken verilen bekleme kararı en kötü durumda yetişmiyordu. Tek kablo değişikliğiyle düzeldi; payı az olduğu için osiloskopla ölçülecek.</li>
         <li>İşlemci şimdi 63 entegre; hiçbir modülde plandaki sayı aşılmıyor.</li>
+        <li><b>Ekran (M6) ve klavye (M7) simülasyonda tamam:</b> Snake, işlemci + ekran + klavye çip seviyesinde, emülatörle sıfır farkla çalışıyor. KiCad şemaları ve eksiksiz malzeme listesi hazır (Abdurrahman).</li>
       </ul>
       <p class="cap">Abdurrahman'ın bu haftaki çalışması kendi sekmesinde. Terimlerin açıklaması: <a href="#sozluk">Sözlük</a>.</p>
     </section>
@@ -238,9 +239,9 @@ figcaption { font-size: .8rem; color: var(--muted); }
         <div class="track">
           <div class="track-head">
             <h3>Donanım<small>Abdurrahman · M2, M5 ve hata ayıklama: Deniz</small></h3>
-            <div class="pct">%22<small>M1–M5, birleştirme ve hata ayıklama mantığı bitti (Digital'de) · sırada M6 VGA</small></div>
+            <div class="pct">%31<small>M1–M7, birleştirme ve hata ayıklama mantığı bitti · KiCad şemaları sürüyor</small></div>
           </div>
-          <div class="segs" role="img" aria-label="Donanım: 7 iş bitti, 4 iş sırada">
+          <div class="segs" role="img" aria-label="Donanım: 9 iş bitti, 1 iş sürüyor, 1 iş sırada">
             <span class="done" style="flex: 1" title="M2 kontrol ünitesi: bitti (Deniz, Digital'de)"></span>
             <span class="done" style="flex: 1" title="M5 bellek: bitti (Deniz, Digital'de)"></span>
             <span class="done" style="flex: 1" title="M1 saat modülü: bitti (Abdurrahman, Digital'de)"></span>
@@ -248,9 +249,9 @@ figcaption { font-size: .8rem; color: var(--muted); }
             <span class="done" style="flex: 1" title="M3 adres registerları: bitti (Abdurrahman, Digital'de)"></span>
             <span class="done" style="flex: 1" title="İşlemcinin birleştirilmesi: bitti, emülatörle sıfır fark"></span>
             <span class="done" style="flex: 1" title="Hata ayıklama mantığı (breakpoint, BUSREQ): bitti (Deniz, Digital'de)"></span>
-            <span style="flex: 2" title="M6 VGA: sırada">M6 VGA</span>
-            <span style="flex: 1" title="M7 PS/2 klavye: sırada">M7</span>
-            <span style="flex: 2" title="KiCad şemaları ve breadboard yerleşimi: sırada">KiCad</span>
+            <span class="done" style="flex: 2" title="M6 VGA: bitti (Abdurrahman, netlist'te, 19/19 entegre)">M6 VGA</span>
+            <span class="done" style="flex: 1" title="M7 PS/2 klavye: bitti (Abdurrahman, netlist'te)">M7</span>
+            <span class="doing" style="flex: 2" title="KiCad şemaları ve breadboard yerleşimi: şemalar hazır, yerleşim sürüyor">KiCad</span>
             <span style="flex: 20" title="Breadboard yapımı ve testleri: sırada">Breadboard yapımı</span>
           </div>
           <ul class="parts" style="grid-template-rows: repeat(6, auto)">
@@ -261,9 +262,9 @@ figcaption { font-size: .8rem; color: var(--muted); }
             <li class="done">M3 adres registerları (Abdurrahman) <em>bitti</em></li>
             <li class="done">İşlemcinin birleştirilmesi <em>bitti</em></li>
             <li class="done">Hata ayıklama mantığı (Deniz) <em>bitti</em></li>
-            <li>M6 VGA <em>Aralık</em></li>
-            <li>M7 PS/2 klavye <em>Aralık</em></li>
-            <li>KiCad şemaları, yerleşim planı <em>Aralık</em></li>
+            <li class="done">M6 VGA (Abdurrahman) <em>bitti</em></li>
+            <li class="done">M7 PS/2 klavye (Abdurrahman) <em>bitti</em></li>
+            <li class="doing">KiCad şemaları, yerleşim planı <em>sürüyor</em></li>
             <li>Breadboard yapımı ve testleri <em>Ocak – Mayıs</em></li>
           </ul>
         </div>
@@ -284,6 +285,8 @@ figcaption { font-size: .8rem; color: var(--muted); }
             <li><span>Kontrol ünitesi ve bellek Digital'de test edildi<small>planın kabul ölçütleri geçti</small></span></li>
             <li><span>C derleyicisi tamamlandı<small>Deniz · planın C alt kümesi, switch tablosu dahil</small></span></li>
             <li><span>Hata ayıklama donanımı: breakpoint ve BUSREQ<small>Deniz · 63 entegre · Digital'de de</small></span></li>
+            <li><span>Ekran ve klavye simülasyonda, Snake bütün sistemde<small>Abdurrahman · M6 + M7 · sıfır fark</small></span></li>
+            <li><span>Malzeme listesi<small>Abdurrahman · 92 entegre, yedekleriyle 131</small></span></li>
           </ul>
         </div>
         <div class="col doing">
@@ -297,7 +300,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
           <h3>Yapacağız</h3>
           <ul>
             <li><span>Snake oyunu C ile<small>Deniz · gelecek hafta</small></span></li>
-            <li><span>VGA ekran ve klavye simülasyonda<small>Aralık</small></span></li>
+            <li><span>Digital'de ekranda yazı<small>Abdurrahman · K3</small></span></li>
             <li><span>Breadboard'da kurulum<small>Ocak – Haziran 2027</small></span></li>
             <li><span>C ile yazılmış Snake demosu<small>Mayıs 2027</small></span></li>
           </ul>
@@ -322,7 +325,7 @@ figcaption { font-size: .8rem; color: var(--muted); }
       <ol class="next">
         <li><span><b>Deniz:</b> Snake oyununu C ile yazmak; derleyicinin gerçek sınavı.</span></li>
         <li><span><b>Malzeme:</b> bütün malzemenin siparişi (entegreler ve pasifler yurt dışından tek paket, breadboard ve kablo yurt içinden); gelen parçaların giriş testleri.</span></li>
-        <li><span><b>Abdurrahman:</b> kendi sekmesinde.</span></li>
+        <li><span><b>Abdurrahman:</b> Digital'de ekranda yazı (K3), PS/2 zaman aşımı kararı; ayrıntısı kendi sekmesinde.</span></li>
       </ol>
     </section>
   </div>
@@ -516,8 +519,134 @@ RefEmu: durdu (HALT) · 6943 çevrim (6.94 ms @ 1 MHz) · LED=01010101 ($55)
     <section class="person">
       <span class="eyebrow">Donanım ve testler</span>
       <h2>Abdurrahman</h2>
-      <p>Kendi notları: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/Abdurrahman">Abdurrahman klasörü</a>.</p>
-      <!-- ABDURRAHMAN: bu sekme Abdurrahman tarafından doldurulur -->
+      <p>Bu haftanın konuları iki bölüm: <b>5</b>, M6 VGA zamanlaması Digital'de; <b>5.1</b>, M6'nın tamamı ve M7 klavye projenin netlist'inde, Snake bütün sistemde, KiCad şemaları ve malzeme listesi. Notlar: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta5/README.md">Abdurrahman/hafta5</a> · <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta5.1/README.md">Abdurrahman/hafta5.1</a>.</p>
+    </section>
+
+    <section>
+      <h2>Özet</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>İş</th><th>Sonuç</th></tr></thead>
+          <tbody>
+            <tr><td>M6 zamanlaması (5)</td><td style="white-space: normal">11 entegre (U701–U711) Digital'de; bir kare planla birebir: 50 × 525 karakter, satır 31,25 kHz, kare 59,5 Hz</td></tr>
+            <tr><td>M6 tamamı (5.1)</td><td style="white-space: normal">19/19 entegre ana netlist'te; karakter hattı, VRAM, font ROM'u, çıkış katı. Görüntü 480 × 320 noktanın hepsinde beklenenle aynı</td></tr>
+            <tr><td>CPU + M6</td><td style="white-space: normal"><code>merhaba.asm</code> gerçek 25 MHz VGA zamanlamasıyla, emülatörle sıfır fark; pencere dışında VRAM yazması yok</td></tr>
+            <tr><td>M7 PS/2 klavye (5.1)</td><td style="white-space: normal">6/6 entegre + 2N7000, diyotlar, RC; gerçek PS/2 çerçeveleriyle <code>klavye.asm</code> sıfır fark</td></tr>
+            <tr><td>Snake, bütün sistem</td><td style="white-space: normal">CPU + M6 + M7 çip seviyesinde, 43 VGA karesi, 13 hamle, iki ok tuşu: emülatörle sıfır fark</td></tr>
+            <tr><td>KiCad şemaları</td><td style="white-space: normal">Netlist'ten otomatik: <code>py cli.py hw kicad</code>; <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta5.1/TA8_semalar.pdf">PDF</a></td></tr>
+            <tr><td>Malzeme listesi</td><td style="white-space: normal">92 entegre gerekli, yedekleriyle 131; <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta5.1/BOM.md">BOM.md</a> ve LCSC yükleme dosyası</td></tr>
+            <tr><td>Entegre sayısı</td><td style="white-space: normal">Bütün sistem: plan 92, netlist 88; eksik 4'ü bilinen (M1: NE555, 74HC153, 74HC14; AUX: gereksiz 74HC00)</td></tr>
+            <tr><td>Bulgular</td><td style="white-space: normal">÷2 flip-flop'u en kötü köşede 25 MHz'e yetişmiyor; VD0–7 yüzüyordu (pull-down eklendi); PS/2 zaman aşımı kararı</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <span class="eyebrow">Bölüm 5</span>
+      <h2>M6 VGA zamanlaması, Digital'de</h2>
+      <p>Ekran modülünün saat ve sayaç kısmı: 25 MHz osilatörden nokta saati, nokta / karakter / satır sayaçları, zamanlama ROM'u ve çıkışları karakter sınırında yakalayan T1 registerı. Bağlantılar SISTEM-PLANI bölüm 8.1–8.2'den çıkarıldı; her şey <code>m6_uret.py</code> ile yeniden üretilebilir.</p>
+      <figure>
+        <div class="img"><img src="img/hafta5-m6_digital_ekran.png" alt="M6 VGA zamanlaması Digital'de: 74HC74 bölücü ve LD flip-flop'u, 74HC163 nokta, karakter ve satır sayaçları, SST39SF010 zamanlama ROM'u ve 74HC377 T1 registerı." width="1936" height="1048" loading="lazy"></div>
+        <figcaption>M6 zamanlama kısmı Digital'de, 11 entegre (U701–U711).</figcaption>
+      </figure>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Entegre</th><th>Görev</th></tr></thead>
+          <tbody>
+            <tr><td>U701 74HC74</td><td style="white-space: normal">÷2 (25 MHz → DCLK 12,5 MHz) ve LD flip-flop'u</td></tr>
+            <tr><td>U702 74HC163</td><td style="white-space: normal">Nokta sayacı (0..7)</td></tr>
+            <tr><td>U703 74HC20</td><td style="white-space: normal">Nokta 7'yi yakalar, LD'yi üretir</td></tr>
+            <tr><td>U704, U705 74HC163</td><td style="white-space: normal">Karakter sayacı HCHAR (0..49)</td></tr>
+            <tr><td>U706 74HC04</td><td style="white-space: normal">HEND: satır sonunda satır sayacına izin</td></tr>
+            <tr><td>U707–U709 74HC163</td><td style="white-space: normal">Satır sayacı VLINE (0..524)</td></tr>
+            <tr><td>U710 SST39SF010</td><td style="white-space: normal">Zamanlama ROM'u: /HSYNC, /VSYNC, BLANK_n, /BUFEN, /HEND, /VEND, VMUX, VWR</td></tr>
+            <tr><td>U711 74HC377</td><td style="white-space: normal">T1: ROM çıkışlarını karakter sınırında yakalar</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Testler</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Test</th><th>Sonuç</th></tr></thead>
+          <tbody>
+            <tr><td>1. Nokta ve karakter saatleri</td><td style="white-space: normal">DCLK 12,5 MHz; nokta 0..7; her 8 noktada karakter + 1 (640 ns). Digital test aracında <b>geçti</b></td></tr>
+            <tr><td>2. İki satır</td><td style="white-space: normal">H 0..49; görünür 40 karakter; /HSYNC 6 karakter; satır sonunda V + 1. 1.632 adım, <b>geçti</b></td></tr>
+            <tr><td>3. Tam kare</td><td style="white-space: normal">Digital'de 2 kare (924.000 osilatör periyodu): bütün ölçümler planla aynı</td></tr>
+            <tr><td>4. Gerçek 25 MHz</td><td style="white-space: normal">Çip seviyesi simülatörde tipik gecikmelerle 0 ihlal, Digital ile 31.500 karakterde aynı</td></tr>
+            <tr><td>5. Açılış</td><td style="white-space: normal">Rastgele açılış durumlarından (3 tohum) en geç 1 karede doğru kareye kilitleniyor</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <figure>
+        <div class="img"><img src="img/hafta5-m6_2_satir.png" alt="İki satırın dalga şekli: H 0'dan 49'a sayıp sıfıra dönüyor, BLANK_n 40 karakter yüksek, /HSYNC H 42–47'de düşük, satır sonunda V bir artıyor." width="1348" height="328" loading="lazy"></div>
+        <figcaption>Test 2: iki satır. /HSYNC çıkışta H 42–47'de (T1 yüzünden ROM'a göre bir karakter geç, plan 8.3'teki gibi).</figcaption>
+      </figure>
+      <figure>
+        <div class="img"><img src="img/hafta5-m6_4_olcumler.png" alt="Bir karenin ölçümleri ve planla karşılaştırma tablosu: bütün değerler planla aynı." width="784" height="414" loading="lazy"></div>
+        <figcaption>Test 3: bir karenin ölçümleri, planla karşılaştırma.</figcaption>
+      </figure>
+      <div class="finding">
+        <h3>Bulgu: ÷2 flip-flop'u en kötü köşede yetişmiyor</h3>
+        <p>÷2 bağlantısında flip-flop'un gecikmesi + kurulum süresi 40 ns'den kısa olmalı. Simülatörün en kötü değerleriyle 44 + 15 = 59 ns; DCLK 6,25 MHz'e düşüyor. Değerlerin bir kısmı tahmin ve hepsini birden en kötü almak kötümser; datasheet'ler 4,5 V'ta ~25–30 MHz veriyor. Tipik çiplerle çalışır, ama pay az. Prototip c'de DCLK osiloskopla ölçülecek; yedek olarak 74AC74 siparişe eklendi.</p>
+      </div>
+    </section>
+
+    <section>
+      <span class="eyebrow">Bölüm 5.1</span>
+      <h2>M6 ve M7 netlist'te, Snake bütün sistemde</h2>
+      <ul>
+        <li><b>M6'nın tamamı ana netlist'te</b> (<code>cpu.m6_vga()</code>, 19/19 entegre): zamanlamaya karakter hattı eklendi (3× 74HC157, VRAM, DB tamponu, font ROM'u, 74HC166, çıkış katı). VRAM taklidi kalktı.</li>
+        <li><b>Görüntü nokta nokta doğru:</b> VIDEO çıkışı her DCLK'de yakalanıyor; 480 × 320 noktanın hepsi VRAM + font ROM'undan hesaplananla aynı. Gerçek font: <code>font8x8_basic</code> (kamu malı).</li>
+        <li><b>VWR senkronlayıcısı:</b> M1'deki U111'in boş iki flip-flop'u VWR'yi iki MCLK ile CPU saatine eşitliyor (plan 3.6).</li>
+        <li><b>M7 PS/2 klavye</b> (<code>cpu.m7_ps2()</code>, 6/6 entegre + 2N7000, 2× 1N4148, RC): sanal klavyeden gerçek PS/2 çerçeveleri; <code>klavye.asm</code> emülatörle sıfır fark.</li>
+      </ul>
+      <div class="duo">
+        <figure>
+          <div class="img"><img src="img/hafta5-m6_cpu_merhaba.png" alt="Devrenin VIDEO çıkışından alınan ekran: MERHABA, TA-8! yazısı." width="1280" height="960" loading="lazy" style="min-width: 0"></div>
+          <figcaption>CPU + M6: <code>merhaba.asm</code> yazıyı VRAM'e yazıyor, M6 sonraki karede çiziyor. Devrenin VIDEO çıkışından.</figcaption>
+        </figure>
+        <figure>
+          <div class="img"><img src="img/hafta5-snake_kare42.png" alt="Snake, VGA karesi 42: aşağı ve sol tuşlarından sonra yılan üç satır aşağıda, sola gidiyor." width="1280" height="960" loading="lazy" style="min-width: 0"></div>
+          <figcaption>Snake, VGA karesi 42: ↓ ve ← tuşlarından sonra yılan sola gidiyor. CPU + M6 + M7, çip seviyesinde.</figcaption>
+        </figure>
+      </div>
+      <h3>Sonuçlar</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Deneme</th><th>Sonuç</th></tr></thead>
+          <tbody>
+            <tr><td>merhaba.asm, CPU + M6</td><td style="white-space: normal">Sıfır fark, 573 çevrim; 14 VRAM yazması, hepsi satır 482–522 arasında (pencere içinde); CPU pencereyi ~15,4 ms bekliyor</td></tr>
+            <tr><td>Yalnız M6, 2 kare</td><td style="white-space: normal">480 × 320 noktanın hepsi beklenen görüntüyle aynı</td></tr>
+            <tr><td>M7, 6 byte</td><td style="white-space: normal">Hepsi doğru; CPU geç okurken KCLK düşük tutuluyor (susturma), byte kaybolmuyor</td></tr>
+            <tr><td>klavye.asm, CPU + M7</td><td style="white-space: normal">5 tuş, sıfır fark; CPU + M6 + M7 birlikte de sıfır fark</td></tr>
+            <tr><td>Snake, bütün sistem</td><td style="white-space: normal">730 ms simülasyon (571.201 çevrim), 34 tur, 13 hamle; emülatörle sıfır fark; 43 karenin hepsi VRAM'le nokta nokta aynı</td></tr>
+            <tr><td>Testler</td><td style="white-space: normal"><code>test_m6_netlist.py</code> 12, <code>test_m7_netlist.py</code> 10, <code>test_kicad.py</code> M6 ve M7 dahil</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="finding">
+        <h3>Bulgu: VD0–7 yüzüyordu</h3>
+        <p>VRAM penceresinde /BUFEN kapalıyken font ROM'unun girişleri boşta kalıyordu. 10k pull-down SIP dizisi eklendi (planda yok).</p>
+      </div>
+      <div class="finding">
+        <h3>Bulgu: PS/2 zaman aşımı (karar ikimizin)</h3>
+        <p>Yarım kalan bir çerçeveden 190 µs'den kısa süre sonra gelen byte bozuluyor (PS/2 cihazı 50 µs sonra gönderebilir). Nadir bir durum (tak-çıkar, gürültü). Kısaltmak mümkün: 22k / 4,7 nF ≈ 90 µs; 50 µs'nin altına inemez.</p>
+      </div>
+      <h3>KiCad şemaları ve malzeme listesi</h3>
+      <ul>
+        <li><b>KiCad şemaları</b> netlist'ten üretiliyor (<code>py cli.py hw kicad</code> → <code>sim/kicad/</code>): elle çizim yok, simülasyonla şema aynı kaynaktan. PDF: <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta5.1/TA8_semalar.pdf">TA8_semalar.pdf</a>.</li>
+        <li><b>Malzeme listesi:</b> plandaki 92 entegreyle birebir; yedek kuralıyla 131 entegre. Entegreler ve pasifler LCSC'den tek paket, breadboard ve kablo Türkiye'den. <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta5.1/BOM.md">BOM.md</a> · <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta5.1/BOM-lcsc.csv">BOM-lcsc.csv</a>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Gelecek hafta</h2>
+      <ol class="next">
+        <li><span>Digital'de ekranda yazı (K3): <code>py cli.py hw digital</code> M6'yı da dışa aktarmalı, Digital'in VGA bileşeniyle.</span></li>
+        <li><span>PS/2 zaman aşımı kararı (yukarıdaki bulgu).</span></li>
+        <li><span>Parçalar gelince prototip c: gerçek monitörde DCLK ölçümü.</span></li>
+      </ol>
     </section>
   </div>
 
@@ -609,6 +738,8 @@ RefEmu: durdu (HALT) · 6943 çevrim (6.94 ms @ 1 MHz) · LED=01010101 ($55)
   <footer>
     <span>Ayrıntılar:</span>
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Taha/hafta5/README.md">5. hafta notları</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta5/README.md">Abdurrahman 5</a>
+    <a href="https://github.com/AbdulrahmanZaidan/Tasarim/blob/main/Abdurrahman/hafta5.1/README.md">Abdurrahman 5.1</a>
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/sim/tacc">C derleyicisi</a>
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim/tree/main/sim/ta8/hw">Çip seviyesi simülatör</a>
     <a href="https://github.com/AbdulrahmanZaidan/Tasarim">GitHub deposu</a>

@@ -1,6 +1,6 @@
 # Sipariş sepetleri (19 Kasım 2026)
 
-**Kural (19 Kasım, toplantı sonrası):** Türkiye'de **stokta** olan ve fiyatı LCSC'ye yakın olan parçalar Türkiye'den; Türkiye'de olmayan ya da çok pahalı olanlar LCSC'den, Abdurrahman'ın Arabistan adresine tek paket. Kaynak liste: Abdurrahman'ın [BOM.md](../../Abdurrahman/hafta6/BOM.md)'si (92 entegre, yedekleriyle 131) ve toplantıda eksik görülenler ([soru 15–22](../2026-11-19-abdurrahmana-sorular.md)).
+**Kural (19 Kasım, toplantı sonrası):** Türkiye'de **stokta** olan ve fiyatı LCSC'ye yakın olan parçalar Türkiye'den; Türkiye'de olmayan ya da çok pahalı olanlar LCSC'den, Abdurrahman'ın Arabistan adresine tek paket. Kaynak liste: Abdurrahman'ın [BOM.md](../../Abdurrahman/hafta5.1/BOM.md)'si (92 entegre, yedekleriyle 131) ve toplantıda eksik görülenler ([soru 15–22](../2026-11-19-abdurrahmana-sorular.md)).
 
 Fiyatlar KDV dahil. direnc.net entegre fiyatları ve stokları 19 Kasım'da kontrol edildi; pasifler ve araçlar Ekim fiyatı (%5–10 artmış olabilir). Sepetler herkesin kendi hesabıyla, siteye girilerek oluşturulur; aşağıdaki linkler ürünlerin kendisi.
 

@@ -1,4 +1,4 @@
-# Hafta 6 (1–7 Aralık 2026): M6 ve M7 netlist'te, KiCad şemaları, malzeme listesi
+# Hafta 5.1 (24–30 Kasım 2026): M6 ve M7 netlist'te, KiCad şemaları, malzeme listesi
 
 Hazırlayan: Abdurrahman
 
@@ -88,7 +88,7 @@ Yeni modeller: `ta8/hw/discrete.py` (2N7000, 1N4148, RC zaman aşımı; entegre 
 
 ## 4. Snake bütün sistemde (CPU + M6 + M7)
 
-`snake.c` (C, tacc), `HIZ_BAS=2` ile (2 turda bir hamle), çip seviyesindeki netlist'in tamamında: 88 entegre + ayrık parçalar, 25 MHz VGA saati, gerçek PS/2 çerçeveleri. Yeniden üretmek: `py -3 Abdurrahman/hafta6/snake_netlist.py` (~5 dk).
+`snake.c` (C, tacc), `HIZ_BAS=2` ile (2 turda bir hamle), çip seviyesindeki netlist'in tamamında: 88 entegre + ayrık parçalar, 25 MHz VGA saati, gerçek PS/2 çerçeveleri. Yeniden üretmek: `py -3 Abdurrahman/hafta5.1/snake_netlist.py` (~5 dk).
 
 | Ölçüm | Sonuç |
 |---|---|

@@ -78,7 +78,7 @@ Cevap: Sorular asistan tarafından cevaplardan çıkarıldı: [2026-11-19-tahaya
 
 ## E. Malzeme listesi (BOM) için ek sorular (Taha, 19 Kasım)
 
-Senin [BOM.md](../Abdurrahman/hafta6/BOM.md)'n plandaki 92 entegreyle birebir tutuyor. Paket tek seferde Arabistan'a gideceği için sonradan eksik getirmek zor; aşağıdakiler listede yok ya da netleşmeli. Eklemeye karar verirsen BOM'u sen güncelle.
+Senin [BOM.md](../Abdurrahman/hafta5.1/BOM.md)'n plandaki 92 entegreyle birebir tutuyor. Paket tek seferde Arabistan'a gideceği için sonradan eksik getirmek zor; aşağıdakiler listede yok ya da netleşmeli. Eklemeye karar verirsen BOM'u sen güncelle.
 
 **15.** Saat hattının seri dirençleri: CLK tamponunun her çıkışına 47 Ω (7 adet), LCLK'nın üç 273'üne 33 Ω (3 adet) (SISTEM-PLANI 3.5). Eklensin mi? Öneri: 47 Ω ×10, 33 Ω ×5.
 

@@ -11,7 +11,7 @@ Hazırlayan: Abdurrahman
 - Üç ayrı yoldan denendi ve **üçü aynı sonucu verdi**: Digital'in test aracı (2 test), Digital'de 2 tam kare, projenin çip seviyesi simülatöründe gerçek 25 MHz saatle (tipik ve en kötü gecikmeler).
 - **Açılışta kendini toparlıyor:** rastgele açılış durumlarından en geç **1 kare** içinde doğru kareye kilitleniyor (plan: "bir kare içinde").
 - **Bulgu:** en kötü gecikme değerleriyle 74HC74 25 MHz'i ikiye bölemiyor (aşağıda). Prototip c'de denenmeli.
-- Karakter hattı (VRAM, font ROM'u, 74HC166, 157'ler) ve çıkış katı bu haftada yok; plana göre 6. haftada.
+- Karakter hattı (VRAM, font ROM'u, 74HC166, 157'ler) ve çıkış katı bu notta yok; [hafta 5.1](../hafta5.1/README.md)'de yapıldı.
 
 ## Dosyalar
 
@@ -101,7 +101,7 @@ ROM, kullanılmayan H ≥ 50 ve V ≥ 525 adreslerinde de /HEND ve /VEND'i 0 ver
 
 ## Sınırlar ve sonraki adımlar
 
-- **SLOW modu** (A16 = 1, banka 1) yalnız ROM içeriğinde var; testler SLOW = 0 ile. 6. haftada CPU ile VRAM paylaşımı denenirken eklenecek.
-- **Karakter hattı** (VRAM adres seçimi 3× 74HC157, VRAM CY62256, font ROM'u, 74HC166, DB → VRAM tamponu 74HC245) ve **çıkış katı** (R, G, B = AND(QH, BLANK_n), dirençler): 6. hafta.
+- **SLOW modu** (A16 = 1, banka 1) yalnız ROM içeriğinde var; testler SLOW = 0 ile. CPU ile VRAM paylaşımı [hafta 5.1](../hafta5.1/README.md)'de denendi.
+- **Karakter hattı** (VRAM adres seçimi 3× 74HC157, VRAM CY62256, font ROM'u, 74HC166, DB → VRAM tamponu 74HC245) ve **çıkış katı** (R, G, B = AND(QH, BLANK_n), dirençler): [hafta 5.1](../hafta5.1/README.md)'de yapıldı.
 - **Prototip c** (gerçek monitör): parçalar gelince; ilk ölçüm DCLK frekansı (yukarıdaki bulgu).
 - Bu modül henüz projenin netlist'inde (`cpu.py`) değil; Taha'yla konuşup oraya eklenebilir (şu an `TB` taklitleri VGA'nın yerini tutuyor).
